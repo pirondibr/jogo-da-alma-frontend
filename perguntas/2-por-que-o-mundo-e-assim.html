@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Por que o mundo é assim? — Jogo da Alma</title>
+<meta name="description" content="O mundo não é mau — é desatualizado. Entenda a dualidade como motor, o software antigo do cérebro e a Civilização 1.0.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #0A0A0F; --bg-alt: #111118; --bg-card: #16161F;
+    --surface: #1E1E2A; --surface-light: #252535;
+    --text: #F0EFF4; --text-secondary: #B8B5C8; --text-muted: #7A7690;
+    --accent: #A78BFA; --accent-light: #C4B5FD; --accent-dark: #7C3AED;
+    --accent-glow: rgba(167, 139, 250, 0.15);
+    --gold: #F59E0B;
+    --q1: #EF4444; --q2: #F97316; --q3: #EAB308; --q4: #22C55E;
+    --q5: #3B82F6; --q6: #8B5CF6; --q7: #A855F7;
+    --qc: var(--q2);
+    --radius-md: 12px; --radius-lg: 20px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.7;
+    overflow-x: hidden; -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+.container.wide { max-width: 1060px; }
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; font-weight: 600; line-height: 1.15; }
+::selection { background: var(--accent-dark); color: #fff; }
+
+nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10, 10, 15, 0.82); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--surface);
+}
+.nav-inner {
+    max-width: 1100px; margin: 0 auto; padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.logo { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 600; text-decoration: none; color: var(--text); display: flex; gap: 8px; }
+.logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 22px; align-items: center; }
+.nav-links a { text-decoration: none; color: var(--text-secondary); font-size: 0.9rem; transition: color var(--transition); }
+.nav-links a:hover { color: var(--text); }
+.nav-cta { background: var(--accent-dark); color: #fff !important; padding: 8px 18px; border-radius: 999px; font-weight: 500; }
+.nav-cta:hover { background: var(--accent); }
+@media (max-width: 720px) { .nav-links a:not(.nav-cta) { display: none; } }
+
+.hero {
+    padding: 150px 24px 70px; text-align: center;
+    background: radial-gradient(ellipse 60% 45% at 50% 0%, rgba(249, 115, 22, 0.10), transparent), var(--bg);
+}
+.breadcrumb { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 26px; }
+.breadcrumb a { color: var(--text-muted); text-decoration: none; }
+.breadcrumb a:hover { color: var(--text-secondary); }
+.hero .q-label {
+    color: var(--qc); letter-spacing: 0.18em; text-transform: uppercase;
+    font-size: 0.78rem; font-weight: 700; margin-bottom: 18px;
+}
+.hero h1 { font-size: clamp(2.2rem, 5.5vw, 3.6rem); max-width: 760px; margin: 0 auto 22px; }
+.hero h1 .qmark { color: var(--qc); }
+.hero p.sub { color: var(--text-secondary); font-size: 1.12rem; max-width: 640px; margin: 0 auto; }
+
+.zoom-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 14px;
+}
+.zoom-label b { color: var(--qc); font-weight: 700; }
+.zoom-label::before { content: ""; width: 26px; height: 1px; background: var(--surface-light); }
+
+.answer {
+    padding: 70px 24px;
+    border-top: 1px solid var(--surface); border-bottom: 1px solid var(--surface);
+    background: var(--bg-alt); text-align: center;
+}
+.answer .eyebrow { color: var(--qc); letter-spacing: 0.16em; text-transform: uppercase; font-size: 0.75rem; font-weight: 700; margin-bottom: 16px; }
+.answer p {
+    font-family: 'Fraunces', serif; font-size: clamp(1.25rem, 2.6vw, 1.7rem);
+    line-height: 1.45; max-width: 720px; margin: 0 auto; color: var(--text);
+}
+.answer p em { font-style: italic; color: var(--accent-light); }
+
+section.block { padding: 90px 24px 0; }
+.block h2 { font-size: clamp(1.7rem, 3.6vw, 2.4rem); margin-bottom: 18px; }
+.block .container > p, .block .container.wide > p { color: var(--text-secondary); margin-bottom: 16px; max-width: 760px; }
+.block p strong { color: var(--text); font-weight: 500; }
+.zoom-out {
+    margin-top: 26px; font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 1.15rem; color: var(--accent-light);
+    border-left: 2px solid var(--accent); padding-left: 18px;
+}
+
+/* dualidade — pares */
+.pairs { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.pair {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--bg-card); border: 1px solid var(--surface);
+    border-radius: 999px; padding: 8px 18px; font-size: 0.9rem; color: var(--text-secondary);
+}
+.pair span { color: var(--qc); }
+
+/* programas de fábrica */
+.programs { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 32px; }
+.program {
+    background: var(--bg-card); border: 1px solid var(--surface);
+    border-radius: var(--radius-lg); padding: 24px;
+    border-top: 3px solid var(--qc);
+}
+.program .tag { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: var(--text-muted); }
+.program h3 { font-size: 1.2rem; margin: 6px 0 4px; }
+.program .motto {
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 1rem;
+    color: var(--qc); margin-bottom: 10px;
+}
+.program p { font-size: 0.9rem; color: var(--text-secondary); }
+
+.h10 {
+    margin-top: 36px; max-width: 760px;
+    background: var(--bg-card); border: 1px solid var(--surface);
+    border-left: 3px solid var(--qc);
+    border-radius: var(--radius-md); padding: 26px 30px;
+}
+.h10 h3 { font-size: 1.25rem; margin-bottom: 10px; }
+.h10 h3 em { font-style: italic; color: var(--qc); }
+.h10 p { font-size: 0.96rem; color: var(--text-secondary); margin-bottom: 10px; }
+.h10 p:last-child { margin-bottom: 0; }
+
+/* civilização 1.0 */
+.civ { margin-top: 34px; max-width: 860px; }
+.civ-row {
+    display: grid; grid-template-columns: 130px 1fr; gap: 16px;
+    padding: 13px 0; border-bottom: 1px solid var(--surface); align-items: baseline;
+}
+.civ-row:last-child { border-bottom: none; }
+.civ-row b { font-size: 0.85rem; font-weight: 700; letter-spacing: 0.04em; color: var(--cc); }
+.civ-row p { font-size: 0.94rem; color: var(--text-secondary); }
+@media (max-width: 560px) { .civ-row { grid-template-columns: 100px 1fr; gap: 12px; } }
+
+/* dados de atualização */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-top: 32px; }
+.stat {
+    background: var(--bg-card); border: 1px solid var(--surface);
+    border-radius: var(--radius-lg); padding: 24px; text-align: center;
+}
+.stat b { display: block; font-family: 'Fraunces', serif; font-size: 2rem; color: var(--gold); margin-bottom: 6px; }
+.stat span { font-size: 0.88rem; color: var(--text-secondary); }
+
+.ecos {
+    margin-top: 46px; background: var(--bg-card); border: 1px solid var(--surface);
+    border-left: 3px solid var(--gold); border-radius: var(--radius-md); padding: 24px 28px;
+    max-width: 860px;
+}
+.ecos h3 { font-size: 1rem; color: var(--gold); margin-bottom: 8px; }
+.ecos p { font-size: 0.92rem; color: var(--text-secondary); }
+
+.diag {
+    margin-top: 90px; text-align: center; padding: 90px 24px;
+    background: radial-gradient(ellipse 55% 50% at 50% 100%, var(--accent-glow), transparent), var(--bg-alt);
+    border-top: 1px solid var(--surface);
+}
+.diag h2 { font-size: clamp(1.8rem, 4vw, 2.7rem); max-width: 660px; margin: 0 auto 18px; }
+.diag p { color: var(--text-secondary); max-width: 580px; margin: 0 auto 30px; font-size: 1.05rem; }
+.diag .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 640px; margin: 0 auto 36px; }
+.diag .chips a {
+    text-decoration: none; font-size: 0.88rem; font-weight: 500; color: var(--text);
+    background: var(--surface); border: 1px solid var(--surface-light);
+    border-radius: 999px; padding: 8px 15px;
+    display: inline-flex; align-items: center; gap: 7px;
+    transition: border-color var(--transition), transform var(--transition);
+}
+.diag .chips a::before { content: "▸"; color: var(--qc); font-size: 0.72rem; }
+.diag .chips a:hover { border-color: var(--qc); transform: translateY(-2px); }
+.btn { display: inline-block; text-decoration: none; font-weight: 500; padding: 14px 32px; border-radius: 999px; font-size: 1rem; transition: transform var(--transition), background var(--transition); }
+.btn-primary { background: var(--accent-dark); color: #fff; }
+.btn-primary:hover { background: var(--accent); transform: translateY(-2px); }
+
+.next {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    max-width: 860px; margin: 0 auto; padding: 34px 24px;
+}
+.next a { text-decoration: none; color: var(--text-secondary); font-size: 0.95rem; transition: color var(--transition); }
+.next a:hover { color: var(--text); }
+.next .next-q { text-align: right; }
+.next .next-q small { display: block; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
+
+footer { border-top: 1px solid var(--surface); padding: 40px 24px; text-align: center; color: var(--text-muted); font-size: 0.85rem; }
+footer .disclaimer { margin-top: 8px; }
+
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="../index.html" class="logo"><span>✦</span> Jogo da Alma</a>
+        <div class="nav-links">
+            <a href="../index.html#p2">As 7 Perguntas</a>
+            <a href="../questionario.html">Quiz Chakras</a>
+            <a href="../questionario-personalidade.html" class="nav-cta">Quiz Personalidade</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO — a dor -->
+<header class="hero">
+    <p class="breadcrumb"><a href="../index.html">Jogo da Alma</a> / As 7 Perguntas / 2</p>
+    <p class="q-label">Pergunta 02 de 7</p>
+    <h1>Por que o mundo é assim<span class="qmark">?</span></h1>
+    <p class="sub">Ligue o noticiário: guerra, polarização, ansiedade em números recordes. Ou olhe mais perto: por que as pessoas se machucam mesmo quando se amam? Existem duas respostas prontas — "o mundo é mau" (o cinismo) e "sempre foi assim" (a resignação). Nenhuma das duas explica nada. Existe uma terceira.</p>
+</header>
+
+<!-- RESPOSTA CURTA -->
+<section class="answer">
+    <p class="eyebrow">A resposta do Jogo</p>
+    <p>O mundo não é mau. <em>É desatualizado.</em> Ele roda um software antigo — moldado para sobreviver a um passado hostil — em um presente que já mudou. E o que parece caos tem estrutura: por baixo de tudo, existe um motor chamado dualidade.</p>
+</section>
+
+<!-- AMPLO -->
+<section class="block">
+    <div class="container reveal">
+        <p class="zoom-label"><b>Amplo</b> · A escala do universo</p>
+        <h2>A oposição não é o defeito do mundo. É o motor.</h2>
+        <p>Nada se experimenta sem contraste. Você só conhece a luz porque existe escuridão, só reconhece a segurança porque existe o risco, só valoriza a conexão porque conhece a solidão. Da física à biologia, <strong>é a diferença que gera movimento</strong> — onde tudo é igual, nada acontece.</p>
+        <p>Isso muda a pergunta inteira. Um mundo sem oposição não seria um paraíso: seria um mundo sem escolha, sem aprendizado, sem evolução — <strong>sem jogo</strong>. Os opostos que você enfrenta todos os dias não são um erro da existência. São o mecanismo dela:</p>
+        <div class="pairs">
+            <span class="pair">Segurança <span>↔</span> Liberdade</span>
+            <span class="pair">Razão <span>↔</span> Emoção</span>
+            <span class="pair">Eu <span>↔</span> Outro</span>
+            <span class="pair">Estabilidade <span>↔</span> Mudança</span>
+            <span class="pair">Agora <span>↔</span> Depois</span>
+        </div>
+        <p class="zoom-out">Mas se a oposição é o motor, por que ela dói tanto? Porque quem a atravessa é um cérebro antigo.</p>
+    </div>
+</section>
+
+<!-- MÉDIO -->
+<section class="block">
+    <div class="container reveal">
+        <p class="zoom-label"><b>Médio</b> · A mecânica humana</p>
+        <h2>O software antigo</h2>
+        <p>Seu cérebro foi moldado durante centenas de milhares de anos em um ambiente de escassez e perigo constantes. Nesse mundo, três programas garantiam a sobrevivência — e eles <strong>continuam instalados</strong>, rodando por baixo de tudo o que você sente:</p>
+        <div class="programs">
+            <div class="program">
+                <span class="tag">Programa 01</span>
+                <h3>Escassez</h3>
+                <p class="motto">"Nunca é suficiente."</p>
+                <p>Acumular era sobreviver ao inverno. Hoje, o mesmo programa roda em cima de dinheiro, status e curtidas — e nunca desliga sozinho.</p>
+            </div>
+            <div class="program">
+                <span class="tag">Programa 02</span>
+                <h3>Ameaça</h3>
+                <p class="motto">"O perigo pesa mais."</p>
+                <p>Um risco ignorado matava; uma alegria ignorada, não. Por isso uma crítica pesa mais que dez elogios — e o noticiário sabe disso.</p>
+            </div>
+            <div class="program">
+                <span class="tag">Programa 03</span>
+                <h3>Tribo</h3>
+                <p class="motto">"Nós contra eles."</p>
+                <p>Pertencer ao grupo era viver; ser expulso era morrer. Hoje o mesmo programa transforma opinião em identidade — e discordância em guerra.</p>
+            </div>
+        </div>
+        <div class="h10">
+            <h3>É isso que chamamos de <em>Humano 1.0</em></h3>
+            <p>Humano 1.0 não é um tipo de pessoa — é um <strong>modo de operar</strong>: viver reagindo, com os programas antigos no controle das escolhas. O medo decide onde você fica, a escassez decide o quanto você corre, a tribo decide o que você pensa.</p>
+            <p>E aqui está o ponto que muda tudo: <strong>ninguém escolheu esse software.</strong> Ele vem de fábrica. Você não é culpado pelo modo reativo — mas, a partir do momento em que o enxerga, ele deixa de ser destino.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ESPECÍFICO -->
+<section class="block">
+    <div class="container wide reveal">
+        <p class="zoom-label"><b>Específico</b> · O mundo que conhecemos</p>
+        <h2>Civilização 1.0: o software antigo em escala</h2>
+        <p>Agora multiplique o modo reativo por oito bilhões. Uma sociedade construída por Humanos 1.0 não fica neutra — ela <strong>institucionaliza os programas antigos</strong>, frequência por frequência. O mundo que você vê no noticiário é isto:</p>
+        <div class="civ">
+            <div class="civ-row" style="--cc: var(--q1)"><b>Básico</b><p>Sociedades organizadas pelo medo — da violência, da escassez, do amanhã.</p></div>
+            <div class="civ-row" style="--cc: var(--q2)"><b>Sacral</b><p>Cultura do vício: prazer imediato como anestesia, consumo como identidade.</p></div>
+            <div class="civ-row" style="--cc: var(--q3)"><b>Plexo Solar</b><p>Competição predatória e obsessão por status — vencer virou sinônimo de derrotar.</p></div>
+            <div class="civ-row" style="--cc: var(--q4)"><b>Cardíaco</b><p>Polarização e tribalismo: a conexão reduzida a "quem está do meu lado".</p></div>
+            <div class="civ-row" style="--cc: var(--q5)"><b>Laríngeo</b><p>Propaganda e manipulação — a expressão usada para controlar, não para comunicar.</p></div>
+            <div class="civ-row" style="--cc: var(--q6)"><b>Frontal</b><p>Excesso de informação, escassez de clareza: nunca soubemos tanto e entendemos tão pouco.</p></div>
+            <div class="civ-row" style="--cc: var(--q7)"><b>Coronário</b><p>Dogmas de um lado, vazio de sentido do outro — e pouca coisa no meio.</p></div>
+        </div>
+        <p style="margin-top:26px">Percebe? O mundo não é assim por acaso, nem por maldade essencial. <strong>É o comportamento previsível de um sistema rodando software desatualizado.</strong> E sistemas desatualizados têm uma propriedade importante: podem ser atualizados.</p>
+
+        <h2 style="margin-top:64px; font-size:1.5rem">E a atualização já começou</h2>
+        <p>Parece otimismo ingênuo? São dados. Nos últimos dois séculos, sempre que a humanidade atualizou uma parte do software — ciência no lugar de superstição, cooperação no lugar de isolamento — o resultado apareceu em escala:</p>
+        <div class="stats">
+            <div class="stat"><b>2×</b><span>A expectativa de vida global mais que dobrou desde 1900</span></div>
+            <div class="stat"><b>−90%</b><span>A mortalidade infantil despencou no último século</span></div>
+            <div class="stat"><b>90% → 9%</b><span>A pobreza extrema encolheu de quase toda a humanidade para menos de um décimo</span></div>
+        </div>
+        <p style="margin-top:26px">O mundo é assim — mas <strong>não está parado</strong>. Ele é o placar de um jogo em andamento, e o placar já se moveu antes. Para onde ele vai daqui é outra pergunta deste mapa (a sexta). Antes dela, falta a mais importante.</p>
+
+        <div class="ecos reveal">
+            <h3>Ecos em outras tradições</h3>
+            <p>Heráclito chamou a oposição de "pai de todas as coisas". O budismo abriu seu mapa declarando o sofrimento como característica estrutural da experiência. A psicologia moderna descreveu, um a um, os vieses do cérebro antigo. São ecos da mesma percepção — no Jogo da Alma, a estrutura é própria: a dualidade como motor, as sete frequências como canais, e um software que pode ser atualizado.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CONVERSÃO -->
+<section class="diag">
+    <h2 class="reveal">O software antigo também roda em você</h2>
+    <p class="reveal">A pergunta não é se — é <strong style="color:var(--text)">onde</strong>: em qual das suas sete frequências o modo reativo está no controle. O diagnóstico mostra exatamente isso.</p>
+    <div class="chips reveal">
+        <a href="../questionario.html">Vivo ansioso</a>
+        <a href="../questionario.html">Me comparo o tempo todo</a>
+        <a href="../questionario.html">Discussões me consomem</a>
+        <a href="../questionario.html">Não consigo largar as telas</a>
+        <a href="../questionario.html">Desconfio de todo mundo</a>
+    </div>
+    <a href="../questionario.html" class="btn btn-primary reveal">Fazer o diagnóstico</a>
+</section>
+
+<!-- PRÓXIMA PERGUNTA -->
+<div class="next">
+    <a href="1-quem-voce-e.html">← Pergunta 1: Quem você é?</a>
+    <a href="3-por-que-estamos-aqui.html" class="next-q"><small>Você entendeu a estrutura. Mas se o jogo é difícil assim — por que jogar?</small>Por que estamos aqui? →</a>
+</div>
+
+<footer>
+    <div>✦ Jogo da Alma — © 2026. Todos os direitos reservados.</div>
+    <div class="disclaimer">Não substitui acompanhamento profissional.</div>
+</footer>
+
+<script>
+(function () {
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var reveals = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window && !reduced) {
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+            });
+        }, { threshold: 0.12 });
+        reveals.forEach(function (el) { io.observe(el); });
+    } else {
+        reveals.forEach(function (el) { el.classList.add('in'); });
+    }
+})();
+</script>
+</body>
+</html>

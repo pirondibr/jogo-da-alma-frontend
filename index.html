@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jogo da Alma — As 7 Perguntas</title>
+<meta name="description" content="Sete perguntas que toda vida precisa responder. O Jogo da Alma é o mapa para respondê-las.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #0A0A0F;
+    --bg-alt: #111118;
+    --bg-card: #16161F;
+    --surface: #1E1E2A;
+    --surface-light: #252535;
+
+    --text: #F0EFF4;
+    --text-secondary: #B8B5C8;
+    --text-muted: #7A7690;
+
+    --accent: #A78BFA;
+    --accent-light: #C4B5FD;
+    --accent-dark: #7C3AED;
+    --accent-glow: rgba(167, 139, 250, 0.15);
+
+    --gold: #F59E0B;
+
+    --q1: #EF4444;
+    --q2: #F97316;
+    --q3: #EAB308;
+    --q4: #22C55E;
+    --q5: #3B82F6;
+    --q6: #8B5CF6;
+    --q7: #A855F7;
+
+    --radius-md: 12px;
+    --radius-lg: 20px;
+
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+h1, h2, h3, .display {
+    font-family: 'Fraunces', Georgia, serif;
+    font-weight: 600;
+    line-height: 1.15;
+}
+
+a { color: inherit; }
+
+::selection { background: var(--accent-dark); color: #fff; }
+
+/* ---------- Nav ---------- */
+nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10, 10, 15, 0.82);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--surface);
+}
+.nav-inner {
+    max-width: 1100px; margin: 0 auto; padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.logo {
+    font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 600;
+    text-decoration: none; display: flex; align-items: center; gap: 8px;
+}
+.logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 22px; align-items: center; }
+.nav-links a {
+    text-decoration: none; color: var(--text-secondary);
+    font-size: 0.9rem; transition: color var(--transition);
+}
+.nav-links a:hover, .nav-links a:focus-visible { color: var(--text); }
+.nav-cta {
+    background: var(--accent-dark); color: #fff !important;
+    padding: 8px 18px; border-radius: 999px; font-weight: 500;
+}
+.nav-cta:hover { background: var(--accent); }
+@media (max-width: 720px) { .nav-links a:not(.nav-cta) { display: none; } }
+
+/* ---------- Hero ---------- */
+.hero {
+    min-height: 92vh;
+    display: flex; flex-direction: column; justify-content: center;
+    text-align: center; position: relative;
+    padding: 120px 24px 80px;
+    background:
+        radial-gradient(ellipse 60% 45% at 50% 0%, rgba(124, 58, 237, 0.14), transparent),
+        var(--bg);
+}
+.hero .eyebrow {
+    color: var(--accent-light); letter-spacing: 0.18em; text-transform: uppercase;
+    font-size: 0.78rem; font-weight: 700; margin-bottom: 22px;
+}
+.hero h1 {
+    font-size: clamp(2.4rem, 6vw, 4.4rem);
+    max-width: 820px; margin: 0 auto 26px;
+}
+.hero h1 em {
+    font-style: italic; font-weight: 400;
+    background: linear-gradient(90deg, var(--q1), var(--q3), var(--q4), var(--q5), var(--q7));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.hero p.sub {
+    color: var(--text-secondary); font-size: 1.15rem;
+    max-width: 560px; margin: 0 auto 40px;
+}
+.hero-questions {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 10px;
+    max-width: 760px; margin: 0 auto 48px;
+    list-style: none;
+}
+.hero-questions li {
+    font-size: 0.85rem; color: var(--text-muted);
+    border: 1px solid var(--surface-light); border-radius: 999px;
+    padding: 6px 14px; display: flex; align-items: center; gap: 8px;
+    transition: color var(--transition), border-color var(--transition);
+}
+.hero-questions li:hover { color: var(--text-secondary); }
+.hero-questions .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.btn {
+    display: inline-block; text-decoration: none; font-weight: 500;
+    padding: 14px 32px; border-radius: 999px; font-size: 1rem;
+    transition: transform var(--transition), background var(--transition), box-shadow var(--transition);
+}
+.btn-primary {
+    background: var(--accent-dark); color: #fff;
+    box-shadow: 0 0 0 0 var(--accent-glow);
+}
+.btn-primary:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 32px var(--accent-glow); }
+.btn-ghost {
+    border: 1px solid var(--surface-light); color: var(--text-secondary); margin-left: 12px;
+}
+.btn-ghost:hover { color: var(--text); border-color: var(--text-muted); }
+.scroll-hint {
+    position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%);
+    color: var(--text-muted); font-size: 0.8rem; letter-spacing: 0.1em;
+}
+.scroll-hint::after {
+    content: ""; display: block; width: 1px; height: 34px;
+    background: linear-gradient(var(--text-muted), transparent);
+    margin: 8px auto 0;
+}
+
+/* ---------- Journey (a espinha) ---------- */
+.journey { position: relative; padding: 60px 0 20px; }
+.spine {
+    position: absolute; top: 0; bottom: 0; left: 50%;
+    width: 2px; transform: translateX(-50%);
+    background: var(--surface);
+}
+.spine-fill {
+    position: absolute; top: 0; left: 0; width: 100%; height: 0%;
+    background: linear-gradient(180deg, var(--q1), var(--q2), var(--q3), var(--q4), var(--q5), var(--q6), var(--q7));
+    transition: height 0.15s linear;
+}
+.question {
+    position: relative; padding: 90px 24px;
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+    align-items: center;
+}
+.question:nth-of-type(even) .q-text { order: 2; }
+.question:nth-of-type(even) .q-answer { order: 1; }
+
+.q-node {
+    position: absolute; left: 50%; top: 90px; transform: translateX(-50%);
+    width: 46px; height: 46px; border-radius: 50%;
+    background: var(--bg); border: 2px solid var(--surface-light);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.05rem;
+    color: var(--text-muted);
+    transition: border-color 0.5s ease, color 0.5s ease, box-shadow 0.5s ease;
+    z-index: 2;
+}
+.question.lit .q-node {
+    border-color: var(--qc); color: var(--qc);
+    box-shadow: 0 0 24px color-mix(in srgb, var(--qc) 40%, transparent);
+}
+
+.q-text .q-label {
+    font-size: 0.78rem; letter-spacing: 0.16em; text-transform: uppercase;
+    font-weight: 700; color: var(--qc); margin-bottom: 14px;
+}
+.q-text h2 {
+    font-size: clamp(1.8rem, 3.6vw, 2.7rem);
+    margin-bottom: 20px;
+}
+.q-text h2 .qmark { color: var(--qc); }
+.q-text p { color: var(--text-secondary); margin-bottom: 14px; }
+.q-text p strong { color: var(--text); font-weight: 500; }
+
+.q-answer {
+    background: var(--bg-card); border: 1px solid var(--surface);
+    border-radius: var(--radius-lg); padding: 30px;
+    position: relative; overflow: hidden;
+}
+.q-answer::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--qc); opacity: 0.85;
+}
+.q-answer h3 { font-size: 1.05rem; margin-bottom: 14px; color: var(--text); }
+.q-answer ul { list-style: none; }
+.q-answer li {
+    padding: 9px 0; color: var(--text-secondary); font-size: 0.95rem;
+    border-bottom: 1px solid var(--surface);
+    display: flex; gap: 10px; align-items: baseline;
+}
+.q-answer li:last-child { border-bottom: none; }
+.q-answer li::before { content: "◆"; color: var(--qc); font-size: 0.6rem; flex-shrink: 0; }
+.q-answer .versus {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 4px;
+}
+.q-answer .versus > div {
+    background: var(--bg-alt); border-radius: var(--radius-md); padding: 14px 16px;
+    font-size: 0.88rem; color: var(--text-secondary);
+}
+.q-answer .versus b { display: block; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.q-answer .versus .neg b { color: var(--text-muted); }
+.q-answer .versus .pos b { color: var(--qc); }
+.q-cta {
+    display: inline-block; margin-top: 18px; text-decoration: none;
+    font-size: 0.92rem; font-weight: 500; color: var(--qc);
+}
+.q-cta:hover { text-decoration: underline; }
+
+/* freq chips (pergunta 4) */
+.freq-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.freq-chip {
+    font-size: 0.8rem; padding: 5px 12px; border-radius: 999px;
+    border: 1px solid var(--surface-light); color: var(--text-secondary);
+}
+
+/* ---------- Prática (Objetivos / Situações) ---------- */
+.practice {
+    padding: 110px 24px 100px;
+    background: var(--bg-alt);
+    border-top: 1px solid var(--surface);
+}
+.practice-head { text-align: center; max-width: 680px; margin: 0 auto 56px; }
+.practice-head .eyebrow {
+    color: var(--gold); letter-spacing: 0.18em; text-transform: uppercase;
+    font-size: 0.78rem; font-weight: 700; margin-bottom: 16px;
+}
+.practice-head h2 { font-size: clamp(1.9rem, 4vw, 2.8rem); margin-bottom: 18px; }
+.practice-head p { color: var(--text-secondary); font-size: 1.05rem; }
+.entries {
+    max-width: 1000px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+}
+.entry {
+    background: var(--bg-card); border: 1px solid var(--surface);
+    border-radius: var(--radius-lg); padding: 30px;
+    border-top: 3px solid var(--ec);
+}
+.entry .step-tag {
+    display: inline-block; font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--ec);
+    border: 1px solid var(--ec); border-radius: 999px; padding: 3px 12px;
+    margin-bottom: 14px; opacity: 0.9;
+}
+.entry h3 { font-size: 1.25rem; margin-bottom: 6px; }
+.entry h3 span { color: var(--ec); }
+.entry > p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 18px; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chips a {
+    text-decoration: none; font-size: 0.9rem; font-weight: 500; color: var(--text);
+    background: var(--surface); border: 1px solid var(--surface-light);
+    border-radius: 999px; padding: 9px 16px;
+    display: inline-flex; align-items: center; gap: 8px;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.35);
+    transition: color var(--transition), border-color var(--transition), transform var(--transition), background var(--transition);
+}
+.chips a::before { content: "▸"; color: var(--ec); font-size: 0.75rem; }
+.chips a:hover, .chips a:focus-visible {
+    border-color: var(--ec); background: var(--surface-light); transform: translateY(-2px);
+    outline: none;
+}
+.chips a:active { transform: translateY(0); }
+.chips a.free {
+    border-style: dashed; color: var(--ec); font-weight: 500;
+}
+.practice-cta { text-align: center; margin-top: 44px; }
+.practice-cta .btn { font-size: 1.05rem; padding: 16px 38px; }
+.practice-cta p {
+    margin-top: 14px; font-size: 0.9rem; color: var(--text-muted);
+}
+.flow {
+    max-width: 760px; margin: 60px auto 0; text-align: center;
+}
+.flow-line {
+    display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 10px 14px;
+}
+.flow-step {
+    background: var(--bg-card); border: 1px solid var(--surface-light);
+    border-radius: 999px; padding: 9px 20px; font-size: 0.92rem; color: var(--text-secondary);
+}
+.flow-step.hot { border-color: var(--accent); color: var(--text); }
+.flow-arrow { color: var(--text-muted); }
+.flow-note { margin-top: 18px; font-size: 0.88rem; color: var(--text-muted); }
+.flow-note b { color: var(--gold); font-weight: 500; }
+@media (max-width: 780px) { .entries { grid-template-columns: 1fr; } }
+
+/* ---------- Closing ---------- */
+.closing {
+    text-align: center; padding: 120px 24px 100px;
+    background:
+        radial-gradient(ellipse 55% 50% at 50% 100%, rgba(124, 58, 237, 0.16), transparent),
+        var(--bg-alt);
+}
+.closing h2 { font-size: clamp(2rem, 4.5vw, 3.2rem); max-width: 700px; margin: 0 auto 22px; }
+.closing p { color: var(--text-secondary); max-width: 560px; margin: 0 auto 40px; font-size: 1.1rem; }
+.closing .checks {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 10px 26px;
+    list-style: none; margin: 0 auto 42px; color: var(--text-secondary); font-size: 0.92rem;
+}
+.closing .checks li::before { content: "✓ "; color: var(--gold); }
+
+/* ---------- Footer ---------- */
+footer {
+    border-top: 1px solid var(--surface);
+    padding: 40px 24px; text-align: center;
+    color: var(--text-muted); font-size: 0.85rem;
+}
+footer .disclaimer { margin-top: 8px; }
+
+/* ---------- Animations ---------- */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+    .spine-fill { transition: none; }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 880px) {
+    .question { grid-template-columns: 1fr; gap: 28px; padding: 70px 24px 60px; }
+    .question:nth-of-type(even) .q-text { order: 1; }
+    .question:nth-of-type(even) .q-answer { order: 2; }
+    .spine, .q-node { left: 20px; }
+    .q-node { top: 70px; width: 38px; height: 38px; font-size: 0.9rem; }
+    .question { padding-left: 64px; }
+    .btn-ghost { margin-left: 0; margin-top: 12px; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="#" class="logo"><span>✦</span> Jogo da Alma</a>
+        <div class="nav-links">
+            <a href="#p1">As 7 Perguntas</a>
+            <a href="#pratica">Na Prática</a>
+            <a href="questionario.html">Quiz Chakras</a>
+            <a href="questionario-personalidade.html">Quiz Personalidade</a>
+            <a href="#comecar" class="nav-cta">Comece agora</a>
+        </div>
+    </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<header class="hero">
+    <p class="eyebrow">Metodologia de Autoconhecimento</p>
+    <h1>Toda vida é jogada em torno de <em>sete perguntas</em>.</h1>
+    <p class="sub">A maioria das pessoas passa a vida inteira sem respondê-las — e sente o custo disso todos os dias. O Jogo da Alma é o mapa para respondê-las, uma a uma.</p>
+    <ul class="hero-questions">
+        <li><span class="dot" style="background:var(--q1)"></span>Quem você é</li>
+        <li><span class="dot" style="background:var(--q2)"></span>Por que o mundo é assim</li>
+        <li><span class="dot" style="background:var(--q3)"></span>Por que estamos aqui</li>
+        <li><span class="dot" style="background:var(--q4)"></span>Como alcançar a felicidade</li>
+        <li><span class="dot" style="background:var(--q5)"></span>Como alcançar o sucesso material</li>
+        <li><span class="dot" style="background:var(--q6)"></span>Qual é o nosso futuro</li>
+        <li><span class="dot" style="background:var(--q7)"></span>Qual é o seu papel nele</li>
+    </ul>
+    <div>
+        <a href="#p1" class="btn btn-primary">Começar pela primeira pergunta</a>
+        <a href="questionario.html" class="btn btn-ghost">Fazer o diagnóstico</a>
+    </div>
+    <div class="scroll-hint">A SUBIDA COMEÇA ABAIXO</div>
+</header>
+
+<!-- ========== JOURNEY ========== -->
+<main class="journey">
+    <div class="spine"><div class="spine-fill" id="spineFill"></div></div>
+
+    <!-- Pergunta 1 -->
+    <section class="question" id="p1" style="--qc: var(--q1)">
+        <div class="q-node">1</div>
+        <div class="q-text reveal">
+            <p class="q-label">Pergunta 01</p>
+            <h2>Quem você é<span class="qmark">?</span></h2>
+            <p>Você não é um só. Sua experiência é atravessada por <strong>sete frequências fundamentais</strong> — e em cada pessoa, uma a três delas dominam, amplificando em 3x tudo o que representam.</p>
+            <p>Entender seu perfil é <strong>parar de se cobrar com a régua errada</strong>. O Conservador não deve se medir pela régua do Criativo. O Empático não é um Ambicioso quebrado.</p>
+        </div>
+        <div class="q-answer reveal">
+            <h3>A resposta do Jogo</h3>
+            <ul>
+                <li>7 arquétipos de personalidade: Conservador, Criativo, Ambicioso, Empático, Expressivo, Intelectual, Espiritualista</li>
+                <li>Cada perfil tem forças que ninguém te ensinou a valorizar</li>
+                <li>E sombras previsíveis — que deixam de te controlar quando têm nome</li>
+            </ul>
+            <a class="q-cta" href="perguntas/1-quem-voce-e.html">Aprofundar: Quem você é →</a>
+        </div>
+    </section>
+
+    <!-- Pergunta 2 -->
+    <section class="question" id="p2" style="--qc: var(--q2)">
+        <div class="q-node">2</div>
+        <div class="q-text reveal">
+            <p class="q-label">Pergunta 02</p>
+            <h2>Por que o mundo é assim<span class="qmark">?</span></h2>
+            <p>O mundo parece caótico, cruel e sem sentido — mas existe uma explicação. Nosso cérebro foi moldado durante centenas de milhares de anos em um ambiente hostil, e <strong>continua rodando esse software antigo</strong> em um mundo que já mudou.</p>
+            <p>Medo, escassez, tribalismo e dominação não são a sua essência — são o <strong>Humano 1.0</strong>. E uma sociedade construída por Humanos 1.0 vira uma Civilização 1.0.</p>
+        </div>
+        <div class="q-answer reveal">
+            <h3>O software antigo em ação</h3>
+            <ul>
+                <li>Sociedades organizadas pelo medo</li>
+                <li>Cultura do vício e do consumo</li>
+                <li>Competição predatória e obsessão por status</li>
+                <li>Polarização, propaganda e dogmas</li>
+            </ul>
+            <a class="q-cta" href="perguntas/2-por-que-o-mundo-e-assim.html">Aprofundar: Por que o mundo é assim →</a>
+        </div>
+    </section>
+
+    <!-- Pergunta 3 -->
+    <section class="question" id="p3" style="--qc: var(--q3)">
+        <div class="q-node">3</div>
+        <div class="q-text reveal">
+            <p class="q-label">Pergunta 03</p>
+            <h2>Por que estamos aqui<span class="qmark">?</span></h2>
+            <p>A vida funciona como um jogo. Não um jogo trivial — um <strong>sistema de experiências com regras, desafios, aprendizado e evolução</strong>.</p>
+            <p>Estamos aqui para evoluir. E no Jogo da Alma, <strong>o negativo é o portal para o positivo</strong>: cada desafio que aparece na sua vida está apontando exatamente para a frequência que pede seu próximo movimento.</p>
+        </div>
+        <div class="q-answer reveal">
+            <h3>Todo jogo tem três elementos</h3>
+            <ul>
+                <li><strong style="color:var(--text)">Um objetivo</strong> — evoluir do 1.0 para o 2.0</li>
+                <li><strong style="color:var(--text)">Um sistema de pontuação</strong> — não uma, mas sete</li>
+                <li><strong style="color:var(--text)">Mecânicas</strong> — as regras de como pontuar de forma positiva</li>
+            </ul>
+            <a class="q-cta" href="perguntas/3-por-que-estamos-aqui.html">Aprofundar: Por que estamos aqui →</a>
+        </div>
+    </section>
+
+    <!-- Pergunta 4 -->
+    <section class="question" id="p4" style="--qc: var(--q4)">
+        <div class="q-node">4</div>
+        <div class="q-text reveal">
+            <p class="q-label">Pergunta 04</p>
+            <h2>Como alcançar a felicidade<span class="qmark">?</span></h2>
+            <p>Sua felicidade é proporcional à sua capacidade de pontuar nas <strong>sete frequências da experiência humana</strong> — os centros de energia observados há milhares de anos.</p>
+            <p>A chave do jogo: preencher cada necessidade <strong>de forma positiva a curto e longo prazo — para você e para as pessoas à sua volta</strong>. A mesma necessidade pode ser preenchida por um caminho que constrói ou por um que cobra juros.</p>
+        </div>
+        <div class="q-answer reveal">
+            <h3>As 7 frequências</h3>
+            <div class="freq-row">
+                <span class="freq-chip" style="border-color:var(--q1);color:var(--q1)">Básico · Segurança</span>
+                <span class="freq-chip" style="border-color:var(--q2);color:var(--q2)">Sacral · Prazer</span>
+                <span class="freq-chip" style="border-color:var(--q3);color:var(--q3)">Plexo · Poder</span>
+                <span class="freq-chip" style="border-color:var(--q4);color:var(--q4)">Cardíaco · Conexão</span>
+                <span class="freq-chip" style="border-color:var(--q5);color:var(--q5)">Laríngeo · Expressão</span>
+                <span class="freq-chip" style="border-color:var(--q6);color:var(--q6)">Frontal · Saber</span>
+                <span class="freq-chip" style="border-color:var(--q7);color:var(--q7)">Coronário · Sentido</span>
+            </div>
+            <div class="versus" style="margin-top:16px">
+                <div class="pos"><b>Quando pontua</b>Alegria, paz, satisfação, prazer, sentido</div>
+                <div class="neg"><b>Quando não pontua</b>Medo, vazio, dor, frustração, sofrimento</div>
+            </div>
+            <a class="q-cta" href="perguntas/4-como-alcancar-a-felicidade.html">Aprofundar: Como alcançar a felicidade →</a>
+        </div>
+    </section>
+
+    <!-- Pergunta 5 -->
+    <section class="question" id="p5" style="--qc: var(--q5)">
+        <div class="q-node">5</div>
+        <div class="q-text reveal">
+            <p class="q-label">Pergunta 05</p>
+            <h2>Como alcançar o sucesso material<span class="qmark">?</span></h2>
+            <p>Sucesso material não é sorte nem uma frequência à parte — é o <strong>resultado de jogar bem frequências específicas</strong>: a segurança que você constrói, as habilidades que você desenvolve, o valor que você consegue comunicar.</p>
+            <p>E cada uma tem forma positiva e forma negativa. Acumular por medo não é o mesmo que construir estabilidade. Dominar pessoas não é o mesmo que liderar.</p>
+        </div>
+        <div class="q-answer reveal">
+            <h3>O caminho positivo</h3>
+            <ul>
+                <li><strong style="color:var(--text)">Básico</strong> — construir estabilidade financeira e planejar o futuro</li>
+                <li><strong style="color:var(--text)">Plexo</strong> — desenvolver habilidades, superar desafios, construir algo significativo</li>
+                <li><strong style="color:var(--text)">Laríngeo</strong> — comunicar ideias e fazer o seu valor ser ouvido</li>
+                <li><strong style="color:var(--text)">Frontal</strong> — entender os sistemas do jogo antes de jogar</li>
+            </ul>
+            <a class="q-cta" href="perguntas/5-como-alcancar-o-sucesso-material.html">Aprofundar: O sucesso material →</a>
+        </div>
+    </section>
+
+    <!-- Pergunta 6 -->
+    <section class="question" id="p6" style="--qc: var(--q6)">
+        <div class="q-node">6</div>
+        <div class="q-text reveal">
+            <p class="q-label">Pergunta 06</p>
+            <h2>Qual é o nosso futuro<span class="qmark">?</span></h2>
+            <p>O futuro não está decidido — ele é a <strong>soma de como cada jogador joga</strong>. Nos últimos dois séculos, a humanidade já provou que consegue se atualizar: a expectativa de vida dobrou, a mortalidade infantil despencou, a pobreza extrema encolheu.</p>
+            <p>O próximo passo não é tecnológico. É a <strong>Civilização 2.0</strong>: a mesma atualização que você faz por dentro, feita em escala.</p>
+        </div>
+        <div class="q-answer reveal">
+            <h3>Civilização 1.0 → 2.0</h3>
+            <ul>
+                <li>Do medo → para estruturas que garantem segurança</li>
+                <li>Do vício → para o prazer consciente e criativo</li>
+                <li>Da competição predatória → para a liderança responsável</li>
+                <li>Da polarização → para a cooperação entre diferenças</li>
+                <li>Da propaganda → para a comunicação transparente</li>
+                <li>Dos dogmas → para a espiritualidade livre</li>
+            </ul>
+            <a class="q-cta" href="perguntas/6-qual-e-o-nosso-futuro.html">Aprofundar: O nosso futuro →</a>
+        </div>
+    </section>
+
+    <!-- Pergunta 7 -->
+    <section class="question" id="p7" style="--qc: var(--q7)">
+        <div class="q-node">7</div>
+        <div class="q-text reveal">
+            <p class="q-label">Pergunta 07</p>
+            <h2>Qual é o seu papel nesse futuro<span class="qmark">?</span></h2>
+            <p>Você não atualiza o mundo por decreto — você o atualiza <strong>jogando melhor a sua própria partida</strong>. Cada frequência que você aprende a preencher de forma positiva muda você, e muda o ambiente ao seu redor.</p>
+            <p>São três desafios, nesta ordem: <strong>conhecer o jogo, atualizar a si mesmo, e fazer parte da atualização coletiva</strong>. A sétima pergunta só se responde vivendo as outras seis.</p>
+        </div>
+        <div class="q-answer reveal">
+            <h3>Os 3 pilares</h3>
+            <ul>
+                <li><strong style="color:var(--text)">Conhecimento</strong> — entender as 7 frequências e como preenchê-las</li>
+                <li><strong style="color:var(--text)">Atualização pessoal</strong> — transcender os padrões de medo, escassez e dominação</li>
+                <li><strong style="color:var(--text)">Atualização coletiva</strong> — ser parte da mudança de uma civilização 1.0 para uma 2.0</li>
+            </ul>
+            <a class="q-cta" href="perguntas/7-qual-e-o-seu-papel.html">Aprofundar: O seu papel →</a>
+        </div>
+    </section>
+</main>
+
+<!-- ========== PRÁTICA: OBJETIVOS E SITUAÇÕES ========== -->
+<section class="practice" id="pratica">
+    <div class="practice-head reveal">
+        <p class="eyebrow">Da filosofia à prática</p>
+        <h2>As grandes perguntas dão direção. Os pequenos desafios mostram onde começar.</h2>
+        <p>O Jogo da Alma não é apenas uma visão sobre a vida — é uma metodologia prática. Você não precisa aprender a teoria inteira para começar: <strong style="color:var(--text)">toque em qualquer opção abaixo</strong> e o diagnóstico começa a partir dela.</p>
+    </div>
+
+    <div class="entries">
+        <div class="entry reveal" style="--ec: var(--gold)">
+            <p class="step-tag">Toque em uma opção para começar</p>
+            <h3>Comece por um <span>objetivo</span></h3>
+            <p>Algo que você quer conquistar — escolha abaixo e o diagnóstico parte dele:</p>
+            <div class="chips">
+                <a href="questionario.html">Ganhar mais dinheiro</a>
+                <a href="questionario.html">Melhorar meu relacionamento</a>
+                <a href="questionario.html">Descobrir meu propósito</a>
+                <a href="questionario.html">Vencer a procrastinação</a>
+                <a href="questionario.html">Falar com confiança</a>
+                <a href="questionario.html">Ter mais disciplina</a>
+                <a href="questionario.html">Aprender mais rápido</a>
+                <a href="questionario.html">Ter mais autoestima</a>
+                <a href="questionario.html" class="free">Outro objetivo? O jogo lê o que você trouxer →</a>
+            </div>
+        </div>
+        <div class="entry reveal" style="--ec: var(--accent)">
+            <p class="step-tag">Toque em uma opção para começar</p>
+            <h3>Ou por uma <span>situação</span></h3>
+            <p>Algo que está acontecendo com você — escolha abaixo e o diagnóstico parte dela:</p>
+            <div class="chips">
+                <a href="questionario.html">Estou ansioso</a>
+                <a href="questionario.html">Estou perdido</a>
+                <a href="questionario.html">Estou sem energia</a>
+                <a href="questionario.html">Estou endividado</a>
+                <a href="questionario.html">Meu relacionamento está difícil</a>
+                <a href="questionario.html">Estou procrastinando</a>
+                <a href="questionario.html">Me sinto vazio</a>
+                <a href="questionario.html">Ninguém me escuta</a>
+                <a href="questionario.html" class="free">Outra situação? Descreva com suas palavras →</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="flow reveal">
+        <div class="flow-line">
+            <span class="flow-step">Situação ou Objetivo</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step hot">Diagnóstico</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">Estratégia</span>
+            <span class="flow-arrow">→</span>
+            <span class="flow-step">Resultado</span>
+        </div>
+        <p class="flow-note">O diagnóstico localiza sua entrada nas 7 frequências — e <b>cada resultado abre o próximo ciclo do jogo</b>.</p>
+        <div class="practice-cta">
+            <a href="questionario.html" class="btn btn-primary">Gerar meu relatório →</a>
+            <p>Comece por um exemplo acima — ou traga exatamente o que você precisar. O diagnóstico parte de qualquer entrada.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ========== CLOSING ========== -->
+<section class="closing" id="comecar">
+    <h2 class="reveal">O jogo não promete que os desafios acabam. Ensina você a jogá-los.</h2>
+    <p class="reveal">Comece pelo diagnóstico: descubra quais das suas sete frequências pedem atenção agora — e receba um mapa claro de onde jogar primeiro.</p>
+    <ul class="checks reveal">
+        <li>7 frequências mapeadas</li>
+        <li>Diagnóstico de chakras</li>
+        <li>Perfil de personalidade</li>
+        <li>Artigos detalhados</li>
+    </ul>
+    <div class="reveal">
+        <a href="questionario.html" class="btn btn-primary">Fazer o Quiz dos Chakras</a>
+        <a href="questionario-personalidade.html" class="btn btn-ghost">Quiz de Personalidade</a>
+    </div>
+</section>
+
+<footer>
+    <div>✦ Jogo da Alma — © 2026. Todos os direitos reservados.</div>
+    <div class="disclaimer">Não substitui acompanhamento profissional.</div>
+</footer>
+
+<script>
+(function () {
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Reveal on scroll
+    var reveals = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window && !reduced) {
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+            });
+        }, { threshold: 0.18 });
+        reveals.forEach(function (el) { io.observe(el); });
+    } else {
+        reveals.forEach(function (el) { el.classList.add('in'); });
+    }
+
+    // Spine fill + node lighting
+    var journey = document.querySelector('.journey');
+    var fill = document.getElementById('spineFill');
+    var questions = document.querySelectorAll('.question');
+
+    function update() {
+        var rect = journey.getBoundingClientRect();
+        var vh = window.innerHeight;
+        var progress = (vh * 0.6 - rect.top) / rect.height;
+        progress = Math.max(0, Math.min(1, progress));
+        fill.style.height = (progress * 100) + '%';
+
+        questions.forEach(function (q) {
+            var qr = q.getBoundingClientRect();
+            if (qr.top < vh * 0.62) { q.classList.add('lit'); }
+        });
+    }
+    update();
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+})();
+</script>
+</body>
+</html>

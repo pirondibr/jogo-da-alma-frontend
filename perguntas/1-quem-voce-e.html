@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quem você é? — Jogo da Alma</title>
+<meta name="description" content="Você é uma combinação única de sete frequências — e uma a três delas dominam, amplificando em 3x seus talentos e suas sombras. Descubra a sua.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #0A0A0F; --bg-alt: #111118; --bg-card: #16161F;
+    --surface: #1E1E2A; --surface-light: #252535;
+    --text: #F0EFF4; --text-secondary: #B8B5C8; --text-muted: #7A7690;
+    --accent: #A78BFA; --accent-light: #C4B5FD; --accent-dark: #7C3AED;
+    --accent-glow: rgba(167, 139, 250, 0.15);
+    --gold: #F59E0B;
+    --q1: #EF4444; --q2: #F97316; --q3: #EAB308; --q4: #22C55E;
+    --q5: #3B82F6; --q6: #8B5CF6; --q7: #A855F7;
+    --qc: var(--q1);
+    --radius-md: 12px; --radius-lg: 20px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: var(--bg); color: var(--text); line-height: 1.7;
+    overflow-x: hidden; -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 860px; margin: 0 auto; padding: 0 24px; }
+.container.wide { max-width: 1060px; }
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; font-weight: 600; line-height: 1.15; }
+::selection { background: var(--accent-dark); color: #fff; }
+
+nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10, 10, 15, 0.82); backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--surface);
+}
+.nav-inner {
+    max-width: 1100px; margin: 0 auto; padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+}
+.logo { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 600; text-decoration: none; color: var(--text); display: flex; gap: 8px; }
+.logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 22px; align-items: center; }
+.nav-links a { text-decoration: none; color: var(--text-secondary); font-size: 0.9rem; transition: color var(--transition); }
+.nav-links a:hover { color: var(--text); }
+.nav-cta { background: var(--accent-dark); color: #fff !important; padding: 8px 18px; border-radius: 999px; font-weight: 500; }
+.nav-cta:hover { background: var(--accent); }
+@media (max-width: 720px) { .nav-links a:not(.nav-cta) { display: none; } }
+
+.hero {
+    padding: 150px 24px 70px; text-align: center;
+    background: radial-gradient(ellipse 60% 45% at 50% 0%, var(--accent-glow), transparent), var(--bg);
+}
+.breadcrumb { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 26px; }
+.breadcrumb a { color: var(--text-muted); text-decoration: none; }
+.breadcrumb a:hover { color: var(--text-secondary); }
+.hero .q-label {
+    color: var(--qc); letter-spacing: 0.18em; text-transform: uppercase;
+    font-size: 0.78rem; font-weight: 700; margin-bottom: 18px;
+}
+.hero h1 { font-size: clamp(2.2rem, 5.5vw, 3.6rem); max-width: 760px; margin: 0 auto 22px; }
+.hero h1 .qmark { color: var(--qc); }
+.hero p.sub { color: var(--text-secondary); font-size: 1.12rem; max-width: 620px; margin: 0 auto; }
+
+/* zoom label — Amplo/Médio/Específico */
+.zoom-label {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 14px;
+}
+.zoom-label b { color: var(--qc); font-weight: 700; }
+.zoom-label::before { content: ""; width: 26px; height: 1px; background: var(--surface-light); }
+
+.answer {
+    padding: 70px 24px;
+    border-top: 1px solid var(--surface); border-bottom: 1px solid var(--surface);
+    background: var(--bg-alt); text-align: center;
+}
+.answer .eyebrow { color: var(--qc); letter-spacing: 0.16em; text-transform: uppercase; font-size: 0.75rem; font-weight: 700; margin-bottom: 16px; }
+.answer p {
+    font-family: 'Fraunces', serif; font-size: clamp(1.25rem, 2.6vw, 1.7rem);
+    line-height: 1.45; max-width: 720px; margin: 0 auto; color: var(--text);
+}
+.answer p em { font-style: italic; color: var(--accent-light); }
+
+section.block { padding: 90px 24px 0; }
+.block h2 { font-size: clamp(1.7rem, 3.6vw, 2.4rem); margin-bottom: 18px; }
+.block .container > p, .block .container.wide > p { color: var(--text-secondary); margin-bottom: 16px; max-width: 760px; }
+.block p strong { color: var(--text); font-weight: 500; }
+.zoom-out {
+    margin-top: 26px; font-family: 'Fraunces', serif; font-style: italic;
+    font-size: 1.15rem; color: var(--accent-light);
+    border-left: 2px solid var(--accent); padding-left: 18px;
+}
+
+.amp {
+    display: flex; align-items: center; gap: 20px;
+    margin: 30px 0 0; max-width: 620px;
+    background: var(--bg-card); border: 1px solid var(--surface);
+    border-radius: var(--radius-lg); padding: 24px;
+}
+.amp .n { font-family: 'Fraunces', serif; font-size: 2.4rem; font-weight: 600; color: var(--qc); flex-shrink: 0; }
+.amp p { font-size: 0.95rem; color: var(--text-secondary); }
+
+.freq-table {
+    margin-top: 30px; max-width: 640px;
+    background: var(--bg-card); border: 1px solid var(--surface);
+    border-radius: var(--radius-lg); padding: 26px 28px;
+}
+.freq-table .ft-title { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: var(--text-muted); margin-bottom: 16px; }
+.ft-row {
+    display: grid; grid-template-columns: 120px 1fr 68px; gap: 14px;
+    align-items: center; padding: 8px 0;
+}
+.ft-row .fname { font-size: 0.92rem; font-weight: 500; color: var(--fc); }
+.ft-bar { display: flex; gap: 5px; }
+.ft-bar span { height: 8px; flex: 1; border-radius: 4px; background: var(--surface-light); }
+.ft-row[data-l="1"] .ft-bar span:nth-child(1) { background: var(--fc); }
+.ft-row[data-l="2"] .ft-bar span:nth-child(-n+2) { background: var(--fc); }
+.ft-row[data-l="3"] .ft-bar span { background: var(--fc); }
+.ft-row .flabel { font-size: 0.78rem; color: var(--text-muted); text-align: right; }
+.ft-row[data-l="3"] .flabel { color: var(--fc); font-weight: 700; }
+.ft-note { margin-top: 16px; font-size: 0.88rem; color: var(--text-muted); }
+.ft-note b { color: var(--text-secondary); font-weight: 500; }
+@media (max-width: 520px) { .ft-row { grid-template-columns: 96px 1fr 56px; gap: 10px; } }
+
+.pleasure {
+    margin-top: 30px; max-width: 760px;
+    background: var(--bg-card); border: 1px solid var(--surface);
+    border-left: 3px solid var(--gold);
+    border-radius: var(--radius-md); padding: 26px 30px;
+}
+.pleasure h3 { font-size: 1.25rem; margin-bottom: 10px; }
+.pleasure h3 em { font-style: italic; color: var(--gold); }
+.pleasure p { font-size: 0.96rem; color: var(--text-secondary); margin-bottom: 10px; }
+.pleasure p:last-child { margin-bottom: 0; }
+
+/* perfis */
+.profiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 16px; margin-top: 36px; }
+.profile {
+    background: var(--bg-card); border: 1px solid var(--surface);
+    border-radius: var(--radius-lg); padding: 26px;
+    border-top: 3px solid var(--cc);
+    display: flex; flex-direction: column; gap: 10px;
+    text-decoration: none; color: inherit;
+    transition: transform var(--transition), border-color var(--transition);
+}
+.profile:hover { transform: translateY(-4px); border-color: var(--cc); }
+.profile .chakra { font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 700; color: var(--cc); }
+.profile h3 { font-size: 1.35rem; }
+.profile .need { font-size: 0.88rem; color: var(--text-secondary); }
+.profile .need b { color: var(--text); font-weight: 500; }
+.profile .vies {
+    font-family: 'Fraunces', serif; font-style: italic; font-size: 1.02rem;
+    color: var(--text); background: var(--bg-alt);
+    border-left: 2px solid var(--cc); border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    padding: 10px 14px; margin: 4px 0;
+}
+.profile .vies small { display: block; font-family: 'DM Sans'; font-style: normal; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+.profile .emo { font-size: 0.85rem; color: var(--text-muted); }
+.profile .emo b { font-weight: 500; }
+.profile .emo .pos { color: var(--cc); }
+.profile .go { margin-top: auto; padding-top: 10px; font-size: 0.88rem; font-weight: 500; color: var(--cc); }
+
+/* combinações e níveis */
+.combos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; margin-top: 30px; }
+.combo {
+    background: var(--bg-card); border: 1px solid var(--surface);
+    border-radius: var(--radius-lg); padding: 22px;
+}
+.combo h3 { font-size: 1.05rem; margin-bottom: 8px; }
+.combo h3 span { color: var(--gold); }
+.combo p { font-size: 0.88rem; color: var(--text-secondary); }
+
+.align-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 34px; }
+.align-card {
+    background: var(--bg-card); border: 1px solid var(--surface);
+    border-top: 3px solid var(--ac);
+    border-radius: var(--radius-lg); padding: 26px;
+}
+.align-card .ac-head { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+.align-card .ac-icon {
+    width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; font-weight: 700;
+    background: color-mix(in srgb, var(--ac) 18%, transparent); color: var(--ac);
+}
+.align-card h3 { font-size: 1.1rem; }
+.align-card ul { list-style: none; }
+.align-card li {
+    padding: 8px 0 8px 20px; position: relative;
+    font-size: 0.93rem; color: var(--text-secondary);
+    border-bottom: 1px solid var(--surface);
+}
+.align-card li:last-child { border-bottom: none; }
+.align-card li::before {
+    content: ""; position: absolute; left: 0; top: 16px;
+    width: 8px; height: 8px; border-radius: 50%; background: var(--ac);
+}
+.align-card li b { color: var(--text); font-weight: 500; }
+@media (max-width: 680px) { .align-grid { grid-template-columns: 1fr; } }
+
+.ecos {
+    margin-top: 46px; background: var(--bg-card); border: 1px solid var(--surface);
+    border-left: 3px solid var(--gold); border-radius: var(--radius-md); padding: 24px 28px;
+    max-width: 860px;
+}
+.ecos h3 { font-size: 1rem; color: var(--gold); margin-bottom: 8px; }
+.ecos p { font-size: 0.92rem; color: var(--text-secondary); }
+
+.diag {
+    margin-top: 90px; text-align: center; padding: 90px 24px;
+    background: radial-gradient(ellipse 55% 50% at 50% 100%, var(--accent-glow), transparent), var(--bg-alt);
+    border-top: 1px solid var(--surface);
+}
+.diag h2 { font-size: clamp(1.8rem, 4vw, 2.7rem); max-width: 640px; margin: 0 auto 18px; }
+.diag p { color: var(--text-secondary); max-width: 560px; margin: 0 auto 30px; font-size: 1.05rem; }
+.diag .chips { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; max-width: 640px; margin: 0 auto 36px; }
+.diag .chips a {
+    text-decoration: none; font-size: 0.88rem; font-weight: 500; color: var(--text);
+    background: var(--surface); border: 1px solid var(--surface-light);
+    border-radius: 999px; padding: 8px 15px;
+    display: inline-flex; align-items: center; gap: 7px;
+    transition: border-color var(--transition), transform var(--transition);
+}
+.diag .chips a::before { content: "▸"; color: var(--qc); font-size: 0.72rem; }
+.diag .chips a:hover { border-color: var(--qc); transform: translateY(-2px); }
+.btn { display: inline-block; text-decoration: none; font-weight: 500; padding: 14px 32px; border-radius: 999px; font-size: 1rem; transition: transform var(--transition), background var(--transition); }
+.btn-primary { background: var(--accent-dark); color: #fff; }
+.btn-primary:hover { background: var(--accent); transform: translateY(-2px); }
+
+.next {
+    display: flex; justify-content: space-between; align-items: center; gap: 16px;
+    max-width: 860px; margin: 0 auto; padding: 34px 24px;
+}
+.next a { text-decoration: none; color: var(--text-secondary); font-size: 0.95rem; transition: color var(--transition); }
+.next a:hover { color: var(--text); }
+.next .next-q { text-align: right; }
+.next .next-q small { display: block; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); }
+
+footer { border-top: 1px solid var(--surface); padding: 40px 24px; text-align: center; color: var(--text-muted); font-size: 0.85rem; }
+footer .disclaimer { margin-top: 8px; }
+
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal { opacity: 1; transform: none; transition: none; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="../index.html" class="logo"><span>✦</span> Jogo da Alma</a>
+        <div class="nav-links">
+            <a href="../index.html#p1">As 7 Perguntas</a>
+            <a href="../questionario.html">Quiz Chakras</a>
+            <a href="../questionario-personalidade.html" class="nav-cta">Quiz Personalidade</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO — a dor -->
+<header class="hero">
+    <p class="breadcrumb"><a href="../index.html">Jogo da Alma</a> / As 7 Perguntas / 1</p>
+    <p class="q-label">Pergunta 01 de 7</p>
+    <h1>Quem você é<span class="qmark">?</span></h1>
+    <p class="sub">Você já se comparou com alguém e concluiu que o problema era você? Já tentou ser mais disciplinado, mais sociável, mais ousado — e sentiu que estava remando contra a própria natureza? Talvez o problema nunca tenha sido esforço. Talvez fosse a régua.</p>
+</header>
+
+<!-- RESPOSTA CURTA -->
+<section class="answer">
+    <p class="eyebrow">A resposta do Jogo</p>
+    <p>Você não é uma coisa só. Você é uma <em>combinação única de sete frequências</em> — e a forma como elas se combinam em você forma a sua personalidade, define seus talentos, seus pontos cegos, onde você encontra felicidade e onde você gera resultado.</p>
+</section>
+
+<!-- AMPLO -->
+<section class="block">
+    <div class="container reveal">
+        <p class="zoom-label"><b>Amplo</b> · A escala do universo</p>
+        <h2>Você é maior do que pensa</h2>
+        <p>Antes de qualquer teste, tipo ou rótulo, existe um fato mais fundamental: você não está apenas <strong>no</strong> universo — você é o universo experienciando a si mesmo. E a experiência só é possível através da <strong>dualidade</strong>: só se conhece a coragem diante do medo, a conexão diante da solidão, a segurança diante do risco. Cada oposição que você vive não é um defeito da existência. É o mecanismo dela.</p>
+        <p class="zoom-out">Mas essa experiência não acontece de forma difusa. Ela acontece através de sete canais.</p>
+    </div>
+</section>
+
+<!-- MÉDIO -->
+<section class="block">
+    <div class="container reveal">
+        <p class="zoom-label"><b>Médio</b> · A mecânica da identidade</p>
+        <h2>Sete frequências. Uma combinação que é só sua.</h2>
+        <p>As sete frequências da experiência humana — Segurança, Prazer, Poder, Conexão, Expressão, Saber e Sentido — existem em <strong>todas</strong> as pessoas, em algum nível. Ninguém tem zero de nada. O tabuleiro é igual para todo mundo — o que muda é a intensidade de cada frequência em você. Veja o mapa de uma pessoa real:</p>
+        <div class="freq-table">
+            <p class="ft-title">Exemplo de configuração — as 7 frequências de uma pessoa</p>
+            <div class="ft-row" data-l="3" style="--fc: var(--q7)"><span class="fname">Coronário</span><div class="ft-bar"><span></span><span></span><span></span></div><span class="flabel">Alto</span></div>
+            <div class="ft-row" data-l="3" style="--fc: var(--q6)"><span class="fname">Frontal</span><div class="ft-bar"><span></span><span></span><span></span></div><span class="flabel">Alto</span></div>
+            <div class="ft-row" data-l="2" style="--fc: var(--q5)"><span class="fname">Laríngeo</span><div class="ft-bar"><span></span><span></span><span></span></div><span class="flabel">Médio</span></div>
+            <div class="ft-row" data-l="3" style="--fc: var(--q4)"><span class="fname">Cardíaco</span><div class="ft-bar"><span></span><span></span><span></span></div><span class="flabel">Alto</span></div>
+            <div class="ft-row" data-l="1" style="--fc: var(--q3)"><span class="fname">Plexo Solar</span><div class="ft-bar"><span></span><span></span><span></span></div><span class="flabel">Baixo</span></div>
+            <div class="ft-row" data-l="1" style="--fc: var(--q2)"><span class="fname">Sacral</span><div class="ft-bar"><span></span><span></span><span></span></div><span class="flabel">Baixo</span></div>
+            <div class="ft-row" data-l="1" style="--fc: var(--q1)"><span class="fname">Básico</span><div class="ft-bar"><span></span><span></span><span></span></div><span class="flabel">Baixo</span></div>
+            <p class="ft-note">Todas as sete estão presentes — mas <b>geralmente entre 1 e 3 ficam no alto</b>. Essas são as dominantes: no exemplo acima, uma pessoa Espiritualista-Intelectual-Empática. A sua configuração é outra — e é ela que o quiz revela.</p>
+        </div>
+        <div class="amp">
+            <span class="n">3×</span>
+            <p>Suas frequências dominantes amplificam em três vezes tudo o que representam: as necessidades, os talentos <strong>e as sombras</strong>. Você não escolheu ser assim — essa é a sua frequência natural. E a questão nunca foi mudar quem você é: é <strong>alinhar sua vida com quem você já é</strong>.</p>
+        </div>
+    </div>
+    <div class="container reveal" style="margin-top:56px">
+        <div class="pleasure">
+            <h3>Personalidade é <em>prazer</em> — não carência</h3>
+            <p>Sua personalidade é formada pelas frequências que você <strong>mais gosta e tem prazer de viver</strong>: onde o talento flui, onde o tempo voa, onde você recarrega. É a sua natureza.</p>
+            <p>Mas ela <strong>não é necessariamente o que mais falta</strong> na sua vida. No exemplo acima, a pessoa tem prazer no sentido, nas ideias e nas conexões — enquanto o jogo pode estar cobrando exatamente as frequências baixas: segurança, energia, ação. Uma coisa é quem você é. Outra é o que a sua vida está pedindo agora.</p>
+            <p>Por isso o Jogo mede as duas separadamente: o <strong>quiz de personalidade</strong> revela onde mora o seu prazer; o <strong>diagnóstico</strong> revela onde mora a sua falta.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ESPECÍFICO: OS 7 PERFIS -->
+<section class="block">
+    <div class="container wide reveal">
+        <p class="zoom-label"><b>Específico</b> · Os 7 perfis</p>
+        <h2>Os 7 perfis — e o filtro invisível de cada um</h2>
+        <p>Cada perfil tem uma busca legítima, forças que ninguém te ensinou a valorizar, sombras previsíveis — e um <strong>viés</strong>: a frase silenciosa que filtra como você enxerga todos os seus problemas. Reconheça o seu:</p>
+
+        <div class="profiles">
+            <a class="profile" style="--cc: var(--q1)" href="../personalidade-basico.html">
+                <span class="chakra">Básico</span>
+                <h3>O Conservador</h3>
+                <p class="need">Movido por <b>segurança e estabilidade</b></p>
+                <p class="vies"><small>O viés que filtra tudo</small>"Se está funcionando, não mexa."</p>
+                <p class="emo">No positivo, <b class="pos">tranquilidade</b> · no negativo, <b>medo e ansiedade</b></p>
+                <span class="go">Conhecer o Conservador →</span>
+            </a>
+            <a class="profile" style="--cc: var(--q2)" href="../personalidade-sacral.html">
+                <span class="chakra">Sacral</span>
+                <h3>O Criativo</h3>
+                <p class="need">Movido por <b>variedade e experiências</b></p>
+                <p class="vies"><small>O viés que filtra tudo</small>"Preciso de algo novo."</p>
+                <p class="emo">No positivo, <b class="pos">prazer e entusiasmo</b> · no negativo, <b>tédio e frustração</b></p>
+                <span class="go">Conhecer o Criativo →</span>
+            </a>
+            <a class="profile" style="--cc: var(--q3)" href="../personalidade-plexo-solar.html">
+                <span class="chakra">Plexo Solar</span>
+                <h3>O Ambicioso</h3>
+                <p class="need">Movido por <b>sucesso e crescimento</b></p>
+                <p class="vies"><small>O viés que filtra tudo</small>"Se não estou crescendo, estou fracassando."</p>
+                <p class="emo">No positivo, <b class="pos">confiança e determinação</b> · no negativo, <b>raiva e frustração</b></p>
+                <span class="go">Conhecer o Ambicioso →</span>
+            </a>
+            <a class="profile" style="--cc: var(--q4)" href="../personalidade-cardiaco.html">
+                <span class="chakra">Cardíaco</span>
+                <h3>O Empático</h3>
+                <p class="need">Movido por <b>conexão e cuidado</b></p>
+                <p class="vies"><small>O viés que filtra tudo</small>"Preciso ajudar todo mundo antes de mim."</p>
+                <p class="emo">No positivo, <b class="pos">amor e gratidão</b> · no negativo, <b>mágoa e culpa</b></p>
+                <span class="go">Conhecer o Empático →</span>
+            </a>
+            <a class="profile" style="--cc: var(--q5)" href="../personalidade-laringeo.html">
+                <span class="chakra">Laríngeo</span>
+                <h3>O Expressivo</h3>
+                <p class="need">Movido por <b>influência e ser ouvido</b></p>
+                <p class="vies"><small>O viés que filtra tudo</small>"Eu sei o que é melhor."</p>
+                <p class="emo">No positivo, <b class="pos">autenticidade e impacto</b> · no negativo, <b>frustração ao ser ignorado</b></p>
+                <span class="go">Conhecer o Expressivo →</span>
+            </a>
+            <a class="profile" style="--cc: var(--q6)" href="../personalidade-frontal.html">
+                <span class="chakra">Frontal</span>
+                <h3>O Intelectual</h3>
+                <p class="need">Movido por <b>aprendizado e análise</b></p>
+                <p class="vies"><small>O viés que filtra tudo</small>"Se não entendo, não aceito."</p>
+                <p class="emo">No positivo, <b class="pos">clareza e fascínio</b> · no negativo, <b>tédio e desconexão</b></p>
+                <span class="go">Conhecer o Intelectual →</span>
+            </a>
+            <a class="profile" style="--cc: var(--q7)" href="../personalidade-coronario.html">
+                <span class="chakra">Coronário</span>
+                <h3>O Espiritualista</h3>
+                <p class="need">Movido por <b>transcendência e propósito</b></p>
+                <p class="vies"><small>O viés que filtra tudo</small>"Isso é pequeno demais para importar."</p>
+                <p class="emo">No positivo, <b class="pos">paz e aceitação</b> · no negativo, <b>desconexão e solidão</b></p>
+                <span class="go">Conhecer o Espiritualista →</span>
+            </a>
+        </div>
+        <p style="margin-top:26px; font-size:0.92rem; color:var(--text-muted)">Cada perfil completo revela: suas forças e sombras em detalhe, o ambiente onde você floresce (e onde murcha), a régua certa de autocobrança, sua fórmula de sucesso, as dinâmicas com os outros perfis e as perguntas de recalibração.</p>
+    </div>
+</section>
+
+<!-- COMBINAÇÕES -->
+<section class="block">
+    <div class="container wide reveal">
+        <h2>Você provavelmente não é um perfil só</h2>
+        <p>Se a dominância vai de uma a três frequências, os perfis puros são minoria. A maioria das pessoas é uma <strong>combinação</strong> — e a combinação muda o jogo inteiro:</p>
+        <div class="combos">
+            <div class="combo">
+                <h3>Ambicioso <span>+</span> Intelectual</h3>
+                <p>O estrategista. Cresce dominando sistemas: estuda o jogo antes de jogar, e vence por profundidade, não por força.</p>
+            </div>
+            <div class="combo">
+                <h3>Ambicioso <span>+</span> Empático</h3>
+                <p>O líder de pessoas. A mesma fome de crescimento — mas o troféu é o time elevado junto. Sofre quando precisa escolher entre resultado e vínculo.</p>
+            </div>
+            <div class="combo">
+                <h3>Conservador <span>+</span> Espiritualista</h3>
+                <p>Raiz e céu — as duas frequências opostas do mapa na mesma pessoa. Um motor interno de tensão: o chão pede segurança, o alto pede sentido. Quando integradas, viram profundidade rara.</p>
+            </div>
+        </div>
+        <p style="margin-top:22px; font-size:0.95rem; color:var(--text-secondary)">É por isso que o Jogo da Alma não te entrega uma caixa — entrega a <strong style="color:var(--text)">sua configuração</strong>: quais frequências dominam, em que proporção, e como elas conversam entre si.</p>
+    </div>
+</section>
+
+<!-- NÍVEIS -->
+<section class="block">
+    <div class="container reveal">
+        <h2>O efeito 3× na prática</h2>
+        <p>A dominância não é um detalhe de personalidade — ela muda a física da sua vida. A mesma pessoa vive dois mundos completamente diferentes dependendo de onde joga:</p>
+        <div class="align-grid">
+            <div class="align-card" style="--ac: var(--q4)">
+                <div class="ac-head">
+                    <span class="ac-icon">✓</span>
+                    <h3>Quando você joga dentro da sua personalidade</h3>
+                </div>
+                <ul>
+                    <li>Sua capacidade é <b>3× maior</b></li>
+                    <li>Você aprende <b>3× mais rápido</b></li>
+                    <li>Seu prazer é <b>3× maior</b></li>
+                    <li>O tempo <b>voa</b></li>
+                    <li>O sucesso no trabalho vem com naturalidade</li>
+                    <li>Os relacionamentos florescem</li>
+                    <li>A vida entra em modo de <b>evolução constante</b></li>
+                </ul>
+            </div>
+            <div class="align-card" style="--ac: var(--q1)">
+                <div class="ac-head">
+                    <span class="ac-icon">✗</span>
+                    <h3>Quando você joga fora dela</h3>
+                </div>
+                <ul>
+                    <li>Sua capacidade despenca</li>
+                    <li>Você demora para aprender</li>
+                    <li>Tudo vira frustração — e exige <b>disciplina forçada</b></li>
+                    <li>O tempo <b>se arrasta</b></li>
+                    <li>A infelicidade vira rotina</li>
+                    <li>A vida para de progredir</li>
+                    <li>Você fica <b>preso</b> em trabalhos e relações que não funcionam</li>
+                </ul>
+            </div>
+        </div>
+        <p style="margin-top:24px">Não é falta de esforço. Não é preguiça. É <strong>desalinhamento de frequência</strong> — e a saída começa por saber, com precisão, qual é a sua.</p>
+
+        <div class="ecos reveal">
+            <h3>Ecos em outras tradições</h3>
+            <p>A percepção de que existem tipos humanos — cada um com dons e armadilhas próprios — atravessa a história: dos temperamentos da medicina grega ao Eneagrama, dos arquétipos da psicologia às tipologias modernas. São ecos da mesma observação. No Jogo da Alma, porém, a estrutura é própria: o perfil não é uma caixa em que você nasce preso — é a <strong style="color:var(--text)">dominância de frequências</strong>. E frequências têm estado, se desenvolvem e evoluem de nível.</p>
+        </div>
+    </div>
+</section>
+
+<!-- CONVERSÃO -->
+<section class="diag">
+    <h2 class="reveal">Qual é a sua combinação?</h2>
+    <p class="reveal">O quiz revela suas frequências dominantes — o primeiro passo para trocar a régua errada pela sua. Se preferir, comece por algo específico:</p>
+    <div class="chips reveal">
+        <a href="../questionario-personalidade.html">Quero mais autoestima</a>
+        <a href="../questionario-personalidade.html">Não sei o que quero da vida</a>
+        <a href="../questionario-personalidade.html">Me sinto deslocado</a>
+        <a href="../questionario-personalidade.html">Me cobro demais</a>
+        <a href="../questionario-personalidade.html">Não sei qual carreira combina comigo</a>
+    </div>
+    <a href="../questionario-personalidade.html" class="btn btn-primary reveal">Descobrir minha personalidade</a>
+</section>
+
+<!-- PRÓXIMA PERGUNTA -->
+<div class="next">
+    <a href="../index.html#p1">← Voltar às 7 perguntas</a>
+    <a href="2-por-que-o-mundo-e-assim.html" class="next-q"><small>Agora você sabe quem joga. Mas por que o jogo é tão difícil?</small>Por que o mundo é assim? →</a>
+</div>
+
+<footer>
+    <div>✦ Jogo da Alma — © 2026. Todos os direitos reservados.</div>
+    <div class="disclaimer">Não substitui acompanhamento profissional.</div>
+</footer>
+
+<script>
+(function () {
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var reveals = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window && !reduced) {
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+            });
+        }, { threshold: 0.12 });
+        reveals.forEach(function (el) { io.observe(el); });
+    } else {
+        reveals.forEach(function (el) { el.classList.add('in'); });
+    }
+})();
+</script>
+</body>
+</html>
