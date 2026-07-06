@@ -12,11 +12,13 @@ Site estático da metodologia de autoconhecimento **Jogo da Alma**, construído 
     ├── 2-por-que-o-mundo-e-assim.html      # Pergunta 2
     ├── 3-por-que-estamos-aqui.html         # Pergunta 3
     ├── 4-como-alcancar-a-felicidade.html   # Pergunta 4
-    └── 5-como-alcancar-o-sucesso-material.html  # Pergunta 5
+    ├── 5-como-alcancar-o-sucesso-material.html      # Pergunta 5
+    ├── 6-qual-e-o-nosso-futuro.html                 # Pergunta 6
+    └── 7-qual-e-o-seu-papel-nesse-futuro.html       # Pergunta 7
 ```
 
-> Em construção. As demais páginas (quiz de chakras, quiz de personalidade,
-> perfis e perguntas 6 e 7) ainda estão sendo montadas.
+> As 7 perguntas estão completas. As demais páginas (quiz de chakras,
+> quiz de personalidade e perfis) ainda estão sendo montadas.
 
 ## Rodar localmente
 

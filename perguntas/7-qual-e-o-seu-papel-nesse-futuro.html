@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qual é o seu papel nesse futuro? — Jogo da Alma</title>
+<meta name="description" content="Descubra seu papel no futuro: atualizar a si mesmo, entender sua frequência dominante e transformar sua evolução em contribuição coletiva.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #0A0A0F; --bg-alt: #111118; --bg-card: #16161F;
+    --surface: #1E1E2A; --surface-light: #252535;
+    --text: #F0EFF4; --text-secondary: #B8B5C8; --text-muted: #7A7690;
+    --accent: #A78BFA; --accent-light: #C4B5FD; --accent-dark: #7C3AED;
+    --accent-glow: rgba(167, 139, 250, 0.15);
+    --gold: #F59E0B; --positive: #4ADE80; --negative: #FF6B6B;
+    --q1: #EF4444; --q2: #F97316; --q3: #EAB308; --q4: #22C55E;
+    --q5: #3B82F6; --q6: #8B5CF6; --q7: #A855F7;
+    --qc: var(--q7);
+    --radius-sm: 10px; --radius-md: 12px; --radius-lg: 20px;
+    --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body { font-family: 'DM Sans', -apple-system, sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+.container { max-width: 1040px; margin: 0 auto; padding: 0 24px; }
+.narrow { max-width: 860px; }
+h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; font-weight: 600; line-height: 1.15; }
+a { color: inherit; }
+::selection { background: var(--accent-dark); color: #fff; }
+
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(10,10,15,.82); backdrop-filter: blur(12px); border-bottom: 1px solid var(--surface); }
+.nav-inner { max-width: 1100px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.logo { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 600; text-decoration: none; color: var(--text); display: flex; gap: 8px; }
+.logo span { color: var(--accent); }
+.nav-links { display: flex; gap: 22px; align-items: center; }
+.nav-links a { text-decoration: none; color: var(--text-secondary); font-size: .9rem; transition: color var(--transition); }
+.nav-links a:hover { color: var(--text); }
+.nav-cta { background: var(--accent-dark); color: #fff !important; padding: 8px 18px; border-radius: 999px; font-weight: 500; }
+.nav-cta:hover { background: var(--accent); }
+@media (max-width: 720px) { .nav-links a:not(.nav-cta) { display: none; } }
+
+.hero { padding: 150px 24px 74px; text-align: center; background: radial-gradient(ellipse 60% 45% at 50% 0%, rgba(168,85,247,.20), transparent), var(--bg); }
+.breadcrumb { font-size: .85rem; color: var(--text-muted); margin-bottom: 26px; }
+.breadcrumb a { color: var(--text-muted); text-decoration: none; }
+.breadcrumb a:hover { color: var(--text-secondary); }
+.hero .q-label { color: var(--qc); letter-spacing: .18em; text-transform: uppercase; font-size: .78rem; font-weight: 700; margin-bottom: 18px; }
+.hero h1 { font-size: clamp(2.2rem, 5.5vw, 3.8rem); max-width: 820px; margin: 0 auto 22px; }
+.hero h1 .qmark { color: var(--qc); }
+.hero p.sub { color: var(--text-secondary); font-size: 1.12rem; max-width: 710px; margin: 0 auto; }
+
+.answer { padding: 70px 24px; border-top: 1px solid var(--surface); border-bottom: 1px solid var(--surface); background: var(--bg-alt); text-align: center; }
+.answer .eyebrow, .block .eyebrow { color: var(--qc); letter-spacing: .16em; text-transform: uppercase; font-size: .75rem; font-weight: 700; margin-bottom: 14px; }
+.answer p.main { font-family: 'Fraunces', serif; font-size: clamp(1.28rem, 2.6vw, 1.75rem); line-height: 1.45; max-width: 820px; margin: 0 auto; color: var(--text); }
+.answer p.main em { font-style: italic; color: var(--accent-light); }
+
+section.block { padding: 90px 24px 0; }
+section.block:last-of-type { padding-bottom: 90px; }
+.block h2 { font-size: clamp(1.75rem, 3.6vw, 2.45rem); margin-bottom: 18px; }
+.block > .container > p, .block .narrow > p { color: var(--text-secondary); margin-bottom: 16px; }
+.block p strong { color: var(--text); font-weight: 500; }
+
+.evolution { margin-top: 36px; display: grid; grid-template-columns: repeat(5, auto); gap: 12px; align-items: stretch; }
+.evo-card { min-width: 0; background: var(--bg-card); border: 1px solid var(--surface); border-radius: var(--radius-lg); padding: 24px; text-align: center; }
+.evo-card h3 { font-size: 1.2rem; margin-bottom: 8px; }
+.evo-card p { color: var(--text-secondary); font-size: .93rem; }
+.evo-arrow { display: flex; align-items: center; justify-content: center; color: var(--qc); font-size: 1.6rem; }
+@media (max-width: 880px) { .evolution { grid-template-columns: 1fr; } .evo-arrow { transform: rotate(90deg); } }
+
+.levels { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 34px; }
+.level-card { background: var(--bg-card); border: 1px solid var(--surface); border-radius: var(--radius-lg); padding: 26px; position: relative; overflow: hidden; }
+.level-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--cc); }
+.level-card .tag { color: var(--cc); font-size: .78rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; margin-bottom: 10px; }
+.level-card h3 { font-size: 1.35rem; margin-bottom: 10px; }
+.level-card p { color: var(--text-secondary); font-size: .94rem; margin-bottom: 12px; }
+.level-card ul { list-style: none; margin-top: 14px; }
+.level-card li { color: var(--text-secondary); font-size: .92rem; padding: 7px 0; border-top: 1px solid var(--surface); }
+.level-card li::before { content: "◆"; color: var(--cc); font-size: .6rem; margin-right: 9px; }
+@media (max-width: 900px) { .levels { grid-template-columns: 1fr; } }
+
+.table-wrap { margin-top: 34px; border: 1px solid var(--surface-light); border-radius: var(--radius-lg); overflow-x: auto; background: var(--bg-card); }
+table { width: 100%; border-collapse: collapse; min-width: 900px; }
+th { background: #241B38; color: #D8B4FE; text-align: left; font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; padding: 18px; }
+td { padding: 18px; border-top: 1px solid var(--surface); color: #DCD8FF; vertical-align: top; font-size: .94rem; }
+.badge { display: inline-block; padding: 5px 12px; border-radius: 999px; font-weight: 700; font-size: .75rem; color: var(--cc); border: 1px solid color-mix(in srgb, var(--cc) 45%, transparent); background: color-mix(in srgb, var(--cc) 12%, transparent); }
+
+.tech-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 30px; }
+.tech-card { background: var(--bg-card); border: 1px solid var(--surface); border-radius: var(--radius-lg); padding: 26px; }
+.tech-card h3 { font-size: 1.25rem; margin-bottom: 10px; }
+.tech-card p { color: var(--text-secondary); }
+.tech-card.warning { border-top: 3px solid var(--negative); }
+.tech-card.promise { border-top: 3px solid var(--positive); }
+@media (max-width: 760px) { .tech-grid { grid-template-columns: 1fr; } }
+
+.examples { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 34px; }
+.example-card { background: var(--bg-card); border: 1px solid var(--surface); border-radius: var(--radius-lg); padding: 24px; border-top: 3px solid var(--qc); }
+.example-card h3 { font-size: 1.25rem; margin-bottom: 12px; }
+.example-card p { color: var(--text-secondary); font-size: .94rem; margin-bottom: 10px; }
+.example-card b { color: var(--text); }
+@media (max-width: 900px) { .examples { grid-template-columns: 1fr; } }
+
+.insight { margin-top: 40px; background: linear-gradient(135deg, rgba(168,85,247,.16), rgba(168,85,247,.08)); border: 1px solid rgba(168,85,247,.28); border-radius: var(--radius-lg); padding: 30px; }
+.insight h3 { font-size: 1.4rem; margin-bottom: 10px; }
+.insight p { color: var(--text-secondary); }
+.quote { margin-top: 34px; padding: 34px; border-radius: var(--radius-lg); background: var(--bg-card); border: 1px solid var(--surface); text-align: center; }
+.quote p { font-family: 'Fraunces', serif; font-size: clamp(1.2rem, 2.4vw, 1.65rem); line-height: 1.45; color: var(--text); }
+.quote em { color: var(--accent-light); }
+
+.diag { margin-top: 90px; text-align: center; padding: 90px 24px; background: radial-gradient(ellipse 55% 50% at 50% 100%, rgba(168,85,247,.16), transparent), var(--bg-alt); border-top: 1px solid var(--surface); }
+.diag h2 { font-size: clamp(1.8rem, 4vw, 2.7rem); max-width: 700px; margin: 0 auto 18px; }
+.diag p { color: var(--text-secondary); max-width: 600px; margin: 0 auto 34px; font-size: 1.05rem; }
+.btn { display: inline-block; text-decoration: none; font-weight: 500; padding: 14px 32px; border-radius: 999px; font-size: 1rem; transition: transform var(--transition), background var(--transition), border-color var(--transition); }
+.btn-primary { background: var(--accent-dark); color: #fff; }
+.btn-primary:hover { background: var(--accent); transform: translateY(-2px); }
+.btn-ghost { border: 1px solid var(--surface-light); color: var(--text-secondary); margin-left: 10px; }
+.btn-ghost:hover { color: var(--text); border-color: var(--text-muted); }
+@media (max-width: 540px) { .btn-ghost { margin-left: 0; margin-top: 12px; } }
+
+.next { display: flex; justify-content: space-between; align-items: center; gap: 16px; max-width: 1040px; margin: 0 auto; padding: 34px 24px; }
+.next a { text-decoration: none; color: var(--text-secondary); font-size: .95rem; transition: color var(--transition); }
+.next a:hover { color: var(--text); }
+.next .next-q { text-align: right; }
+.next .next-q small { display: block; font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); }
+footer { border-top: 1px solid var(--surface); padding: 40px 24px; text-align: center; color: var(--text-muted); font-size: .85rem; }
+footer .disclaimer { margin-top: 8px; }
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .reveal { opacity: 1; transform: none; transition: none; } }
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="../index.html" class="logo"><span>✦</span> Jogo da Alma</a>
+        <div class="nav-links">
+            <a href="../index.html#p7">As 7 Perguntas</a>
+            <a href="../questionario.html">Quiz Chakras</a>
+            <a href="../questionario-personalidade.html" class="nav-cta">Quiz Personalidade</a>
+        </div>
+    </div>
+</nav>
+
+<header class="hero">
+    <p class="breadcrumb"><a href="../index.html">Jogo da Alma</a> / As 7 Perguntas / 7</p>
+    <p class="q-label">Pergunta 07 de 7</p>
+    <h1>Qual é o seu papel nesse futuro<span class="qmark">?</span></h1>
+    <p class="sub">Você não precisa salvar o mundo sozinho. Mas existe uma parte da atualização coletiva que só pode acontecer através da sua própria evolução.</p>
+</header>
+
+<section class="answer">
+    <p class="eyebrow">A resposta do Jogo</p>
+    <p class="main">Seu papel é atualizar a si mesmo, descobrir sua frequência dominante e transformar essa evolução em contribuição. <em>O futuro não precisa que você seja tudo — precisa que você ofereça sua parte.</em></p>
+</section>
+
+<section class="block">
+    <div class="container narrow reveal">
+        <p class="eyebrow">O framework</p>
+        <h2>Jornada individual → transformação coletiva.</h2>
+        <p>O mundo muda quando pessoas mudam a forma como vivem, trabalham, amam, criam, lideram e se comunicam. A transformação coletiva começa no indivíduo, mas não termina nele.</p>
+        <p>No Jogo da Alma, seu papel no futuro nasce da união entre <strong>quem você é</strong>, <strong>o que você desenvolve</strong> e <strong>como isso serve à vida ao redor</strong>.</p>
+        <div class="evolution">
+            <div class="evo-card"><h3>Identidade</h3><p>Reconhecer suas frequências, talentos, necessidades e sombras.</p></div>
+            <div class="evo-arrow">→</div>
+            <div class="evo-card"><h3>Atualização</h3><p>Preencher suas necessidades de forma saudável e evoluir do 1.0 para o 3.0.</p></div>
+            <div class="evo-arrow">→</div>
+            <div class="evo-card"><h3>Contribuição</h3><p>Transformar sua evolução em valor para pessoas, projetos e sociedade.</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="block">
+    <div class="container reveal">
+        <p class="eyebrow">Os 3 níveis do papel</p>
+        <h2>Você não descobre seu papel pensando. Descobre jogando.</h2>
+        <p>Missão não é apenas uma frase bonita. É um caminho que se revela quando você aprende o jogo, atualiza sua própria energia e começa a agir de forma útil no mundo.</p>
+        <div class="levels">
+            <div class="level-card" style="--cc: var(--q6)">
+                <div class="tag">Nível 1</div>
+                <h3>Conhecer o jogo</h3>
+                <p>Entender as 7 frequências, suas necessidades, seus padrões e como a vida devolve desafios para gerar evolução.</p>
+                <ul>
+                    <li>Quem sou eu?</li>
+                    <li>Quais são minhas frequências dominantes?</li>
+                    <li>Onde estou jogando pelo medo?</li>
+                </ul>
+            </div>
+            <div class="level-card" style="--cc: var(--q4)">
+                <div class="tag">Nível 2</div>
+                <h3>Atualizar a si mesmo</h3>
+                <p>Transformar reação em consciência, falta em equilíbrio e excesso em direção proporcional.</p>
+                <ul>
+                    <li>Quais necessidades pedem cuidado?</li>
+                    <li>Quais sombras estão repetindo ciclos?</li>
+                    <li>Qual é meu próximo movimento?</li>
+                </ul>
+            </div>
+            <div class="level-card" style="--cc: var(--q7)">
+                <div class="tag">Nível 3</div>
+                <h3>Contribuir com o futuro</h3>
+                <p>Usar sua personalidade, seus talentos e sua história como ponte entre transformação individual e coletiva.</p>
+                <ul>
+                    <li>Que valor eu gero?</li>
+                    <li>Que problema eu ajudo a resolver?</li>
+                    <li>Que futuro eu ajudo a construir?</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="block">
+    <div class="container reveal">
+        <p class="eyebrow">As 7 formas de contribuição</p>
+        <h2>Cada frequência tem uma forma de servir ao mundo.</h2>
+        <p>Você não precisa contribuir do mesmo jeito que outra pessoa. Cada chakra aponta para um tipo de valor que pode ser oferecido à sociedade quando está em sua forma positiva.</p>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Chakra</th>
+                        <th>Quando atualizado</th>
+                        <th>Contribuição para o futuro</th>
+                        <th>Pergunta do papel</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr style="--cc: var(--q1)"><td><span class="badge">Básico</span></td><td>Segurança, estabilidade, presença e consistência.</td><td>Construir bases: família, saúde, rotina, finanças, operações, sistemas sustentáveis.</td><td>O que eu ajudo a sustentar?</td></tr>
+                    <tr style="--cc: var(--q2)"><td><span class="badge">Sacral</span></td><td>Prazer saudável, criatividade, vitalidade e adaptação.</td><td>Trazer vida: arte, cultura, experiências, inovação, leveza e movimento.</td><td>O que eu ajudo a tornar mais vivo?</td></tr>
+                    <tr style="--cc: var(--q3)"><td><span class="badge">Plexo</span></td><td>Coragem, liderança, disciplina e capacidade de conquista.</td><td>Gerar resultado: empreender, liderar, executar, proteger, superar desafios.</td><td>Onde minha força cria avanço?</td></tr>
+                    <tr style="--cc: var(--q4)"><td><span class="badge">Cardíaco</span></td><td>Amor, cooperação, cuidado, justiça e vínculo.</td><td>Curar relações: acolher, mediar, educar, cuidar, conectar pessoas e grupos.</td><td>Quem precisa do meu cuidado?</td></tr>
+                    <tr style="--cc: var(--q5)"><td><span class="badge">Laríngeo</span></td><td>Expressão verdadeira, comunicação e influência responsável.</td><td>Dar voz: ensinar, vender, comunicar, defender ideias, traduzir mensagens importantes.</td><td>Qual verdade precisa passar por mim?</td></tr>
+                    <tr style="--cc: var(--q6)"><td><span class="badge">Frontal</span></td><td>Clareza, visão sistêmica, análise e sabedoria aplicada.</td><td>Organizar conhecimento: diagnosticar, pesquisar, criar métodos, estratégias e mapas.</td><td>Que confusão eu ajudo a esclarecer?</td></tr>
+                    <tr style="--cc: var(--q7)"><td><span class="badge">Coronário</span></td><td>Sentido, propósito, visão ampla e conexão com algo maior.</td><td>Inspirar direção: lembrar o porquê, abrir consciência, unir espiritualidade e vida prática.</td><td>Que sentido eu ajudo a revelar?</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="block">
+    <div class="container narrow reveal">
+        <p class="eyebrow">Do abstrato ao concreto</p>
+        <h2>Propósito só vira papel quando encontra ação.</h2>
+        <p>Muita gente trava tentando descobrir uma missão perfeita. Mas o papel no futuro não começa como uma certeza absoluta. Ele começa como um próximo passo proporcional.</p>
+        <div class="tech-grid">
+            <div class="tech-card warning">
+                <h3>Propósito abstrato</h3>
+                <p>“Preciso descobrir minha missão antes de agir.” Esse caminho pode virar espera, comparação, idealização e paralisia.</p>
+            </div>
+            <div class="tech-card promise">
+                <h3>Propósito encarnado</h3>
+                <p>“Vou usar o que tenho agora para gerar valor real.” Esse caminho transforma identidade em movimento e movimento em clareza.</p>
+            </div>
+        </div>
+        <div class="insight">
+            <h3>A fórmula prática do papel</h3>
+            <p><strong>Frequência dominante + necessidade evoluída + problema real + ação consistente = contribuição.</strong></p>
+        </div>
+    </div>
+</section>
+
+<section class="block">
+    <div class="container reveal">
+        <p class="eyebrow">Fechamento das 7 perguntas</p>
+        <h2>A sétima pergunta só se responde vivendo as outras seis.</h2>
+        <p>Seu papel no futuro não está separado da sua felicidade, do seu sucesso material, da sua identidade, da sua leitura do mundo e da sua compreensão do jogo. Ele é a síntese de tudo isso.</p>
+        <div class="examples">
+            <div class="example-card">
+                <h3>Você se conhece</h3>
+                <p>Para parar de copiar caminhos que não pertencem à sua frequência.</p>
+                <p><b>Pergunta 1:</b> Quem você é?</p>
+            </div>
+            <div class="example-card">
+                <h3>Você entende o tabuleiro</h3>
+                <p>Para não reagir ao mundo como se o caos fosse sem sentido.</p>
+                <p><b>Perguntas 2 e 3:</b> Por que o mundo é assim? Por que estamos aqui?</p>
+            </div>
+            <div class="example-card">
+                <h3>Você aprende a criar</h3>
+                <p>Para transformar necessidades, valor e propósito em contribuição real.</p>
+                <p><b>Perguntas 4, 5, 6 e 7:</b> Felicidade, sucesso, futuro e papel.</p>
+            </div>
+        </div>
+        <div class="quote">
+            <p>O seu papel não é ser perfeito. É <em>jogar melhor a sua parte</em> e deixar que essa evolução se torne útil para o todo.</p>
+        </div>
+    </div>
+</section>
+
+<section class="diag">
+    <h2 class="reveal">Comece descobrindo sua frequência dominante.</h2>
+    <p class="reveal">O diagnóstico ajuda você a identificar seus chakras, sua personalidade, suas necessidades atuais e por onde começar sua atualização individual.</p>
+    <a href="../questionario.html" class="btn btn-primary reveal">Fazer Quiz dos Chakras</a>
+    <a href="../questionario-personalidade.html" class="btn btn-ghost reveal">Descobrir minha Personalidade</a>
+</section>
+
+<div class="next">
+    <a href="6-qual-e-o-nosso-futuro.html">← Pergunta 6: Qual é o nosso futuro?</a>
+    <a href="../index.html#p1" class="next-q"><small>Você percorreu as 7 perguntas</small>Voltar ao início →</a>
+</div>
+
+<footer>
+    <div>✦ Jogo da Alma — © 2026. Todos os direitos reservados.</div>
+    <div class="disclaimer">Não substitui acompanhamento profissional.</div>
+</footer>
+
+<script>
+(function () {
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var reveals = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window && !reduced) {
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (e) {
+                if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+            });
+        }, { threshold: 0.15 });
+        reveals.forEach(function (el) { io.observe(el); });
+    } else {
+        reveals.forEach(function (el) { el.classList.add('in'); });
+    }
+})();
+</script>
+</body>
+</html>
