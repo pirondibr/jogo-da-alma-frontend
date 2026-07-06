@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chakra Coronário — Problemas, Necessidades e Estratégias | Jogo da Alma</title>
+<meta name="description" content="Entenda os problemas mais comuns do Chakra Coronário: vazio existencial, falta de propósito, crise de sentido, desconexão espiritual, fuga da realidade e fanatismo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #0A0A0F; --bg-alt: #111118; --bg-card: #16161F;
+    --surface: #1E1E2A; --surface-light: #252535;
+    --text: #F0EFF4; --text-secondary: #B8B5C8; --text-muted: #7A7690;
+    --accent: #A78BFA; --accent-light: #C4B5FD; --accent-dark: #7C3AED;
+    --red: #A855F7; --red-light: #C084FC; --red-glow: rgba(168,85,247,.16);
+    --gold: #F59E0B; --green: #22C55E; --blue: #3B82F6;
+    --radius-md: 12px; --radius-lg: 20px; --transition: .3s cubic-bezier(.4,0,.2,1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+.narrow { max-width: 860px; }
+h1,h2,h3 { font-family: 'Fraunces', Georgia, serif; font-weight: 600; line-height: 1.15; }
+::selection { background: var(--red); color: #fff; }
+
+nav { position: fixed; inset: 0 0 auto 0; z-index: 100; background: rgba(10,10,15,.82); backdrop-filter: blur(12px); border-bottom: 1px solid var(--surface); }
+.nav-inner { max-width: 1100px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.logo { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 600; text-decoration: none; color: var(--text); display: flex; gap: 8px; }
+.logo span { color: var(--red); }
+.nav-links { display: flex; gap: 22px; align-items: center; }
+.nav-links a { text-decoration: none; color: var(--text-secondary); font-size: .9rem; transition: color var(--transition); }
+.nav-links a:hover { color: var(--text); }
+.nav-cta { background: var(--red); color: #fff !important; padding: 8px 18px; border-radius: 999px; font-weight: 500; }
+.nav-cta:hover { background: var(--red-light); }
+@media (max-width:720px){ .nav-links a:not(.nav-cta){display:none;} }
+
+.hero { padding: 150px 24px 80px; text-align: center; background: radial-gradient(ellipse 60% 45% at 50% 0%, var(--red-glow), transparent), var(--bg); }
+.breadcrumb { color: var(--text-muted); font-size: .85rem; margin-bottom: 26px; }
+.breadcrumb a { color: var(--text-muted); text-decoration: none; }
+.eyebrow { color: var(--red-light); letter-spacing: .16em; text-transform: uppercase; font-size: .76rem; font-weight: 700; margin-bottom: 14px; }
+.hero h1 { font-size: clamp(2.3rem, 6vw, 4.2rem); max-width: 840px; margin: 0 auto 22px; }
+.hero h1 em { font-style: italic; color: var(--red-light); }
+.hero .sub { color: var(--text-secondary); font-size: 1.14rem; max-width: 710px; margin: 0 auto 34px; }
+.hero-card { max-width: 860px; margin: 0 auto; background: rgba(22,22,31,.82); border: 1px solid var(--surface-light); border-radius: var(--radius-lg); padding: 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; text-align: left; }
+.hero-card div { border-left: 3px solid var(--red); padding-left: 16px; }
+.hero-card small { display: block; color: var(--text-muted); text-transform: uppercase; letter-spacing: .12em; font-size: .68rem; margin-bottom: 5px; font-weight: 700; }
+.hero-card strong { display: block; color: var(--text); font-size: .98rem; }
+@media (max-width:760px){ .hero-card{grid-template-columns:1fr;} }
+
+.answer { padding: 70px 24px; border-top: 1px solid var(--surface); border-bottom: 1px solid var(--surface); background: var(--bg-alt); text-align: center; }
+.answer p { font-family: 'Fraunces', serif; font-size: clamp(1.25rem, 2.6vw, 1.75rem); line-height: 1.45; max-width: 780px; margin: 0 auto; }
+.answer em { color: var(--red-light); font-style: italic; }
+
+section.block { padding: 90px 24px 0; }
+section.block.last { padding-bottom: 90px; }
+.block h2 { font-size: clamp(1.8rem, 4vw, 2.7rem); margin-bottom: 18px; }
+.block h3 { font-size: 1.35rem; margin-bottom: 10px; }
+.block p { color: var(--text-secondary); margin-bottom: 16px; }
+.block p strong { color: var(--text); }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 34px; }
+.card { background: var(--bg-card); border: 1px solid var(--surface); border-radius: var(--radius-lg); padding: 24px; border-top: 3px solid var(--red); transition: transform var(--transition), border-color var(--transition); }
+.card:hover { transform: translateY(-3px); border-color: rgba(168,85,247,.4); }
+.card .icon { font-size: 1.65rem; margin-bottom: 12px; }
+.card h3 { font-size: 1.17rem; margin-bottom: 9px; }
+.card p { font-size: .93rem; margin: 0; }
+
+.center-flow { max-width: 760px; margin: 36px auto 0; display: grid; gap: 10px; text-align: center; }
+.flow-step { background: var(--bg-card); border: 1px solid var(--surface); border-radius: var(--radius-md); padding: 16px 20px; }
+.flow-step strong { display: block; color: var(--text); }
+.flow-arrow { color: var(--red-light); font-size: 1.4rem; }
+
+.table-wrap { overflow-x: auto; margin-top: 34px; border: 1px solid var(--surface); border-radius: var(--radius-lg); }
+table { width: 100%; border-collapse: collapse; min-width: 720px; background: var(--bg-card); }
+th, td { padding: 18px 20px; text-align: left; border-bottom: 1px solid var(--surface); vertical-align: top; }
+th { color: var(--red-light); font-size: .78rem; text-transform: uppercase; letter-spacing: .11em; background: rgba(168,85,247,.07); }
+td { color: var(--text-secondary); font-size: .94rem; }
+td strong { color: var(--text); }
+tr:last-child td { border-bottom: none; }
+
+.dual { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 34px; }
+.dual-card { background: var(--bg-card); border: 1px solid var(--surface); border-radius: var(--radius-lg); padding: 26px; }
+.dual-card.good { border-top: 3px solid var(--green); }
+.dual-card.bad { border-top: 3px solid var(--red); }
+.dual-card h3 { margin-bottom: 12px; }
+.dual-card ul { list-style: none; display: grid; gap: 10px; color: var(--text-secondary); }
+.dual-card li::before { content: '◆'; margin-right: 9px; font-size: .58rem; color: var(--green); }
+.dual-card.bad li::before { color: var(--red); }
+@media (max-width:760px){ .dual{grid-template-columns:1fr;} }
+
+.example { margin-top: 38px; background: linear-gradient(180deg, rgba(99,102,241,.1), rgba(22,22,31,.7)); border: 1px solid rgba(99,102,241,.22); border-radius: var(--radius-lg); padding: 28px; }
+.example-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-top: 18px; }
+.example-item { background: rgba(10,10,15,.45); border: 1px solid var(--surface); border-radius: var(--radius-md); padding: 16px; }
+.example-item small { display: block; color: var(--red-light); text-transform: uppercase; letter-spacing: .1em; font-size: .68rem; font-weight: 700; margin-bottom: 5px; }
+.example-item span { color: var(--text-secondary); font-size: .92rem; }
+
+.checks { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 12px; margin-top: 28px; }
+.check { background: var(--bg-card); border: 1px solid var(--surface); border-radius: var(--radius-md); padding: 16px 18px; color: var(--text-secondary); }
+.check::before { content:'✓'; color: var(--gold); margin-right: 9px; }
+
+.practice { background: var(--bg-alt); border-top: 1px solid var(--surface); border-bottom: 1px solid var(--surface); margin-top: 90px; padding: 90px 24px; }
+.practice .container { max-width: 900px; }
+.practice-steps { display: grid; gap: 14px; margin-top: 30px; }
+.practice-step { display: grid; grid-template-columns: 48px 1fr; gap: 18px; align-items: start; background: var(--bg-card); border: 1px solid var(--surface); border-radius: var(--radius-lg); padding: 22px; }
+.practice-step .num { width: 48px; height: 48px; border-radius: 50%; background: rgba(99,102,241,.14); color: var(--red-light); display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-size:1.3rem; }
+.practice-step p { margin: 0; }
+
+.objectives { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 34px; }
+.objective-card { background: var(--bg-card); border: 1px solid var(--surface); border-radius: var(--radius-lg); padding: 26px; }
+.objective-card h3 { color: var(--text); margin-bottom: 14px; }
+.objective-card ul { list-style: none; display: grid; gap: 9px; color: var(--text-secondary); }
+.objective-card li::before { content:'→'; color: var(--red-light); margin-right: 9px; }
+@media (max-width:760px){ .objectives{grid-template-columns:1fr;} }
+
+.diag { text-align: center; padding: 90px 24px; background: radial-gradient(ellipse 55% 50% at 50% 100%, var(--red-glow), transparent), var(--bg-alt); border-top: 1px solid var(--surface); }
+.diag h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); max-width: 700px; margin: 0 auto 18px; }
+.diag p { color: var(--text-secondary); max-width: 560px; margin: 0 auto 34px; font-size: 1.05rem; }
+.btn { display: inline-block; text-decoration: none; font-weight: 500; padding: 14px 32px; border-radius: 999px; transition: transform var(--transition), background var(--transition); }
+.btn-primary { background: var(--red); color: #fff; }
+.btn-primary:hover { background: var(--red-light); transform: translateY(-2px); }
+.btn-ghost { border: 1px solid var(--surface-light); color: var(--text-secondary); margin-left: 10px; }
+.btn-ghost:hover { color: var(--text); border-color: var(--text-muted); }
+@media (max-width:580px){ .btn-ghost{margin-left:0;margin-top:12px;} }
+
+.next { display: flex; justify-content: space-between; align-items: center; gap: 16px; max-width: 860px; margin: 0 auto; padding: 34px 24px; }
+.next a { text-decoration: none; color: var(--text-secondary); font-size: .95rem; }
+.next a:hover { color: var(--text); }
+footer { border-top: 1px solid var(--surface); padding: 40px 24px; text-align: center; color: var(--text-muted); font-size: .85rem; }
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none} }
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="logo"><span>✦</span> Jogo da Alma</a>
+        <div class="nav-links">
+            <a href="index.html#p4">As 7 Perguntas</a>
+            <a href="perguntas/4-como-alcancar-a-felicidade.html">Como alcançar a felicidade</a>
+            <a href="questionario.html">Quiz Chakras</a>
+            <a href="questionario.html" class="nav-cta">Fazer diagnóstico</a>
+        </div>
+    </div>
+</nav>
+
+<header class="hero">
+    <p class="breadcrumb"><a href="index.html">Jogo da Alma</a> / <a href="perguntas/4-como-alcancar-a-felicidade.html">Como alcançar a felicidade?</a> / Coronário</p>
+    <p class="eyebrow">7º Chakra · Sentido</p>
+    <h1>Chakra Coronário: quando a vida perde o sentido<span style="color:var(--red-light)">.</span></h1>
+    <p class="sub">O Chakra Coronário representa sua necessidade de sentido, propósito e conexão com algo maior. Quando ele está equilibrado, você sente direção profunda, paz e confiança na vida. Quando está em desequilíbrio, aparece vazio existencial, desconexão, fuga espiritual ou rigidez de crenças.</p>
+    <div class="hero-card">
+        <div><small>Necessidade central</small><strong>Sentido e propósito</strong></div>
+        <div><small>Em equilíbrio</small><strong>Paz, confiança e direção espiritual</strong></div>
+        <div><small>Em desequilíbrio</small><strong>Vazio, fuga ou fanatismo</strong></div>
+    </div>
+</header>
+
+<section class="answer">
+    <p><em>O problema não é buscar propósito.</em> O problema é quando a busca por sentido vira fuga da vida, vazio, dependência de sinais externos ou crença rígida que substitui a experiência real.</p>
+</section>
+
+<section class="block">
+    <div class="container narrow reveal">
+        <p class="eyebrow">Problemas mais comuns</p>
+        <h2>Você se identifica com alguma dessas situações?</h2>
+        <p>Antes de falar sobre chakra, o Jogo da Alma começa pelo que você vive na prática. O Coronário aparece quando temas de sentido, propósito, fé, confiança na vida e conexão com o todo começam a travar sua vida.</p>
+    </div>
+    <div class="container reveal">
+        <div class="cards">
+            <div class="card"><div class="icon">🌌</div><h3>Vazio existencial</h3><p>Você sente que a vida perdeu profundidade, como se nada fosse suficiente para gerar sentido verdadeiro.</p></div>
+            <div class="card"><div class="icon">🧭</div><h3>Falta de propósito</h3><p>Você até funciona no dia a dia, mas sente que está caminhando sem uma direção maior.</p></div>
+            <div class="card"><div class="icon">🕳️</div><h3>Crise de sentido</h3><p>Uma situação difícil faz você questionar tudo: sua vida, suas escolhas, sua fé e seu futuro.</p></div>
+            <div class="card"><div class="icon">☁️</div><h3>Fuga espiritual</h3><p>Você usa ideias elevadas para não lidar com decisões práticas, emoções difíceis ou responsabilidades concretas.</p></div>
+            <div class="card"><div class="icon">🛐</div><h3>Fanatismo ou rigidez</h3><p>A necessidade de certeza vira apego a uma crença, guru, teoria ou explicação única para tudo.</p></div>
+            <div class="card"><div class="icon">🔌</div><h3>Desconexão da vida</h3><p>Você se sente separado do mundo, das pessoas ou do próprio corpo, como se estivesse observando a vida de longe.</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="block">
+    <div class="container narrow reveal">
+        <p class="eyebrow">A necessidade por trás</p>
+        <h2>O que todos esses problemas têm em comum?</h2>
+        <p>Todos são tentativas diferentes de preencher a mesma necessidade: <strong>sentido</strong>. Seu sistema quer sentir que a vida tem direção, que sua existência importa e que seus desafios fazem parte de uma jornada maior.</p>
+        <div class="center-flow">
+            <div class="flow-step"><strong>Problema visível</strong><span style="color:var(--text-secondary)">vazio, falta de propósito, crise de sentido, fuga espiritual, rigidez de crença</span></div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step"><strong>Necessidade escondida</strong><span style="color:var(--text-secondary)">sentido, propósito, conexão, confiança e pertencimento</span></div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step"><strong>Chakra relacionado</strong><span style="color:var(--text-secondary)">Coronário</span></div>
+        </div>
+    </div>
+</section>
+
+<section class="block">
+    <div class="container reveal">
+        <p class="eyebrow">Diagnóstico prático</p>
+        <h2>O que normalmente está acontecendo?</h2>
+        <p>O Jogo da Alma traduz o problema em necessidade, depois em padrão e estratégia. Assim você deixa de brigar com o sintoma e começa a agir na raiz.</p>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Problema</th><th>O que existe por trás</th><th>Estratégia negativa comum</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Vazio existencial</strong></td><td>Necessidade de sentir que a vida tem significado.</td><td>Buscar estímulos, distrações ou respostas prontas para não encarar o vazio.</td></tr>
+                    <tr><td><strong>Falta de propósito</strong></td><td>Desejo de direção profunda e contribuição.</td><td>Esperar uma revelação perfeita antes de agir no próximo passo.</td></tr>
+                    <tr><td><strong>Crise de sentido</strong></td><td>Uma antiga narrativa deixou de sustentar sua vida.</td><td>Entrar em desespero, negar a dor ou tentar forçar uma explicação imediata.</td></tr>
+                    <tr><td><strong>Fuga espiritual</strong></td><td>Necessidade de paz e transcendência.</td><td>Usar espiritualidade para evitar corpo, dinheiro, limites, conflitos e rotina.</td></tr>
+                    <tr><td><strong>Fanatismo</strong></td><td>Busca por certeza absoluta.</td><td>Substituir experiência viva por dogma, superioridade ou dependência de autoridade externa.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="block">
+    <div class="container reveal">
+        <p class="eyebrow">Forma positiva e negativa</p>
+        <h2>Toda necessidade pode ser preenchida de duas maneiras.</h2>
+        <p>A necessidade de sentido não precisa ser eliminada. Ela precisa ser preenchida de um jeito que gere presença, responsabilidade e confiança — não fuga da realidade, superioridade espiritual ou vazio paralisante.</p>
+        <div class="dual">
+            <div class="dual-card good">
+                <h3>Forma saudável</h3>
+                <ul>
+                    <li>Transformar propósito em pequenos atos concretos.</li>
+                    <li>Usar espiritualidade para viver melhor a realidade.</li>
+                    <li>Confiar na vida sem abandonar responsabilidade.</li>
+                    <li>Encontrar sentido no presente, não apenas em um futuro ideal.</li>
+                    <li>Integrar intuição, corpo, relações, trabalho e ação.</li>
+                </ul>
+            </div>
+            <div class="dual-card bad">
+                <h3>Forma negativa</h3>
+                <ul>
+                    <li>Esperar sinais para tudo e evitar decisão.</li>
+                    <li>Usar propósito como desculpa para não executar.</li>
+                    <li>Negar problemas práticos em nome do espiritual.</li>
+                    <li>Se prender a dogmas, gurus ou explicações absolutas.</li>
+                    <li>Buscar transcendência sem enraizamento.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="block">
+    <div class="container narrow reveal">
+        <p class="eyebrow">Como o Jogo da Alma resolve</p>
+        <h2>O método transforma vazio em direção viva.</h2>
+        <p>Em vez de dizer apenas “confie no universo” ou “encontre seu propósito”, o Jogo da Alma pergunta: qual necessidade está vazia, qual sentido está sendo perdido e qual ação concreta reconecta você com a vida?</p>
+        <div class="center-flow">
+            <div class="flow-step"><strong>1. Identificar a crise de sentido</strong><span style="color:var(--text-secondary)">o que perdeu significado ou deixou de sustentar sua vida?</span></div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step"><strong>2. Separar fé, fuga e responsabilidade</strong><span style="color:var(--text-secondary)">o que é confiança real e o que é evitação do próximo passo?</span></div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step"><strong>3. Traduzir propósito em prática</strong><span style="color:var(--text-secondary)">qual ação pequena expressa sua direção maior hoje?</span></div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step"><strong>4. Integrar céu e terra</strong><span style="color:var(--text-secondary)">sentido vira vida quando atravessa corpo, rotina, relações e ação.</span></div>
+        </div>
+    </div>
+</section>
+
+<section class="block">
+    <div class="container reveal">
+        <div class="example">
+            <p class="eyebrow">Exemplo prático</p>
+            <h2>“Nada faz sentido.”</h2>
+            <p>O Jogo da Alma não trata isso apenas como tristeza ou desmotivação. Ele investiga qual conexão foi perdida e como reconstruir sentido sem fugir da realidade.</p>
+            <div class="example-grid">
+                <div class="example-item"><small>Problema</small><span>Sinto que minha vida está sem propósito.</span></div>
+                <div class="example-item"><small>Necessidade</small><span>Sentido, propósito e conexão.</span></div>
+                <div class="example-item"><small>Forma negativa</small><span>Esperar uma grande revelação antes de viver o próximo passo.</span></div>
+                <div class="example-item"><small>Custo</small><span>Vazio, isolamento e desconexão da vida prática.</span></div>
+                <div class="example-item"><small>Forma saudável</small><span>Criar uma prática pequena que gere conexão real com a vida.</span></div>
+                <div class="example-item"><small>Estratégia</small><span>Escolher uma contribuição simples, uma prática espiritual enraizada e uma ação concreta por 7 dias.</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="practice">
+    <div class="container reveal">
+        <p class="eyebrow">Protocolo inicial</p>
+        <h2>O que praticar quando o Coronário ativa?</h2>
+        <p>O objetivo não é abandonar a espiritualidade. É fazer o sentido descer para a vida prática, sem transformar transcendência em fuga.</p>
+        <div class="practice-steps">
+            <div class="practice-step"><div class="num">1</div><div><h3>Voltar ao corpo e ao presente</h3><p>Quando o vazio ou a fuga ativar, faça algo simples e concreto: caminhar, respirar, organizar o ambiente, cuidar do corpo. O Coronário precisa de Básico para virar vida.</p></div></div>
+            <div class="practice-step"><div class="num">2</div><div><h3>Transformar sentido em serviço</h3><p>Pergunte: “qual pequena ação hoje melhora minha vida ou a vida de alguém?” Propósito fica mais claro quando vira contribuição.</p></div></div>
+            <div class="practice-step"><div class="num">3</div><div><h3>Confiar sem terceirizar escolha</h3><p>Use sinais, intuição e fé como orientação — não como substitutos da sua responsabilidade de escolher e agir.</p></div></div>
+        </div>
+    </div>
+</section>
+
+<section class="block">
+    <div class="container reveal">
+        <p class="eyebrow">Capacidades desenvolvidas</p>
+        <h2>Quando o Coronário se fortalece, você desenvolve sentido.</h2>
+        <div class="checks">
+            <div class="check">Propósito</div>
+            <div class="check">Paz interior</div>
+            <div class="check">Confiança na vida</div>
+            <div class="check">Aceitação</div>
+            <div class="check">Visão do todo</div>
+            <div class="check">Espiritualidade enraizada</div>
+            <div class="check">Resiliência existencial</div>
+            <div class="check">Capacidade de transformar dor em sentido</div>
+        </div>
+    </div>
+</section>
+
+<section class="block last">
+    <div class="container reveal">
+        <p class="eyebrow">Portas de entrada</p>
+        <h2>Você pode começar por um objetivo ou por uma situação.</h2>
+        <div class="objectives">
+            <div class="objective-card">
+                <h3>Quero...</h3>
+                <ul>
+                    <li>Encontrar meu propósito</li>
+                    <li>Ter mais paz interior</li>
+                    <li>Confiar mais na vida</li>
+                    <li>Transformar dor em aprendizado</li>
+                    <li>Conectar espiritualidade e prática</li>
+                    <li>Sentir que minha vida tem sentido</li>
+                </ul>
+            </div>
+            <div class="objective-card">
+                <h3>Estou...</h3>
+                <ul>
+                    <li>Sem propósito</li>
+                    <li>Vazio por dentro</li>
+                    <li>Em crise existencial</li>
+                    <li>Desconectado da vida</li>
+                    <li>Fugindo da realidade</li>
+                    <li>Preso em crenças rígidas ou medo do futuro</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="diag">
+    <h2 class="reveal">Descubra como está o seu Chakra Coronário.</h2>
+    <p class="reveal">O diagnóstico dos 7 chakras mostra quais necessidades estão pedindo atenção agora — e quais estratégias podem criar movimento de forma saudável.</p>
+    <a href="questionario.html" class="btn btn-primary reveal">Fazer diagnóstico</a>
+    <a href="perguntas/4-como-alcancar-a-felicidade.html" class="btn btn-ghost reveal">Explorar outros chakras</a>
+</section>
+
+<div class="next">
+    <a href="chakra-frontal-problemas.html">← Chakra anterior: Frontal</a>
+    <a href="perguntas/4-como-alcancar-a-felicidade.html">Voltar ao mapa dos chakras →</a>
+</div>
+
+<footer>
+    <div>✦ Jogo da Alma — © 2026. Todos os direitos reservados.</div>
+    <div>Não substitui acompanhamento profissional.</div>
+</footer>
+
+<script>
+(function(){
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var reveals = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window && !reduced) {
+        var io = new IntersectionObserver(function(entries){
+            entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+        }, { threshold: .15 });
+        reveals.forEach(function(el){ io.observe(el); });
+    } else {
+        reveals.forEach(function(el){ el.classList.add('in'); });
+    }
+})();
+</script>
+</body>
+</html>

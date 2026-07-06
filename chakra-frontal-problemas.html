@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chakra Frontal — Problemas, Necessidades e Estratégias | Jogo da Alma</title>
+<meta name="description" content="Entenda os problemas mais comuns do Chakra Frontal: confusão mental, excesso de pensamento, dificuldade de decidir, falta de clareza, ilusão e paralisia por análise.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<style>
+:root {
+    --bg: #0A0A0F; --bg-alt: #111118; --bg-card: #16161F;
+    --surface: #1E1E2A; --surface-light: #252535;
+    --text: #F0EFF4; --text-secondary: #B8B5C8; --text-muted: #7A7690;
+    --accent: #A78BFA; --accent-light: #C4B5FD; --accent-dark: #7C3AED;
+    --red: #6366F1; --red-light: #818CF8; --red-glow: rgba(99,102,241,.16);
+    --gold: #F59E0B; --green: #22C55E; --blue: #3B82F6;
+    --radius-md: 12px; --radius-lg: 20px; --transition: .3s cubic-bezier(.4,0,.2,1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+.narrow { max-width: 860px; }
+h1,h2,h3 { font-family: 'Fraunces', Georgia, serif; font-weight: 600; line-height: 1.15; }
+::selection { background: var(--red); color: #fff; }
+
+nav { position: fixed; inset: 0 0 auto 0; z-index: 100; background: rgba(10,10,15,.82); backdrop-filter: blur(12px); border-bottom: 1px solid var(--surface); }
+.nav-inner { max-width: 1100px; margin: 0 auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.logo { font-family: 'Fraunces', serif; font-size: 1.15rem; font-weight: 600; text-decoration: none; color: var(--text); display: flex; gap: 8px; }
+.logo span { color: var(--red); }
+.nav-links { display: flex; gap: 22px; align-items: center; }
+.nav-links a { text-decoration: none; color: var(--text-secondary); font-size: .9rem; transition: color var(--transition); }
+.nav-links a:hover { color: var(--text); }
+.nav-cta { background: var(--red); color: #fff !important; padding: 8px 18px; border-radius: 999px; font-weight: 500; }
+.nav-cta:hover { background: var(--red-light); }
+@media (max-width:720px){ .nav-links a:not(.nav-cta){display:none;} }
+
+.hero { padding: 150px 24px 80px; text-align: center; background: radial-gradient(ellipse 60% 45% at 50% 0%, var(--red-glow), transparent), var(--bg); }
+.breadcrumb { color: var(--text-muted); font-size: .85rem; margin-bottom: 26px; }
+.breadcrumb a { color: var(--text-muted); text-decoration: none; }
+.eyebrow { color: var(--red-light); letter-spacing: .16em; text-transform: uppercase; font-size: .76rem; font-weight: 700; margin-bottom: 14px; }
+.hero h1 { font-size: clamp(2.3rem, 6vw, 4.2rem); max-width: 840px; margin: 0 auto 22px; }
+.hero h1 em { font-style: italic; color: var(--red-light); }
+.hero .sub { color: var(--text-secondary); font-size: 1.14rem; max-width: 710px; margin: 0 auto 34px; }
+.hero-card { max-width: 860px; margin: 0 auto; background: rgba(22,22,31,.82); border: 1px solid var(--surface-light); border-radius: var(--radius-lg); padding: 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; text-align: left; }
+.hero-card div { border-left: 3px solid var(--red); padding-left: 16px; }
+.hero-card small { display: block; color: var(--text-muted); text-transform: uppercase; letter-spacing: .12em; font-size: .68rem; margin-bottom: 5px; font-weight: 700; }
+.hero-card strong { display: block; color: var(--text); font-size: .98rem; }
+@media (max-width:760px){ .hero-card{grid-template-columns:1fr;} }
+
+.answer { padding: 70px 24px; border-top: 1px solid var(--surface); border-bottom: 1px solid var(--surface); background: var(--bg-alt); text-align: center; }
+.answer p { font-family: 'Fraunces', serif; font-size: clamp(1.25rem, 2.6vw, 1.75rem); line-height: 1.45; max-width: 780px; margin: 0 auto; }
+.answer em { color: var(--red-light); font-style: italic; }
+
+section.block { padding: 90px 24px 0; }
+section.block.last { padding-bottom: 90px; }
+.block h2 { font-size: clamp(1.8rem, 4vw, 2.7rem); margin-bottom: 18px; }
+.block h3 { font-size: 1.35rem; margin-bottom: 10px; }
+.block p { color: var(--text-secondary); margin-bottom: 16px; }
+.block p strong { color: var(--text); }
+
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 34px; }
+.card { background: var(--bg-card); border: 1px solid var(--surface); border-radius: var(--radius-lg); padding: 24px; border-top: 3px solid var(--red); transition: transform var(--transition), border-color var(--transition); }
+.card:hover { transform: translateY(-3px); border-color: rgba(99,102,241,.4); }
+.card .icon { font-size: 1.65rem; margin-bottom: 12px; }
+.card h3 { font-size: 1.17rem; margin-bottom: 9px; }
+.card p { font-size: .93rem; margin: 0; }
+
+.center-flow { max-width: 760px; margin: 36px auto 0; display: grid; gap: 10px; text-align: center; }
+.flow-step { background: var(--bg-card); border: 1px solid var(--surface); border-radius: var(--radius-md); padding: 16px 20px; }
+.flow-step strong { display: block; color: var(--text); }
+.flow-arrow { color: var(--red-light); font-size: 1.4rem; }
+
+.table-wrap { overflow-x: auto; margin-top: 34px; border: 1px solid var(--surface); border-radius: var(--radius-lg); }
+table { width: 100%; border-collapse: collapse; min-width: 720px; background: var(--bg-card); }
+th, td { padding: 18px 20px; text-align: left; border-bottom: 1px solid var(--surface); vertical-align: top; }
+th { color: var(--red-light); font-size: .78rem; text-transform: uppercase; letter-spacing: .11em; background: rgba(99,102,241,.07); }
+td { color: var(--text-secondary); font-size: .94rem; }
+td strong { color: var(--text); }
+tr:last-child td { border-bottom: none; }
+
+.dual { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 34px; }
+.dual-card { background: var(--bg-card); border: 1px solid var(--surface); border-radius: var(--radius-lg); padding: 26px; }
+.dual-card.good { border-top: 3px solid var(--green); }
+.dual-card.bad { border-top: 3px solid var(--red); }
+.dual-card h3 { margin-bottom: 12px; }
+.dual-card ul { list-style: none; display: grid; gap: 10px; color: var(--text-secondary); }
+.dual-card li::before { content: '◆'; margin-right: 9px; font-size: .58rem; color: var(--green); }
+.dual-card.bad li::before { color: var(--red); }
+@media (max-width:760px){ .dual{grid-template-columns:1fr;} }
+
+.example { margin-top: 38px; background: linear-gradient(180deg, rgba(99,102,241,.1), rgba(22,22,31,.7)); border: 1px solid rgba(99,102,241,.22); border-radius: var(--radius-lg); padding: 28px; }
+.example-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-top: 18px; }
+.example-item { background: rgba(10,10,15,.45); border: 1px solid var(--surface); border-radius: var(--radius-md); padding: 16px; }
+.example-item small { display: block; color: var(--red-light); text-transform: uppercase; letter-spacing: .1em; font-size: .68rem; font-weight: 700; margin-bottom: 5px; }
+.example-item span { color: var(--text-secondary); font-size: .92rem; }
+
+.checks { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 12px; margin-top: 28px; }
+.check { background: var(--bg-card); border: 1px solid var(--surface); border-radius: var(--radius-md); padding: 16px 18px; color: var(--text-secondary); }
+.check::before { content:'✓'; color: var(--gold); margin-right: 9px; }
+
+.practice { background: var(--bg-alt); border-top: 1px solid var(--surface); border-bottom: 1px solid var(--surface); margin-top: 90px; padding: 90px 24px; }
+.practice .container { max-width: 900px; }
+.practice-steps { display: grid; gap: 14px; margin-top: 30px; }
+.practice-step { display: grid; grid-template-columns: 48px 1fr; gap: 18px; align-items: start; background: var(--bg-card); border: 1px solid var(--surface); border-radius: var(--radius-lg); padding: 22px; }
+.practice-step .num { width: 48px; height: 48px; border-radius: 50%; background: rgba(99,102,241,.14); color: var(--red-light); display:flex; align-items:center; justify-content:center; font-family:'Fraunces',serif; font-size:1.3rem; }
+.practice-step p { margin: 0; }
+
+.objectives { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 34px; }
+.objective-card { background: var(--bg-card); border: 1px solid var(--surface); border-radius: var(--radius-lg); padding: 26px; }
+.objective-card h3 { color: var(--text); margin-bottom: 14px; }
+.objective-card ul { list-style: none; display: grid; gap: 9px; color: var(--text-secondary); }
+.objective-card li::before { content:'→'; color: var(--red-light); margin-right: 9px; }
+@media (max-width:760px){ .objectives{grid-template-columns:1fr;} }
+
+.diag { text-align: center; padding: 90px 24px; background: radial-gradient(ellipse 55% 50% at 50% 100%, var(--red-glow), transparent), var(--bg-alt); border-top: 1px solid var(--surface); }
+.diag h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); max-width: 700px; margin: 0 auto 18px; }
+.diag p { color: var(--text-secondary); max-width: 560px; margin: 0 auto 34px; font-size: 1.05rem; }
+.btn { display: inline-block; text-decoration: none; font-weight: 500; padding: 14px 32px; border-radius: 999px; transition: transform var(--transition), background var(--transition); }
+.btn-primary { background: var(--red); color: #fff; }
+.btn-primary:hover { background: var(--red-light); transform: translateY(-2px); }
+.btn-ghost { border: 1px solid var(--surface-light); color: var(--text-secondary); margin-left: 10px; }
+.btn-ghost:hover { color: var(--text); border-color: var(--text-muted); }
+@media (max-width:580px){ .btn-ghost{margin-left:0;margin-top:12px;} }
+
+.next { display: flex; justify-content: space-between; align-items: center; gap: 16px; max-width: 860px; margin: 0 auto; padding: 34px 24px; }
+.next a { text-decoration: none; color: var(--text-secondary); font-size: .95rem; }
+.next a:hover { color: var(--text); }
+footer { border-top: 1px solid var(--surface); padding: 40px 24px; text-align: center; color: var(--text-muted); font-size: .85rem; }
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
+.reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce){ html{scroll-behavior:auto}.reveal{opacity:1;transform:none;transition:none} }
+</style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="logo"><span>✦</span> Jogo da Alma</a>
+        <div class="nav-links">
+            <a href="index.html#p4">As 7 Perguntas</a>
+            <a href="perguntas/4-como-alcancar-a-felicidade.html">Como alcançar a felicidade</a>
+            <a href="questionario.html">Quiz Chakras</a>
+            <a href="questionario.html" class="nav-cta">Fazer diagnóstico</a>
+        </div>
+    </div>
+</nav>
+
+<header class="hero">
+    <p class="breadcrumb"><a href="index.html">Jogo da Alma</a> / <a href="perguntas/4-como-alcancar-a-felicidade.html">Como alcançar a felicidade?</a> / Frontal</p>
+    <p class="eyebrow">6º Chakra · Clareza</p>
+    <h1>Chakra Frontal: quando sua mente perde a direção<span style="color:var(--red-light)">.</span></h1>
+    <p class="sub">O Chakra Frontal representa sua necessidade de clareza, compreensão e visão. Quando ele está equilibrado, você enxerga padrões, toma decisões melhores e aprende com profundidade. Quando está em desequilíbrio, a mente vira labirinto: excesso de análise, confusão, falsa certeza ou desconexão da realidade.</p>
+    <div class="hero-card">
+        <div><small>Necessidade central</small><strong>Clareza e compreensão</strong></div>
+        <div><small>Em equilíbrio</small><strong>Visão, discernimento e aprendizado</strong></div>
+        <div><small>Em desequilíbrio</small><strong>Confusão, ilusão ou paralisia</strong></div>
+    </div>
+</header>
+
+<section class="answer">
+    <p><em>O problema não é pensar muito.</em> O problema é quando sua busca por entendimento vira confusão, excesso de análise, falsa certeza ou distância da ação.</p>
+</section>
+
+<section class="block">
+    <div class="container narrow reveal">
+        <p class="eyebrow">Problemas mais comuns</p>
+        <h2>Você se identifica com alguma dessas situações?</h2>
+        <p>Antes de falar sobre chakra, o Jogo da Alma começa pelo que você vive na prática. O Frontal aparece quando temas de clareza, percepção, decisão, aprendizado e realidade começam a travar sua vida.</p>
+    </div>
+    <div class="container reveal">
+        <div class="cards">
+            <div class="card"><div class="icon">🌫️</div><h3>Confusão mental</h3><p>Você sente que tem muitas informações, possibilidades e pensamentos, mas não consegue organizar tudo em uma direção clara.</p></div>
+            <div class="card"><div class="icon">🔁</div><h3>Paralisia por análise</h3><p>Você pesquisa, compara, pensa e revisa — mas demora demais para decidir e agir.</p></div>
+            <div class="card"><div class="icon">🧠</div><h3>Excesso de pensamento</h3><p>Sua mente não desliga. Mesmo quando o corpo para, o pensamento continua tentando resolver tudo.</p></div>
+            <div class="card"><div class="icon">🧩</div><h3>Dificuldade de decidir</h3><p>Você vê muitos lados, muitas variáveis e muitos cenários, até perder o próximo passo simples.</p></div>
+            <div class="card"><div class="icon">🪞</div><h3>Autoengano ou falsa certeza</h3><p>Às vezes a mente fecha uma explicação rápido demais e confunde interpretação com verdade.</p></div>
+            <div class="card"><div class="icon">📚</div><h3>Aprender muito e aplicar pouco</h3><p>Você acumula conhecimento, cursos e ideias, mas sente dificuldade de transformar entendimento em prática.</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="block">
+    <div class="container narrow reveal">
+        <p class="eyebrow">A necessidade por trás</p>
+        <h2>O que todos esses problemas têm em comum?</h2>
+        <p>Todos são tentativas diferentes de preencher a mesma necessidade: <strong>clareza</strong>. Seu sistema quer entender o que está acontecendo, enxergar o caminho e saber qual decisão faz mais sentido.</p>
+        <div class="center-flow">
+            <div class="flow-step"><strong>Problema visível</strong><span style="color:var(--text-secondary)">confusão, excesso de análise, indecisão, falsa certeza, acúmulo de informação</span></div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step"><strong>Necessidade escondida</strong><span style="color:var(--text-secondary)">clareza, compreensão, discernimento, visão e direção</span></div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step"><strong>Chakra relacionado</strong><span style="color:var(--text-secondary)">Frontal</span></div>
+        </div>
+    </div>
+</section>
+
+<section class="block">
+    <div class="container reveal">
+        <p class="eyebrow">Diagnóstico prático</p>
+        <h2>O que normalmente está acontecendo?</h2>
+        <p>O Jogo da Alma traduz o problema em necessidade, depois em padrão e estratégia. Assim você deixa de brigar com o sintoma e começa a agir na raiz.</p>
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Problema</th><th>O que existe por trás</th><th>Estratégia negativa comum</th></tr></thead>
+                <tbody>
+                    <tr><td><strong>Confusão mental</strong></td><td>Necessidade de organizar variáveis e enxergar direção.</td><td>Consumir mais informação sem criar síntese.</td></tr>
+                    <tr><td><strong>Paralisia por análise</strong></td><td>Desejo de certeza antes de agir.</td><td>Esperar entender 100% antes de dar o próximo passo.</td></tr>
+                    <tr><td><strong>Falsa certeza</strong></td><td>Necessidade de segurança cognitiva.</td><td>Fechar uma explicação cedo demais para evitar dúvida.</td></tr>
+                    <tr><td><strong>Excesso de pensamento</strong></td><td>Tentativa de controlar a realidade pela mente.</td><td>Pensar no lugar de agir, sentir ou testar.</td></tr>
+                    <tr><td><strong>Aprender e não aplicar</strong></td><td>Prazer mental em entender padrões.</td><td>Transformar conhecimento em refúgio contra execução.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<section class="block">
+    <div class="container reveal">
+        <p class="eyebrow">Forma positiva e negativa</p>
+        <h2>Toda necessidade pode ser preenchida de duas maneiras.</h2>
+        <p>A necessidade de clareza não precisa ser eliminada. Ela precisa ser preenchida de um jeito que gere discernimento, decisão e movimento — não labirinto mental ou arrogância intelectual.</p>
+        <div class="dual">
+            <div class="dual-card good">
+                <h3>Forma saudável</h3>
+                <ul>
+                    <li>Organizar variáveis antes de decidir.</li>
+                    <li>Transformar informação em síntese.</li>
+                    <li>Testar hipóteses na realidade.</li>
+                    <li>Aprender o suficiente para agir melhor.</li>
+                    <li>Usar dúvida como investigação, não como paralisia.</li>
+                </ul>
+            </div>
+            <div class="dual-card bad">
+                <h3>Forma negativa</h3>
+                <ul>
+                    <li>Pensar sem nunca agir.</li>
+                    <li>Acumular informação para evitar risco.</li>
+                    <li>Confundir opinião com verdade.</li>
+                    <li>Usar inteligência para justificar fuga.</li>
+                    <li>Ficar preso em cenários, teorias e possibilidades infinitas.</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="block">
+    <div class="container narrow reveal">
+        <p class="eyebrow">Como o Jogo da Alma resolve</p>
+        <h2>O método transforma confusão em direção.</h2>
+        <p>Em vez de dizer apenas “pense positivo” ou “pare de pensar”, o Jogo da Alma pergunta: quais variáveis importam, qual interpretação está dominando e qual experimento pequeno pode revelar a verdade?</p>
+        <div class="center-flow">
+            <div class="flow-step"><strong>1. Identificar a pergunta real</strong><span style="color:var(--text-secondary)">o que você está tentando entender ou decidir?</span></div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step"><strong>2. Separar fato, interpretação e previsão</strong><span style="color:var(--text-secondary)">o que aconteceu, por que você acha que aconteceu e o que você acha que vai acontecer?</span></div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step"><strong>3. Reduzir para o próximo teste</strong><span style="color:var(--text-secondary)">qual ação pequena gera informação real?</span></div>
+            <div class="flow-arrow">↓</div>
+            <div class="flow-step"><strong>4. Transformar clareza em movimento</strong><span style="color:var(--text-secondary)">entendimento vira resultado quando orienta ação.</span></div>
+        </div>
+    </div>
+</section>
+
+<section class="block">
+    <div class="container reveal">
+        <div class="example">
+            <p class="eyebrow">Exemplo prático</p>
+            <h2>“Não sei qual caminho escolher.”</h2>
+            <p>O Jogo da Alma não trata isso apenas como indecisão. Ele organiza a confusão até encontrar uma decisão possível, proporcional e testável.</p>
+            <div class="example-grid">
+                <div class="example-item"><small>Problema</small><span>Tenho muitas opções e não consigo decidir.</span></div>
+                <div class="example-item"><small>Necessidade</small><span>Clareza e direção.</span></div>
+                <div class="example-item"><small>Forma negativa</small><span>Esperar certeza total antes de agir.</span></div>
+                <div class="example-item"><small>Custo</small><span>Paralisia, ansiedade e perda de oportunidade.</span></div>
+                <div class="example-item"><small>Forma saudável</small><span>Escolher um teste pequeno que aumente informação real.</span></div>
+                <div class="example-item"><small>Estratégia</small><span>Definir critérios, escolher hipótese principal e executar por 7 dias.</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="practice">
+    <div class="container reveal">
+        <p class="eyebrow">Protocolo inicial</p>
+        <h2>O que praticar quando o Frontal ativa?</h2>
+        <p>O objetivo não é desligar a mente. É ensinar a mente a servir o movimento, não substituir a vida.</p>
+        <div class="practice-steps">
+            <div class="practice-step"><div class="num">1</div><div><h3>Separar fato, narrativa e futuro</h3><p>Escreva em três linhas: o que aconteceu, por que eu acho que aconteceu e o que eu acho que vai acontecer. Isso tira a mente do emaranhado.</p></div></div>
+            <div class="practice-step"><div class="num">2</div><div><h3>Definir critérios de decisão</h3><p>Antes de escolher, defina o que importa: velocidade, segurança, aprendizado, dinheiro, energia, alinhamento. Clareza nasce de referência.</p></div></div>
+            <div class="practice-step"><div class="num">3</div><div><h3>Trocar certeza por experimento</h3><p>Escolha uma ação pequena que teste sua hipótese. A realidade dá feedback melhor do que pensamento infinito.</p></div></div>
+        </div>
+    </div>
+</section>
+
+<section class="block">
+    <div class="container reveal">
+        <p class="eyebrow">Capacidades desenvolvidas</p>
+        <h2>Quando o Frontal se fortalece, você desenvolve visão.</h2>
+        <div class="checks">
+            <div class="check">Clareza mental</div>
+            <div class="check">Discernimento</div>
+            <div class="check">Capacidade analítica</div>
+            <div class="check">Síntese de informações</div>
+            <div class="check">Tomada de decisão</div>
+            <div class="check">Aprendizado acelerado</div>
+            <div class="check">Percepção de padrões</div>
+            <div class="check">Pensamento orientado à ação</div>
+        </div>
+    </div>
+</section>
+
+<section class="block last">
+    <div class="container reveal">
+        <p class="eyebrow">Portas de entrada</p>
+        <h2>Você pode começar por um objetivo ou por uma situação.</h2>
+        <div class="objectives">
+            <div class="objective-card">
+                <h3>Quero...</h3>
+                <ul>
+                    <li>Ter mais clareza</li>
+                    <li>Tomar melhores decisões</li>
+                    <li>Aprender mais rápido</li>
+                    <li>Organizar minhas ideias</li>
+                    <li>Sair da confusão mental</li>
+                    <li>Transformar conhecimento em ação</li>
+                </ul>
+            </div>
+            <div class="objective-card">
+                <h3>Estou...</h3>
+                <ul>
+                    <li>Perdido</li>
+                    <li>Pensando demais</li>
+                    <li>Sem saber o que fazer</li>
+                    <li>Travado por excesso de análise</li>
+                    <li>Cheio de informação e sem direção</li>
+                    <li>Aprendendo muito e aplicando pouco</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="diag">
+    <h2 class="reveal">Descubra como está o seu Chakra Frontal.</h2>
+    <p class="reveal">O diagnóstico dos 7 chakras mostra quais necessidades estão pedindo atenção agora — e quais estratégias podem criar movimento de forma saudável.</p>
+    <a href="questionario.html" class="btn btn-primary reveal">Fazer diagnóstico</a>
+    <a href="perguntas/4-como-alcancar-a-felicidade.html" class="btn btn-ghost reveal">Explorar outros chakras</a>
+</section>
+
+<div class="next">
+    <a href="chakra-laringeo-problemas.html">← Chakra anterior: Laríngeo</a>
+    <a href="chakra-coronario-problemas.html">Próximo chakra: Coronário →</a>
+</div>
+
+<footer>
+    <div>✦ Jogo da Alma — © 2026. Todos os direitos reservados.</div>
+    <div>Não substitui acompanhamento profissional.</div>
+</footer>
+
+<script>
+(function(){
+    var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var reveals = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window && !reduced) {
+        var io = new IntersectionObserver(function(entries){
+            entries.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+        }, { threshold: .15 });
+        reveals.forEach(function(el){ io.observe(el); });
+    } else {
+        reveals.forEach(function(el){ el.classList.add('in'); });
+    }
+})();
+</script>
+</body>
+</html>

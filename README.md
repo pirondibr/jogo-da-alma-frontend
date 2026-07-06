@@ -15,6 +15,13 @@ Site estático da metodologia de autoconhecimento **Jogo da Alma**, construído 
 ├── personalidade-laringeo.html             # Perfil Expressivo
 ├── personalidade-frontal.html              # Perfil Intelectual
 ├── personalidade-coronario.html            # Perfil Espiritualista
+├── chakra-basico-problemas.html            # Chakra Básico — problemas e estratégias
+├── chakra-sacral-problemas.html            # Chakra Sacral
+├── chakra-plexo-solar-problemas.html       # Chakra Plexo Solar
+├── chakra-cardiaco-problemas.html          # Chakra Cardíaco
+├── chakra-laringeo-problemas.html          # Chakra Laríngeo
+├── chakra-frontal-problemas.html           # Chakra Frontal
+├── chakra-coronario-problemas.html         # Chakra Coronário
 └── perguntas/
     ├── 1-quem-voce-e.html                  # Pergunta 1
     ├── 2-por-que-o-mundo-e-assim.html      # Pergunta 2
@@ -25,8 +32,8 @@ Site estático da metodologia de autoconhecimento **Jogo da Alma**, construído 
     └── 7-qual-e-o-seu-papel-nesse-futuro.html       # Pergunta 7
 ```
 
-> As 7 perguntas e os 7 perfis de personalidade estão completos. As demais páginas
-> (quiz de chakras e quiz de personalidade) ainda estão sendo montadas.
+> As 7 perguntas, os 7 perfis de personalidade e as 7 páginas de chakras estão completos.
+> Os quizzes ainda estão sendo montados.
 
 ## Rodar localmente
 
