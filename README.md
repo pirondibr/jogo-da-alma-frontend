@@ -8,7 +8,7 @@ Site estático da metodologia de autoconhecimento **Jogo da Alma**, construído 
 .
 ├── index.html                              # Página inicial — As 7 Perguntas
 ├── personalidade.css                     # Estilos compartilhados dos perfis
-├── personalidade-basico.html               # Perfil Conservador
+├── personalidade-basico.html               # Perfil Tradicional
 ├── personalidade-sacral.html               # Perfil Criativo
 ├── personalidade-plexo-solar.html          # Perfil Ambicioso
 ├── personalidade-cardiaco.html             # Perfil Empático
