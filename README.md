@@ -7,6 +7,14 @@ Site estático da metodologia de autoconhecimento **Jogo da Alma**, construído 
 ```
 .
 ├── index.html                              # Página inicial — As 7 Perguntas
+├── personalidade.css                     # Estilos compartilhados dos perfis
+├── personalidade-basico.html               # Perfil Conservador
+├── personalidade-sacral.html               # Perfil Criativo
+├── personalidade-plexo-solar.html          # Perfil Ambicioso
+├── personalidade-cardiaco.html             # Perfil Empático
+├── personalidade-laringeo.html             # Perfil Expressivo
+├── personalidade-frontal.html              # Perfil Intelectual
+├── personalidade-coronario.html            # Perfil Espiritualista
 └── perguntas/
     ├── 1-quem-voce-e.html                  # Pergunta 1
     ├── 2-por-que-o-mundo-e-assim.html      # Pergunta 2
@@ -17,8 +25,8 @@ Site estático da metodologia de autoconhecimento **Jogo da Alma**, construído 
     └── 7-qual-e-o-seu-papel-nesse-futuro.html       # Pergunta 7
 ```
 
-> As 7 perguntas estão completas. As demais páginas (quiz de chakras,
-> quiz de personalidade e perfis) ainda estão sendo montadas.
+> As 7 perguntas e os 7 perfis de personalidade estão completos. As demais páginas
+> (quiz de chakras e quiz de personalidade) ainda estão sendo montadas.
 
 ## Rodar localmente
 
