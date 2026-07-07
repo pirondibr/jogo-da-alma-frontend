@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Personalidade — Questionário | Jogo da Alma</title>
+    <meta name="description" content="Descubra qual das 7 personalidades mais combina com você. Questionário baseado nos arquétipos dos 7 chakras.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="quiz-base.css">
+    <link rel="stylesheet" href="questionario-personalidade.css">
+    <script src="https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+</head>
+<body>
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="logo"><span>✦</span> Jogo da Alma</a>
+        <div class="nav-links">
+            <a href="index.html#p1">As 7 Perguntas</a>
+            <a href="perguntas/1-quem-voce-e.html">Quem você é</a>
+            <a href="questionario.html">Quiz Chakras</a>
+            <a href="questionario-personalidade.html" class="nav-cta">Quiz Personalidade</a>
+        </div>
+    </div>
+</nav>
+
+    <div id="pqApp" class="pq-wrapper"></div>
+
+    <footer class="site-footer">
+    <div>✦ Jogo da Alma — © 2026. Todos os direitos reservados.</div>
+    <div class="disclaimer">Não substitui acompanhamento profissional.</div>
+</footer>
+
+<script>
+(function(){
+
+const ARCHETYPES = [
+  { id:'tradicional', name:'Tradicional / Consistente', chakra:'Básico', color:'#EF4444' },
+  { id:'criativa',    name:'Dinâmica / Social',      chakra:'Sacral', color:'#F97316' },
+  { id:'ambiciosa',   name:'Ambiciosa / Confiante',  chakra:'Plexo Solar', color:'#EAB308' },
+  { id:'empatica',    name:'Empática / Amigável',    chakra:'Cardíaco', color:'#22C55E' },
+  { id:'intelectual', name:'Intelectual / Curiosa',  chakra:'Frontal', color:'#8B5CF6' },
+  { id:'expressiva',  name:'Expressiva / Comunicativa', chakra:'Laríngeo', color:'#3B82F6' },
+  { id:'espiritualista', name:'Espiritualista / Intuitiva', chakra:'Coronário', color:'#A855F7' }
+];
+
+const QUESTIONS = [
+  {
+    title:'O que mais você procura em uma amizade?',
+    options:[
+      { archId:'tradicional',    text:'Pessoas que sempre estiveram ao meu lado, que pensam como eu e têm o mesmo estilo de vida.' },
+      { archId:'criativa',       text:'Pessoas divertidas, sociáveis, leves, com bom humor.' },
+      { archId:'ambiciosa',      text:'Pessoas que têm destaque, poder, sucesso, influência e ambição.' },
+      { archId:'empatica',       text:'Pessoas a quem eu possa ajudar ou dar apoio, seja intelectual, material, emocional ou físico.' },
+      { archId:'intelectual',    text:'Pessoas com quem eu possa conversar de forma profunda ou aprender.' },
+      { archId:'expressiva',     text:'Pessoas a quem eu possa influenciar, impactar, que me admirem, me deem atenção ou me reconheçam.' },
+      { archId:'espiritualista', text:'Pessoas que são espirituais, intuitivas, que não se importam tanto com o material.' }
+    ]
+  },
+  {
+    title:'O que você mais gostaria de fazer no seu tempo livre?',
+    options:[
+      { archId:'tradicional',    text:'Fazer atividades que me relaxam ou que eu já domino e com as quais tenho familiaridade.' },
+      { archId:'criativa',       text:'Fazer coisas diferentes e me divertir, como participar de eventos, festas, ouvir música, estar com amigos, praticar esportes, apreciar arte, culinária, dança, entre outros.' },
+      { archId:'ambiciosa',      text:'Estar fazendo algo que me traga destaque, dinheiro, desafios, capacidades ou que esteja relacionado à minha ambição.' },
+      { archId:'empatica',       text:'Estar ajudando, contribuindo ou dando suporte a pessoas ou animais, seja de forma intelectual, material, física ou emocional.' },
+      { archId:'intelectual',    text:'Estar aprendendo assuntos novos ou me aprofundando em algum conhecimento.' },
+      { archId:'expressiva',     text:'Estar me comunicando, influenciando ou recebendo atenção de pessoas.' },
+      { archId:'espiritualista', text:'Estar realizando alguma prática espiritual, em busca de experiências ou missões espirituais, ou integrando diferentes áreas.' }
+    ]
+  },
+  {
+    title:'Qual das opções de emprego mais combinaria com você?',
+    options:[
+      { archId:'tradicional',    text:'Poder ter uma profissão ou vocação em que eu consiga ter um bom desempenho e estabilidade, sem mudanças drásticas ou grande pressão.' },
+      { archId:'criativa',       text:'Poder ter uma profissão ou vocação que seja divertida e envolva pessoas, socialização ou atividades como arte, esporte, dança, culinária, pintura, entre outras.' },
+      { archId:'ambiciosa',      text:'Poder ter uma profissão ou vocação que corresponda à minha ambição, trazendo sucesso, dinheiro, influência, impacto e crescimento.' },
+      { archId:'empatica',       text:'Poder ter uma profissão ou vocação em que eu possa ajudar ou contribuir com pessoas, seja de forma intelectual, física ou material.' },
+      { archId:'intelectual',    text:'Poder ter uma profissão ou vocação onde você possa explorar sua inteligência, estar em constante aprendizado e aprofundamento, criar novas soluções ou aprimorar soluções existentes.' },
+      { archId:'expressiva',     text:'Poder ter uma profissão ou vocação em que eu possa influenciar ou receber a atenção de pessoas, seja de forma digital ou física, utilizando meu corpo, voz ou intelecto.' },
+      { archId:'espiritualista', text:'Poder ter uma profissão ou vocação em que você exerça sua missão espiritual ou contribua para a espiritualidade das pessoas.' }
+    ]
+  },
+  {
+    title:'Qual é o estereótipo que mais combina com você?',
+    options:[
+      { archId:'tradicional',    text:'Sou uma pessoa que gosta de seguir o fluxo da vida, ter um bom emprego, curtir os momentos, e aproveitar a família, os amigos e os filhos.' },
+      { archId:'criativa',       text:'Sou uma pessoa que quer experimentar a vida, me divertir, fazer coisas diferentes, emocional e sensível.' },
+      { archId:'ambiciosa',      text:'Sou uma pessoa muito ambiciosa, preciso me destacar no que faço, gosto de competir e quero estar entre os melhores.' },
+      { archId:'empatica',       text:'Sou uma pessoa empática, gosto de ajudar pessoas ou animais e tenho dificuldade em dizer \'não\' ou em não me conectar com as emoções e problemas dos outros.' },
+      { archId:'intelectual',    text:'Sou uma pessoa muito curiosa, estou sempre questionando as coisas e buscando aprender mais. Tenho um perfil analítico.' },
+      { archId:'expressiva',     text:'Sou uma pessoa comunicativa, gosto de poder expressar minhas ideias e ser ouvido e notado por outras pessoas. Sempre estou procurando me comunicar ou ter atenção/influência de pessoas.' },
+      { archId:'espiritualista', text:'Sou uma pessoa intuitiva ou espiritual, procuro ver as coisas de forma mais holística e não apenas material.' }
+    ]
+  },
+  {
+    title:'Se você tivesse uma quantia de dinheiro para ficar sem trabalhar e utilizar para o que quiser, como utilizaria esse dinheiro?',
+    options:[
+      { archId:'tradicional',    text:'Vou utilizar esse dinheiro com prudência, e deixar ele guardado.' },
+      { archId:'criativa',       text:'Vou usar esse dinheiro para aproveitar a vida, investindo em diversão, viagens, socialização, arte, cultura e gastronomia.' },
+      { archId:'ambiciosa',      text:'Vou utilizar esse dinheiro para ele poder gerar mais dinheiro de forma direta ou indireta, ou para comprar algo material significante.' },
+      { archId:'empatica',       text:'Vou usar esse dinheiro tanto para meu benefício quanto para ajudar outras pessoas.' },
+      { archId:'intelectual',    text:'Vou usar esse dinheiro para ampliar meu conhecimento, investindo em cursos, livros e ferramentas, experimentos.' },
+      { archId:'expressiva',     text:'Vou usar esse dinheiro para expandir minha influência, investindo em formas de me promover e aumentar minha visibilidade.' },
+      { archId:'espiritualista', text:'Vou usar esse dinheiro para reduzir minhas obrigações e dedicar mais tempo às minhas práticas espirituais ou à minha missão espiritual.' }
+    ]
+  }
+];
+
+const POINTS = [35, 30, 15, 10, 5, 5, 5];
+
+let page = 'welcome';
+let currentQ = 0;
+const rankings = [];
+for (let i = 0; i < QUESTIONS.length; i++) {
+  const shuffled = QUESTIONS[i].options.slice();
+  for (let j = shuffled.length - 1; j > 0; j--) {
+    const k = Math.floor(Math.random() * (j + 1));
+    [shuffled[j], shuffled[k]] = [shuffled[k], shuffled[j]];
+  }
+  rankings.push(shuffled.map(o => o.archId));
+}
+
+let dragIdx = null;
+
+function getArchetype(id) {
+  return ARCHETYPES.find(a => a.id === id);
+}
+
+function posClass(i) {
+  if (i === 0) return 'pos-1';
+  if (i === 1) return 'pos-2';
+  if (i === 2) return 'pos-3';
+  return 'pos-rest';
+}
+
+function render() {
+  const app = document.getElementById('pqApp');
+  if (page === 'welcome') return renderWelcome(app);
+  if (page === 'quiz') return renderQuiz(app);
+  if (page === 'result') return renderResult(app);
+}
+
+function renderWelcome(app) {
+  app.innerHTML = `
+    <div class="pq-welcome">
+      <div class="pq-welcome-icon">&#10022;</div>
+      <h1>Perfil de Personalidade</h1>
+      <p>Descubra qual das <strong>7 personalidades</strong> mais combina com você, baseado nos arquétipos dos chakras do Jogo da Alma.</p>
+      <p>Você vai responder <strong>5 perguntas</strong>. Em cada uma, ordene as 7 opções da que mais te representa (topo) até a que menos te representa (base).</p>
+      <p class="pq-note">Não existe resposta certa ou errada. Siga seu instinto e escolha com sinceridade.</p>
+      <button class="pq-btn-start" onclick="startQuiz()">Começar</button>
+    </div>`;
+}
+
+function renderQuiz(app) {
+  const q = QUESTIONS[currentQ];
+  const rank = rankings[currentQ];
+  const pct = ((currentQ) / QUESTIONS.length * 100).toFixed(0);
+
+  let items = '';
+  rank.forEach((archId, i) => {
+    const opt = q.options.find(o => o.archId === archId);
+    const a = getArchetype(archId);
+    const pts = POINTS[i];
+    const ptsClass = i < 2 ? 'pts-high' : '';
+    items += `
+      <div class="pq-rank-item" draggable="true" data-idx="${i}"
+           ondragstart="onDragStart(event,${i})"
+           ondragover="onDragOver(event,${i})"
+           ondragleave="onDragLeave(event)"
+           ondrop="onDrop(event,${i})"
+           ontouchstart="onTouchStart(event,${i})"
+           ontouchmove="onTouchMove(event)"
+           ontouchend="onTouchEnd(event)">
+        <span class="pq-rank-pos ${posClass(i)}">${i + 1}</span>
+        <span class="pq-rank-text">${opt.text}</span>
+        <span class="pq-rank-pts ${ptsClass}">${pts}pts</span>
+        <span class="pq-rank-arrows">
+          <button class="pq-arrow-btn" onclick="moveItem(${i},-1)" ${i === 0 ? 'disabled' : ''} aria-label="Subir">&#9650;</button>
+          <button class="pq-arrow-btn" onclick="moveItem(${i},1)" ${i === 6 ? 'disabled' : ''} aria-label="Descer">&#9660;</button>
+        </span>
+      </div>`;
+  });
+
+  const isLast = currentQ === QUESTIONS.length - 1;
+
+  app.innerHTML = `
+    <div class="pq-progress">
+      <div class="pq-progress-track"><div class="pq-progress-fill" style="width:${pct}%"></div></div>
+      <div class="pq-progress-label"><span>Pergunta ${currentQ + 1} de ${QUESTIONS.length}</span><span>${pct}%</span></div>
+    </div>
+    <div class="pq-question-header">
+      <h2>${q.title}</h2>
+      <p class="pq-instruction">Arraste ou use as setas para ordenar do que mais combina com você (topo) ao que menos combina (base).</p>
+    </div>
+    <div class="pq-ranking-list" id="rankingList">${items}</div>
+    <div class="pq-nav">
+      <button class="pq-btn-prev" onclick="prevQ()" ${currentQ === 0 ? 'disabled' : ''}>Anterior</button>
+      ${isLast
+        ? '<button class="pq-btn-result" onclick="showResult()">Ver Resultado</button>'
+        : '<button class="pq-btn-next" onclick="nextQ()">Próxima</button>'}
+    </div>`;
+}
+
+function calcScores() {
+  const scores = {};
+  ARCHETYPES.forEach(a => { scores[a.id] = 0; });
+  rankings.forEach((rank) => {
+    rank.forEach((archId, pos) => {
+      scores[archId] += POINTS[pos];
+    });
+  });
+  const sorted = ARCHETYPES.map(a => ({ ...a, score: scores[a.id] }))
+    .sort((a, b) => b.score - a.score);
+  return sorted;
+}
+
+function renderResult(app) {
+  const sorted = calcScores();
+  const max = 175;
+
+  let cards = '';
+  sorted.forEach((a, i) => {
+    const rankNum = i + 1;
+    let cardClass = '';
+    let rankClass = 'rank-rest';
+    if (i === 0) { cardClass = 'top-1'; rankClass = 'rank-1'; }
+    else if (i === 1) { cardClass = 'top-2'; rankClass = 'rank-2'; }
+    else if (i === 2) { cardClass = 'top-3'; rankClass = 'rank-3'; }
+
+    const pct = ((a.score / max) * 100).toFixed(0);
+
+    cards += `
+      <div class="pq-result-card ${cardClass}">
+        <span class="pq-result-rank ${rankClass}">${rankNum}</span>
+        <div class="pq-result-info">
+          <p class="pq-result-name">${a.name}</p>
+          <span class="pq-result-chakra">Chakra ${a.chakra}</span>
+        </div>
+        <div class="pq-result-bar-wrap">
+          <div class="pq-result-bar-track"><div class="pq-result-bar-fill" style="width:${pct}%;background:${a.color}"></div></div>
+          <span class="pq-result-bar-label" style="color:${a.color}">${a.score} pts</span>
+        </div>
+      </div>`;
+  });
+
+  app.innerHTML = `
+    <div class="pq-result-header">
+      <div class="pq-result-icon">&#10022;</div>
+      <h2>Seu Perfil de Personalidade</h2>
+      <p>Baseado nas suas respostas, esta é a ordem das personalidades que mais combinam com você.</p>
+    </div>
+    <div class="pq-result-list">${cards}</div>
+    <div class="pq-caveat">
+      <p><strong>Importante:</strong> Todas as pessoas possuem todas as 7 personalidades em diferentes intensidades. Este resultado é um indicativo inicial. Segundo a metodologia, cerca de 50% das pessoas se identificam de imediato com o resultado, enquanto as outras 50% podem perceber mudanças conforme aprofundam o autoconhecimento.</p>
+    </div>
+    <div class="pq-result-actions">
+      <button class="pq-btn-prev" onclick="backToQuiz()">Refazer</button>
+      <button class="pq-btn-result" onclick="downloadPDF()">Baixar PDF</button>
+    </div>
+    <p class="pq-disclaimer">Jogo da Alma &mdash; Autoconhecimento e transformacao pessoal</p>`;
+}
+
+/* ---- Navigation ---- */
+window.startQuiz = function() {
+  page = 'quiz';
+  currentQ = 0;
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+window.nextQ = function() {
+  if (currentQ < QUESTIONS.length - 1) {
+    currentQ++;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+};
+
+window.prevQ = function() {
+  if (currentQ > 0) {
+    currentQ--;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+};
+
+window.showResult = function() {
+  page = 'result';
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+window.backToQuiz = function() {
+  page = 'quiz';
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+};
+
+/* ---- Reorder via arrows ---- */
+window.moveItem = function(idx, dir) {
+  const rank = rankings[currentQ];
+  const newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= rank.length) return;
+  [rank[idx], rank[newIdx]] = [rank[newIdx], rank[idx]];
+  render();
+};
+
+/* ---- Drag & Drop (desktop) ---- */
+window.onDragStart = function(e, idx) {
+  dragIdx = idx;
+  e.target.classList.add('dragging');
+  e.dataTransfer.effectAllowed = 'move';
+};
+
+window.onDragOver = function(e, idx) {
+  e.preventDefault();
+  const items = document.querySelectorAll('.pq-rank-item');
+  items.forEach(el => el.classList.remove('drag-over'));
+  if (idx !== dragIdx) {
+    items[idx].classList.add('drag-over');
+  }
+};
+
+window.onDragLeave = function(e) {
+  e.target.classList.remove('drag-over');
+};
+
+window.onDrop = function(e, dropIdx) {
+  e.preventDefault();
+  document.querySelectorAll('.pq-rank-item').forEach(el => {
+    el.classList.remove('drag-over', 'dragging');
+  });
+  if (dragIdx === null || dragIdx === dropIdx) return;
+  const rank = rankings[currentQ];
+  const item = rank.splice(dragIdx, 1)[0];
+  rank.splice(dropIdx, 0, item);
+  dragIdx = null;
+  render();
+};
+
+/* ---- Touch Drag (mobile) ---- */
+let touchStartIdx = null;
+let touchClone = null;
+let touchStartY = 0;
+
+window.onTouchStart = function(e, idx) {
+  touchStartIdx = idx;
+  touchStartY = e.touches[0].clientY;
+  const el = e.currentTarget;
+  touchClone = el.cloneNode(true);
+  touchClone.style.position = 'fixed';
+  touchClone.style.left = el.getBoundingClientRect().left + 'px';
+  touchClone.style.top = el.getBoundingClientRect().top + 'px';
+  touchClone.style.width = el.offsetWidth + 'px';
+  touchClone.style.zIndex = '9999';
+  touchClone.style.opacity = '0.85';
+  touchClone.style.pointerEvents = 'none';
+  touchClone.style.boxShadow = '0 8px 30px rgba(0,0,0,0.4)';
+  touchClone.style.transform = 'scale(1.03)';
+  document.body.appendChild(touchClone);
+  el.classList.add('dragging');
+};
+
+window.onTouchMove = function(e) {
+  if (touchClone) {
+    e.preventDefault();
+    const y = e.touches[0].clientY;
+    const dy = y - touchStartY;
+    const origTop = parseFloat(touchClone.style.top);
+    touchClone.style.transform = `scale(1.03) translateY(${dy}px)`;
+
+    const items = document.querySelectorAll('.pq-rank-item');
+    items.forEach(el => el.classList.remove('drag-over'));
+    items.forEach((el, idx) => {
+      if (idx === touchStartIdx) return;
+      const rect = el.getBoundingClientRect();
+      if (y > rect.top && y < rect.bottom) {
+        el.classList.add('drag-over');
+      }
+    });
+  }
+};
+
+window.onTouchEnd = function(e) {
+  if (touchClone) {
+    document.body.removeChild(touchClone);
+    touchClone = null;
+  }
+  document.querySelectorAll('.pq-rank-item').forEach(el => {
+    el.classList.remove('dragging', 'drag-over');
+  });
+  if (touchStartIdx === null) return;
+  const y = e.changedTouches[0].clientY;
+  const items = document.querySelectorAll('.pq-rank-item');
+  let dropIdx = touchStartIdx;
+  items.forEach((el, idx) => {
+    const rect = el.getBoundingClientRect();
+    if (y > rect.top && y < rect.bottom) {
+      dropIdx = idx;
+    }
+  });
+  if (dropIdx !== touchStartIdx) {
+    const rank = rankings[currentQ];
+    const item = rank.splice(touchStartIdx, 1)[0];
+    rank.splice(dropIdx, 0, item);
+    render();
+  }
+  touchStartIdx = null;
+};
+
+/* ---- PDF Generation ---- */
+window.downloadPDF = function() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ unit:'mm', format:'a4' });
+  const pw = doc.internal.pageSize.getWidth();
+  const ph = doc.internal.pageSize.getHeight();
+  const mx = 18;
+  let y = 20;
+
+  function checkPage(need) {
+    if (y + need > ph - 20) {
+      doc.addPage();
+      y = 20;
+    }
+  }
+
+  // Header
+  doc.setFillColor(10, 10, 15);
+  doc.rect(0, 0, pw, ph, 'F');
+  doc.setTextColor(240, 239, 244);
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(18);
+  doc.text('Perfil de Personalidade', pw / 2, y, { align: 'center' });
+  y += 7;
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(186, 181, 200);
+  doc.text('Jogo da Alma - Questionario de Personalidade', pw / 2, y, { align: 'center' });
+  y += 5;
+  const today = new Date();
+  doc.setFontSize(8);
+  doc.text('Data: ' + today.toLocaleDateString('pt-BR'), pw / 2, y, { align: 'center' });
+  y += 12;
+
+  // Line
+  doc.setDrawColor(60, 60, 80);
+  doc.line(mx, y, pw - mx, y);
+  y += 8;
+
+  // Section 1: Answers per question
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(13);
+  doc.setTextColor(240, 239, 244);
+  doc.text('SUAS RESPOSTAS', mx, y);
+  y += 8;
+
+  QUESTIONS.forEach((q, qi) => {
+    checkPage(60);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.setTextColor(167, 139, 250);
+    doc.text('Pergunta ' + (qi + 1) + ': ' + q.title.substring(0, 80), mx, y);
+    y += 6;
+
+    const rank = rankings[qi];
+    rank.forEach((archId, pos) => {
+      checkPage(8);
+      const opt = q.options.find(o => o.archId === archId);
+      const pts = POINTS[pos];
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+
+      if (pos < 2) {
+        doc.setTextColor(245, 158, 11);
+      } else {
+        doc.setTextColor(186, 181, 200);
+      }
+
+      const posLabel = (pos + 1) + 'o (' + pts + 'pts)';
+      doc.text(posLabel, mx, y);
+
+      doc.setTextColor(220, 218, 230);
+      const lines = doc.splitTextToSize(opt.text, pw - mx * 2 - 30);
+      doc.text(lines, mx + 28, y);
+      y += lines.length * 4 + 2;
+    });
+    y += 4;
+  });
+
+  // Section 2: Results
+  checkPage(40);
+  doc.setDrawColor(60, 60, 80);
+  doc.line(mx, y, pw - mx, y);
+  y += 8;
+
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(13);
+  doc.setTextColor(240, 239, 244);
+  doc.text('RESULTADO FINAL', mx, y);
+  y += 8;
+
+  const sorted = calcScores();
+  const maxPts = 175;
+
+  sorted.forEach((a, i) => {
+    checkPage(12);
+    const rankNum = i + 1;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+
+    if (i === 0) doc.setTextColor(245, 158, 11);
+    else if (i === 1) doc.setTextColor(139, 92, 246);
+    else if (i === 2) doc.setTextColor(236, 72, 153);
+    else doc.setTextColor(186, 181, 200);
+
+    doc.text(rankNum + 'o  ' + a.name, mx, y);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8);
+    doc.text('Chakra ' + a.chakra + '  -  ' + a.score + ' pts (' + ((a.score / maxPts) * 100).toFixed(0) + '%)', mx + 2, y + 4);
+
+    // Bar
+    const barX = pw - mx - 50;
+    const barW = 48;
+    const barH = 4;
+    doc.setFillColor(37, 37, 53);
+    doc.roundedRect(barX, y - 2.5, barW, barH, 1.5, 1.5, 'F');
+
+    const fillW = (a.score / maxPts) * barW;
+    const rgb = hexToRgb(a.color);
+    doc.setFillColor(rgb.r, rgb.g, rgb.b);
+    doc.roundedRect(barX, y - 2.5, fillW, barH, 1.5, 1.5, 'F');
+
+    y += 12;
+  });
+
+  // Caveat
+  checkPage(20);
+  y += 4;
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(7);
+  doc.setTextColor(122, 118, 144);
+  const caveat = 'Importante: Todas as pessoas possuem todas as 7 personalidades em diferentes intensidades. Este resultado e um indicativo inicial. Segundo a metodologia, cerca de 50% das pessoas se identificam de imediato com o resultado, enquanto as outras 50% podem perceber mudancas conforme aprofundam o autoconhecimento.';
+  const cavLines = doc.splitTextToSize(caveat, pw - mx * 2);
+  doc.text(cavLines, mx, y);
+  y += cavLines.length * 3 + 6;
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(7);
+  doc.text('Jogo da Alma - Autoconhecimento e transformacao pessoal', pw / 2, y, { align: 'center' });
+
+  doc.save('perfil-personalidade-' + today.toISOString().slice(0, 10) + '.pdf');
+};
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return { r, g, b };
+}
+
+/* ---- Nav toggle ---- */
+render();
+})();
+</script>
+</body>
+</html>

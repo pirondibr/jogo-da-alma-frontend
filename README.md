@@ -22,6 +22,11 @@ Site estático da metodologia de autoconhecimento **Jogo da Alma**, construído 
 ├── chakra-laringeo-problemas.html          # Chakra Laríngeo
 ├── chakra-frontal-problemas.html           # Chakra Frontal
 ├── chakra-coronario-problemas.html         # Chakra Coronário
+├── questionario.html                       # Quiz diagnóstico dos 7 chakras
+├── questionario.css
+├── questionario-personalidade.html         # Quiz de personalidade
+├── questionario-personalidade.css
+├── quiz-base.css                           # Estilos compartilhados dos quizzes
 └── perguntas/
     ├── 1-quem-voce-e.html                  # Pergunta 1
     ├── 2-por-que-o-mundo-e-assim.html      # Pergunta 2
@@ -32,8 +37,7 @@ Site estático da metodologia de autoconhecimento **Jogo da Alma**, construído 
     └── 7-qual-e-o-seu-papel-nesse-futuro.html       # Pergunta 7
 ```
 
-> As 7 perguntas, os 7 perfis de personalidade e as 7 páginas de chakras estão completos.
-> Os quizzes ainda estão sendo montados.
+> As 7 perguntas, os 7 perfis de personalidade, as 7 páginas de chakras e os 2 questionários estão completos.
 
 ## Rodar localmente
 

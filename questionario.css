@@ -1,0 +1,778 @@
+/* ============================================================
+   QUESTIONÁRIO — MAPA DOS CHAKRAS
+   Tema escuro alinhado ao site principal
+   ============================================================ */
+
+.quiz-wrapper {
+    max-width: 580px;
+    margin: 0 auto;
+    padding: 24px 16px 120px;
+    min-height: 100vh;
+}
+
+/* ----- Header ----- */
+.quiz-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.quiz-header h1 {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 8px;
+}
+
+.quiz-header .quiz-desc {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin: 0 0 4px;
+}
+
+.quiz-header .quiz-hint {
+    font-size: 0.82rem;
+    color: #6b7280;
+    margin: 0 0 14px;
+    line-height: 1.4;
+}
+
+.quiz-sample-btn {
+    font-size: 0.78rem;
+    color: var(--accent);
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: 500;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.quiz-sample-btn:hover {
+    opacity: 1;
+}
+
+/* ----- Counter ----- */
+.quiz-counter {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.quiz-counter-badge {
+    display: inline-block;
+    padding: 5px 18px;
+    border-radius: 20px;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.12), rgba(236, 72, 153, 0.12));
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+/* ----- Chakra Nav ----- */
+.quiz-chakra-nav {
+    display: flex;
+    gap: 4px;
+    margin: 0 0 22px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+}
+
+.quiz-chakra-nav::-webkit-scrollbar {
+    height: 3px;
+}
+
+.quiz-chakra-nav::-webkit-scrollbar-thumb {
+    background: var(--surface-light);
+    border-radius: 3px;
+}
+
+.quiz-nav-btn {
+    flex: 1 0 auto;
+    min-width: 48px;
+    padding: 8px 6px 6px;
+    border-radius: 12px;
+    border: 1px solid var(--surface-light);
+    background: var(--surface);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    transition: all 0.2s;
+}
+
+.quiz-nav-btn.active {
+    border-width: 2px;
+}
+
+.quiz-nav-btn .nav-emoji {
+    font-size: 1.15rem;
+}
+
+.quiz-nav-btn .nav-count {
+    font-size: 0.56rem;
+    font-weight: 600;
+    color: var(--text-muted);
+}
+
+.quiz-nav-btn.active .nav-count {
+    color: inherit;
+}
+
+/* ----- Chakra Title ----- */
+.quiz-chakra-title {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.quiz-chakra-title .chakra-emoji-lg {
+    font-size: 2rem;
+}
+
+.quiz-chakra-title h2 {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0;
+}
+
+.quiz-chakra-title .chakra-sub {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin: 2px 0 0;
+}
+
+.quiz-chakra-title .chakra-sub-pending {
+    color: #FBBF24;
+    font-weight: 600;
+}
+
+.quiz-validation-msg {
+    text-align: center;
+    font-size: 0.78rem;
+    color: #FBBF24;
+    background: rgba(251, 191, 36, 0.08);
+    border: 1px solid rgba(251, 191, 36, 0.25);
+    border-radius: 12px;
+    padding: 8px 14px;
+    margin: 18px 0 8px;
+}
+
+/* ----- Bloco Card ----- */
+.quiz-blocos {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.bloco-card {
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--surface-light);
+    padding: 18px 18px 14px;
+    transition: all 0.3s ease;
+}
+
+.bloco-card.selected-nao-identifico {
+    background: rgba(148, 163, 184, 0.04);
+    border: 2px solid rgba(148, 163, 184, 0.25);
+}
+
+.bloco-card.selected-identifico {
+    background: rgba(251, 191, 36, 0.04);
+    border: 2px solid rgba(251, 191, 36, 0.3);
+}
+
+.bloco-card.selected-prejudica {
+    background: rgba(239, 68, 68, 0.04);
+    border: 2px solid rgba(239, 68, 68, 0.3);
+}
+
+.bloco-card.bloco-unanswered {
+    border: 2px dashed rgba(139, 92, 246, 0.35);
+}
+
+.bloco-required {
+    color: #F87171;
+    font-weight: 700;
+    font-size: 0.85rem;
+    margin-left: 2px;
+}
+
+.bloco-card.selected-nao-identifico .bloco-required,
+.bloco-card.selected-identifico .bloco-required,
+.bloco-card.selected-prejudica .bloco-required {
+    display: none;
+}
+
+.bloco-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.bloco-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.bloco-tipo {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+}
+
+.bloco-subtitulo {
+    font-size: 0.78rem;
+    color: #6b7280;
+    margin: 0 0 12px;
+    font-style: italic;
+}
+
+.bloco-itens {
+    margin-bottom: 14px;
+}
+
+.bloco-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 7px;
+}
+
+.bloco-item:last-child {
+    margin-bottom: 0;
+}
+
+.bloco-bullet {
+    color: #6b7280;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    flex-shrink: 0;
+}
+
+.bloco-text {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    color: var(--text-secondary);
+}
+
+.bloco-actions {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.bloco-btn {
+    flex: 1 1 calc(33% - 6px);
+    min-width: 0;
+    padding: 8px 8px;
+    border-radius: 20px;
+    border: 1.5px solid var(--surface-light);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.74rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-body);
+    text-align: center;
+    line-height: 1.2;
+}
+
+.bloco-btn:hover {
+    border-color: rgba(167, 139, 250, 0.3);
+}
+
+.bloco-btn.active-nao-identifico {
+    border-color: rgba(148, 163, 184, 0.5);
+    background: rgba(148, 163, 184, 0.08);
+    color: #CBD5E1;
+    font-weight: 600;
+}
+
+.bloco-btn.active-identifico {
+    border-color: rgba(251, 191, 36, 0.5);
+    background: rgba(251, 191, 36, 0.08);
+    color: #FBBF24;
+    font-weight: 600;
+}
+
+.bloco-btn.active-prejudica {
+    border-color: rgba(239, 68, 68, 0.5);
+    background: rgba(239, 68, 68, 0.08);
+    color: #F87171;
+    font-weight: 600;
+}
+
+@media (max-width: 420px) {
+    .bloco-btn {
+        flex: 1 1 100%;
+        padding: 9px 12px;
+        font-size: 0.78rem;
+    }
+}
+
+/* ----- Resultado Card ----- */
+.resultado-divider {
+    border-top: 1px dashed var(--surface-light);
+    padding-top: 14px;
+}
+
+.resultado-card {
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--surface-light);
+    padding: 18px 18px 14px;
+    transition: all 0.3s ease;
+}
+
+.resultado-pergunta {
+    font-size: 0.78rem;
+    color: #6b7280;
+    margin: 0 0 12px;
+    font-style: italic;
+}
+
+.resultado-itens {
+    margin-bottom: 14px;
+}
+
+.resultado-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.resultado-item:last-child {
+    margin-bottom: 0;
+}
+
+.resultado-bullet {
+    font-size: 0.8rem;
+    line-height: 1.35;
+    flex-shrink: 0;
+    opacity: 0.5;
+}
+
+.resultado-text {
+    font-size: 0.82rem;
+    line-height: 1.35;
+    color: var(--text-secondary);
+}
+
+.resultado-nivel-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    display: block;
+}
+
+.resultado-nivel-btns {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.nivel-btn {
+    flex: 1;
+    padding: 7px 12px;
+    border-radius: 20px;
+    border: 1.5px solid var(--surface-light);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-body);
+}
+
+.nivel-btn.active-baixo {
+    border-color: rgba(239, 68, 68, 0.5);
+    background: rgba(239, 68, 68, 0.08);
+    color: #F87171;
+    font-weight: 600;
+}
+
+.nivel-btn.active-medio {
+    border-color: rgba(234, 179, 8, 0.5);
+    background: rgba(234, 179, 8, 0.08);
+    color: #FBBF24;
+    font-weight: 600;
+}
+
+.nivel-btn.active-alto {
+    border-color: rgba(34, 197, 94, 0.5);
+    background: rgba(34, 197, 94, 0.08);
+    color: #4ADE80;
+    font-weight: 600;
+}
+
+.prioridade-btn {
+    width: 100%;
+    padding: 7px 12px;
+    border-radius: 20px;
+    border: 1.5px solid var(--surface-light);
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: var(--font-body);
+}
+
+.prioridade-btn.active {
+    border-color: rgba(139, 92, 246, 0.5);
+    background: rgba(139, 92, 246, 0.08);
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* ----- Navigation Buttons ----- */
+.quiz-nav-bottom {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 24px;
+    gap: 12px;
+}
+
+.quiz-btn-prev, .quiz-btn-next, .quiz-btn-final {
+    flex: 1;
+    padding: 12px 0;
+    border-radius: 28px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: all 0.2s;
+}
+
+.quiz-btn-prev {
+    border: 1px solid var(--surface-light);
+    background: var(--surface);
+    color: var(--text-secondary);
+}
+
+.quiz-btn-prev:disabled {
+    color: #4b5563;
+    cursor: default;
+    opacity: 0.5;
+}
+
+.quiz-btn-next {
+    border: none;
+    color: #fff;
+}
+
+.quiz-btn-next:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.quiz-btn-final {
+    border: none;
+    background: linear-gradient(135deg, #8B5CF6, #EC4899);
+    color: #fff;
+}
+
+.quiz-btn-final:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+}
+
+.quiz-btn-final:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background: #4b5563;
+}
+
+/* ============================================================
+   RESULTADO / MAPA ENERGÉTICO
+   ============================================================ */
+.mapa-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.mapa-header .mapa-icon {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.mapa-header h2 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin: 0 0 8px;
+}
+
+.mapa-header p {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+/* Chakra Result Row */
+.mapa-chakras {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.mapa-row {
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--surface-light);
+    padding: 18px 20px;
+}
+
+.mapa-row-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.mapa-row-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mapa-row-title .row-emoji {
+    font-size: 1.35rem;
+}
+
+.mapa-row-title .row-name {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.mapa-row-empty {
+    font-size: 0.68rem;
+    color: #6b7280;
+    font-style: italic;
+}
+
+.mapa-meters {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.mapa-meter {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 12px;
+    padding: 12px 14px;
+}
+
+.meter-label {
+    font-size: 0.62rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+}
+
+.meter-bar-track {
+    flex: 1;
+    height: 5px;
+    border-radius: 3px;
+    background: var(--surface-light);
+    overflow: hidden;
+}
+
+.meter-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.6s ease;
+}
+
+.meter-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.meter-status {
+    font-size: 0.68rem;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+/* Tags */
+.mapa-tags {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+}
+
+.mapa-tag {
+    font-size: 0.65rem;
+    padding: 3px 9px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.mapa-tag.tag-prejudica {
+    background: rgba(239, 68, 68, 0.1);
+    color: #F87171;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.mapa-tag.tag-identifico {
+    background: rgba(251, 191, 36, 0.08);
+    color: #FBBF24;
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    font-weight: 500;
+}
+
+.mapa-tag.tag-prioridade {
+    background: rgba(139, 92, 246, 0.1);
+    color: var(--accent);
+    border: 1px solid rgba(139, 92, 246, 0.25);
+}
+
+/* Summary Boxes */
+.mapa-summary-box {
+    margin-top: 20px;
+    border-radius: 16px;
+    padding: 20px;
+}
+
+.mapa-summary-box h3 {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 12px;
+}
+
+.mapa-summary-box .summary-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+}
+
+.mapa-summary-box .summary-item:last-child {
+    margin-bottom: 0;
+}
+
+.summary-critical {
+    background: rgba(239, 68, 68, 0.06);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.summary-critical h3 { color: #F87171; }
+.summary-critical .summary-item { color: #FCA5A5; }
+
+.summary-priority {
+    background: rgba(139, 92, 246, 0.06);
+    border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.summary-priority h3 { color: var(--accent); }
+.summary-priority .summary-item { color: #C4B5FD; }
+
+.summary-gaps {
+    background: rgba(234, 179, 8, 0.06);
+    border: 1px solid rgba(234, 179, 8, 0.2);
+}
+
+.summary-gaps h3 { color: #FBBF24; }
+.summary-gaps p { font-size: 0.82rem; color: #FDE68A; margin: 0 0 10px; line-height: 1.35; }
+.summary-gaps .summary-item { color: #FDE68A; }
+
+.mapa-disclaimer {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 24px;
+}
+
+.quiz-btn-back {
+    display: block;
+    margin: 20px auto 0;
+    padding: 12px 32px;
+    border-radius: 28px;
+    border: 1px solid var(--surface-light);
+    background: var(--surface);
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: all 0.2s;
+}
+
+.quiz-btn-back:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.quiz-btn-download {
+    display: block;
+    padding: 12px 32px;
+    border-radius: 28px;
+    border: none;
+    background: linear-gradient(135deg, #8B5CF6, #EC4899);
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: var(--font-body);
+    transition: all 0.2s;
+}
+
+.quiz-btn-download:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
+}
+
+/* ----- Progress bar ----- */
+.quiz-progress {
+    margin-bottom: 20px;
+}
+
+.quiz-progress-track {
+    height: 3px;
+    border-radius: 2px;
+    background: var(--surface-light);
+    overflow: hidden;
+}
+
+.quiz-progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: linear-gradient(90deg, var(--accent), #EC4899);
+    transition: width 0.4s ease;
+}
+
+.quiz-progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 6px;
+    font-size: 0.68rem;
+    color: var(--text-muted);
+}
