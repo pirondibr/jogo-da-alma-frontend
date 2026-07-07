@@ -35,7 +35,7 @@
 <script>
 (function(){
 const CHAKRAS = [
-  { id:"basico", name:"Básico", color:"#DC2626", emoji:"🔴",
+  { id:"basico", name:"Básico", color:"#DC2626", emoji:"🔴", article:"chakra-basico-problemas.html",
     resultadoPergunta:"Minha vida tem uma base estável e segura?",
     blocos:[
       { id:"emocao_bloqueada", tipo:"Emoção Bloqueada", subtitulo:"O que eu sinto? (falta)", itens:["Sinto medo frequente de perder dinheiro, estabilidade ou segurança","Sinto insegurança constante mesmo quando está tudo bem","Me sinto desenraizado, como se nada fosse realmente meu chão"]},
@@ -47,7 +47,7 @@ const CHAKRAS = [
     ],
     resultado:["Eu tenho uma fonte de renda satisfatória e estável","Meu corpo está saudável e sem doenças","Eu consigo cumprir as minhas expectativas","Minha rotina atual é saudável, consigo resolver tudo que precisa","Estou seguro e preparado para o futuro"]
   },
-  { id:"sacral", name:"Sacral", color:"#EA580C", emoji:"🟠",
+  { id:"sacral", name:"Sacral", color:"#EA580C", emoji:"🟠", article:"chakra-sacral-problemas.html",
     resultadoPergunta:"Minha vida tem prazer, conexão e variedade?",
     blocos:[
       { id:"emocao_bloqueada", tipo:"Emoção Bloqueada", subtitulo:"O que eu sinto? (falta)", itens:["Sinto que estou emocionalmente anestesiado boa parte do tempo","Tenho dificuldade de identificar o que estou sentindo","Sinto pouco prazer mesmo em coisas que antes me davam alegria"]},
@@ -59,7 +59,7 @@ const CHAKRAS = [
     ],
     resultado:["Tenho hobbies ou atividades que gosto","Tenho amigos ou conexões leves","Tenho vida sexual ativa/saudável ou energia criativa equivalente","Tenho tempo para diversão","Minha vida tem variedade (não é repetitiva e vazia)"]
   },
-  { id:"plexo", name:"Plexo Solar", color:"#CA8A04", emoji:"🟡",
+  { id:"plexo", name:"Plexo Solar", color:"#CA8A04", emoji:"🟡", article:"chakra-plexo-solar-problemas.html",
     resultadoPergunta:"Eu me sinto capaz, relevante e em movimento?",
     blocos:[
       { id:"emocao_bloqueada", tipo:"Emoção Bloqueada", subtitulo:"O que eu sinto? (falta)", itens:["Sinto medo de me posicionar ou ocupar meu espaço","Sinto vergonha de mim mesmo com frequência","Me sinto pequeno diante das outras pessoas"]},
@@ -71,7 +71,7 @@ const CHAKRAS = [
     ],
     resultado:["Me sinto importante em alguma área da minha vida","Estou enfrentando desafios (não evitando tudo)","Estou vencendo ou evoluindo nesses desafios","Tenho autonomia para tomar decisões","Sinto que minha vida está indo para algum lugar"]
   },
-  { id:"cardiaco", name:"Cardíaco", color:"#16A34A", emoji:"💚",
+  { id:"cardiaco", name:"Cardíaco", color:"#16A34A", emoji:"💚", article:"chakra-cardiaco-problemas.html",
     resultadoPergunta:"Eu sou amado e pertenço?",
     blocos:[
       { id:"emocao_bloqueada", tipo:"Emoção Bloqueada", subtitulo:"O que eu sinto? (falta)", itens:["Sinto meu peito fechado ou travado emocionalmente","Tenho dificuldade de me emocionar ou sentir ternura","Me sinto sozinho mesmo cercado de pessoas"]},
@@ -83,7 +83,7 @@ const CHAKRAS = [
     ],
     resultado:["Faço parte de um grupo ou rede de pessoas","Me sinto aceito por quem eu sou","Recebo afeto e apoio emocional","Minhas relações não são só por interesse ou troca","Sinto conexão genuína com outras pessoas"]
   },
-  { id:"laringeo", name:"Laríngeo", color:"#2563EB", emoji:"🔵",
+  { id:"laringeo", name:"Laríngeo", color:"#2563EB", emoji:"🔵", article:"chakra-laringeo-problemas.html",
     resultadoPergunta:"Eu consigo me expressar e ser ouvido?",
     blocos:[
       { id:"emocao_bloqueada", tipo:"Emoção Bloqueada", subtitulo:"O que eu sinto? (falta)", itens:["Sinto a garganta travada quando preciso falar algo importante","Sinto medo de ser mal interpretado ao me expressar","Sinto frustração por engolir o que gostaria de dizer"]},
@@ -95,7 +95,7 @@ const CHAKRAS = [
     ],
     resultado:["Consigo falar o que penso","Me sinto ouvido quando me comunico","Consigo influenciar pessoas ou ambientes","Não preciso me esconder ou me calar constantemente","Minha comunicação é clara e autêntica"]
   },
-  { id:"frontal", name:"Frontal", color:"#7C3AED", emoji:"🟣",
+  { id:"frontal", name:"Frontal", color:"#7C3AED", emoji:"🟣", article:"chakra-frontal-problemas.html",
     resultadoPergunta:"Eu entendo minha vida e sei o que fazer?",
     blocos:[
       { id:"emocao_bloqueada", tipo:"Emoção Bloqueada", subtitulo:"O que eu sinto? (falta)", itens:["Sinto confusão mental com frequência","Me sinto perdido, sem saber para onde ir","Sinto dúvida constante sobre minhas percepções"]},
@@ -107,7 +107,7 @@ const CHAKRAS = [
     ],
     resultado:["Eu entendo meus problemas atuais","Eu sei possíveis soluções","Estou aprendendo e evoluindo","Tenho clareza sobre próximos passos","Sinto que estou progredindo na vida"]
   },
-  { id:"coronario", name:"Coronário", color:"#8B5CF6", emoji:"⚪",
+  { id:"coronario", name:"Coronário", color:"#8B5CF6", emoji:"⚪", article:"chakra-coronario-problemas.html",
     resultadoPergunta:"Minha vida tem sentido maior?",
     blocos:[
       { id:"emocao_bloqueada", tipo:"Emoção Bloqueada", subtitulo:"O que eu sinto? (falta)", itens:["Sinto um vazio interno mesmo quando está tudo \"ok\"","Sinto desmotivação sem motivo claro","Me sinto desconectado de algo maior"]},
@@ -305,6 +305,7 @@ function renderFinal(){
       if(d.resPrioridade) h+='<span class="mapa-tag tag-prioridade">★ Resultado é prioridade</span>';
       h+='</div>';
     }
+    h+='<a class="mapa-row-link" href="'+c.article+'" style="color:'+c.color+'">Ver problemas e estratégias →</a>';
     h+='</div>';
   });
   h+='</div>';

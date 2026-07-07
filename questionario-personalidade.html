@@ -36,13 +36,13 @@
 (function(){
 
 const ARCHETYPES = [
-  { id:'tradicional', name:'Tradicional / Consistente', chakra:'Básico', color:'#EF4444' },
-  { id:'criativa',    name:'Dinâmica / Social',      chakra:'Sacral', color:'#F97316' },
-  { id:'ambiciosa',   name:'Ambiciosa / Confiante',  chakra:'Plexo Solar', color:'#EAB308' },
-  { id:'empatica',    name:'Empática / Amigável',    chakra:'Cardíaco', color:'#22C55E' },
-  { id:'intelectual', name:'Intelectual / Curiosa',  chakra:'Frontal', color:'#8B5CF6' },
-  { id:'expressiva',  name:'Expressiva / Comunicativa', chakra:'Laríngeo', color:'#3B82F6' },
-  { id:'espiritualista', name:'Espiritualista / Intuitiva', chakra:'Coronário', color:'#A855F7' }
+  { id:'tradicional', name:'Tradicional / Consistente', chakra:'Básico', color:'#EF4444', article:'personalidade-basico.html' },
+  { id:'criativa',    name:'Dinâmica / Social',      chakra:'Sacral', color:'#F97316', article:'personalidade-sacral.html' },
+  { id:'ambiciosa',   name:'Ambiciosa / Confiante',  chakra:'Plexo Solar', color:'#EAB308', article:'personalidade-plexo-solar.html' },
+  { id:'empatica',    name:'Empática / Amigável',    chakra:'Cardíaco', color:'#22C55E', article:'personalidade-cardiaco.html' },
+  { id:'intelectual', name:'Intelectual / Curiosa',  chakra:'Frontal', color:'#8B5CF6', article:'personalidade-frontal.html' },
+  { id:'expressiva',  name:'Expressiva / Comunicativa', chakra:'Laríngeo', color:'#3B82F6', article:'personalidade-laringeo.html' },
+  { id:'espiritualista', name:'Espiritualista / Intuitiva', chakra:'Coronário', color:'#A855F7', article:'personalidade-coronario.html' }
 ];
 
 const QUESTIONS = [
@@ -147,9 +147,9 @@ function renderWelcome(app) {
     <div class="pq-welcome">
       <div class="pq-welcome-icon">&#10022;</div>
       <h1>Perfil de Personalidade</h1>
-      <p>Descubra qual das <strong>7 personalidades</strong> mais combina com você, baseado nos arquétipos dos chakras do Jogo da Alma.</p>
+      <p>Descubra dentro das <strong>7 frequências/personalidades</strong> quais mais combinam com você, baseado nos arquétipos dos chakras do Jogo da Alma.</p>
       <p>Você vai responder <strong>5 perguntas</strong>. Em cada uma, ordene as 7 opções da que mais te representa (topo) até a que menos te representa (base).</p>
-      <p class="pq-note">Não existe resposta certa ou errada. Siga seu instinto e escolha com sinceridade.</p>
+      <p><strong>Importante:</strong> tente responder de acordo com o que você mais gostaria de cada opção, e não naquilo que você é ou precisa ser atualmente.</p>
       <button class="pq-btn-start" onclick="startQuiz()">Começar</button>
     </div>`;
 }
@@ -238,6 +238,7 @@ function renderResult(app) {
         <div class="pq-result-info">
           <p class="pq-result-name">${a.name}</p>
           <span class="pq-result-chakra">Chakra ${a.chakra}</span>
+          <a class="pq-result-link" href="${a.article}" style="color:${a.color}">Conhecer o perfil →</a>
         </div>
         <div class="pq-result-bar-wrap">
           <div class="pq-result-bar-track"><div class="pq-result-bar-fill" style="width:${pct}%;background:${a.color}"></div></div>

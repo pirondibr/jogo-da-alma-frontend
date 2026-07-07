@@ -4,7 +4,7 @@
    ============================================================ */
 
 .quiz-wrapper {
-    max-width: 580px;
+    max-width: 680px;
     margin: 0 auto;
     padding: 24px 16px 120px;
     min-height: 100vh;
@@ -13,29 +13,46 @@
 /* ----- Header ----- */
 .quiz-header {
     text-align: center;
-    margin-bottom: 24px;
+    margin-bottom: 28px;
 }
 
 .quiz-header h1 {
     font-family: var(--font-display);
-    font-size: 1.6rem;
+    font-size: clamp(1.8rem, 5vw, 2.2rem);
     font-weight: 700;
     color: var(--text-primary);
-    margin: 0 0 8px;
+    margin: 0 0 16px;
+    line-height: 1.2;
 }
 
 .quiz-header .quiz-desc {
-    font-size: 0.88rem;
-    color: var(--text-muted);
-    line-height: 1.5;
-    margin: 0 0 4px;
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    margin: 0 0 10px;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.quiz-header .quiz-desc strong {
+    color: var(--text-primary);
+    font-weight: 600;
 }
 
 .quiz-header .quiz-hint {
-    font-size: 0.82rem;
-    color: #6b7280;
+    font-size: 1rem;
+    color: var(--text-secondary);
     margin: 0 0 14px;
-    line-height: 1.4;
+    line-height: 1.65;
+    max-width: 540px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.quiz-header .quiz-hint strong {
+    color: var(--text-primary);
+    font-weight: 600;
 }
 
 .quiz-sample-btn {
@@ -651,6 +668,20 @@
     background: rgba(139, 92, 246, 0.1);
     color: var(--accent);
     border: 1px solid rgba(139, 92, 246, 0.25);
+}
+
+.mapa-row-link {
+    display: inline-block;
+    margin-top: 12px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s;
+}
+
+.mapa-row-link:hover {
+    opacity: 0.85;
+    text-decoration: underline;
 }
 
 /* Summary Boxes */
