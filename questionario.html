@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mapa dos Chakras — Questionário | Jogo da Alma</title>
+    <title>Mapa dos Chakras: Questionário | Jogo da Alma</title>
     <meta name="description" content="Descubra seu mapa energético. Identifique desequilíbrios nos 7 chakras e entenda como eles afetam sua vida real.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,7 +28,7 @@
     <div id="quizApp" class="quiz-wrapper"></div>
 
     <footer class="site-footer">
-    <div>✦ Jogo da Alma — © 2026. Todos os direitos reservados.</div>
+    <div>✦ Jogo da Alma · © 2026. Todos os direitos reservados.</div>
     <div class="disclaimer">Não substitui acompanhamento profissional.</div>
 </footer>
 
@@ -39,7 +39,7 @@ const CHAKRAS = [
     resultadoPergunta:"Minha vida tem uma base estável e segura?",
     blocos:[
       { id:"emocao_bloqueada", tipo:"Emoção Bloqueada", subtitulo:"O que eu sinto? (falta)", itens:["Sinto medo frequente de perder dinheiro, estabilidade ou segurança","Sinto insegurança constante mesmo quando está tudo bem","Me sinto desenraizado, como se nada fosse realmente meu chão"]},
-      { id:"emocao_excessiva", tipo:"Emoção Excessiva", subtitulo:"O que eu sinto? (demais)", itens:["Me sinto constantemente em estado de alerta","Sinto ansiedade no corpo mesmo sem motivo claro","Tenho dificuldade em relaxar — meu corpo vive tenso"]},
+      { id:"emocao_excessiva", tipo:"Emoção Excessiva", subtitulo:"O que eu sinto? (demais)", itens:["Me sinto constantemente em estado de alerta","Sinto ansiedade no corpo mesmo sem motivo claro","Tenho dificuldade em relaxar, meu corpo vive tenso"]},
       { id:"pensamento_bloqueado", tipo:"Pensamento Bloqueado", subtitulo:"O que eu digo para mim mesmo? (falta)", itens:["Penso com frequência que não vou dar conta","Tenho a sensação de que nunca vou ter o suficiente","Acho que as coisas tendem a dar errado para mim"]},
       { id:"pensamento_excessivo", tipo:"Pensamento Excessivo", subtitulo:"O que eu digo para mim mesmo? (demais)", itens:["Sinto que preciso prever tudo antes de agir","Penso que se eu não controlar, algo vai dar errado","Tenho dificuldade de confiar que as coisas vão se resolver"]},
       { id:"acao_bloqueada", tipo:"Ação Bloqueada", subtitulo:"O que eu faço? (falta)", itens:["Procrastino tarefas importantes por medo ou insegurança","Evito agir quando não tenho certeza de que vai dar certo","Tenho dificuldade em sair da zona de conforto"]},
@@ -166,7 +166,7 @@ function getChakraData(chakra){
   if(prejudicam.length>=2){deseqStatus='Crítico';deseqColor='#ef4444';}
   else if(marcados.length>=4||prejudicam.length>=1){deseqStatus='Desequilibrado';deseqColor='#f97316';}
   else if(marcados.length>=2){deseqStatus='Atenção Leve';deseqColor='#eab308';}
-  let resStatus='—',resColor='#6b7280';
+  let resStatus='·',resColor='#6b7280';
   if(resVal==='alto'){resStatus='Forte';resColor='#22c55e';}
   else if(resVal==='medio'){resStatus='Parcial';resColor='#eab308';}
   else if(resVal==='baixo'){resStatus='Fraco';resColor='#ef4444';}
@@ -198,7 +198,7 @@ function renderBlocos(){
   CHAKRAS.forEach((ch,i)=>{
     const active=i===currentChakra;
     const cnt=chakraMarked(i);
-    h+='<button class="quiz-nav-btn'+(active?' active':'')+'" onclick="goToChakra('+i+')" style="'+(active?'border-color:'+ch.color+';background:'+ch.color+'12;':'')+'"><span class="nav-emoji">'+ch.emoji+'</span><span class="nav-count" style="'+(active?'color:'+ch.color:'')+'">'+( cnt>0?cnt:'—')+'</span></button>';
+    h+='<button class="quiz-nav-btn'+(active?' active':'')+'" onclick="goToChakra('+i+')" style="'+(active?'border-color:'+ch.color+';background:'+ch.color+'12;':'')+'"><span class="nav-emoji">'+ch.emoji+'</span><span class="nav-count" style="'+(active?'color:'+ch.color:'')+'">'+( cnt>0?cnt:'·')+'</span></button>';
   });
   h+='</div>';
 
@@ -312,7 +312,7 @@ function renderFinal(){
 
   if(allPrejudica.length>0){
     h+='<div class="mapa-summary-box summary-critical"><h3>⚠ Desequilíbrios prioritários</h3>';
-    allPrejudica.forEach(p=>{ h+='<div class="summary-item"><span>'+p.chakra.emoji+'</span><span><strong>'+esc(p.chakra.name)+'</strong> — '+esc(p.bloco.tipo)+'</span></div>'; });
+    allPrejudica.forEach(p=>{ h+='<div class="summary-item"><span>'+p.chakra.emoji+'</span><span><strong>'+esc(p.chakra.name)+'</strong>: '+esc(p.bloco.tipo)+'</span></div>'; });
     h+='</div>';
   }
 
@@ -320,15 +320,15 @@ function renderFinal(){
     h+='<div class="mapa-summary-box summary-priority"><h3>★ Resultados prioritários para aprimorar</h3>';
     resPrioridades.forEach(c=>{
       const rv=respostas[c.id+'_resultado'];
-      const lbl=rv?(rv==='alto'?'Forte':rv==='medio'?'Parcial':'Fraco'):'—';
-      h+='<div class="summary-item"><span>'+c.emoji+'</span><span><strong>'+esc(c.name)+'</strong> — '+esc(c.resultadoPergunta)+' <span style="opacity:0.6">('+lbl+')</span></span></div>';
+      const lbl=rv?(rv==='alto'?'Forte':rv==='medio'?'Parcial':'Fraco'):'·';
+      h+='<div class="summary-item"><span>'+c.emoji+'</span><span><strong>'+esc(c.name)+'</strong>: '+esc(c.resultadoPergunta)+' <span style="opacity:0.6">('+lbl+')</span></span></div>';
     });
     h+='</div>';
   }
 
   if(gapChakras.length>0){
     h+='<div class="mapa-summary-box summary-gaps"><h3>💡 Gaps importantes</h3><p>Chakras com desequilíbrio identificado e resultado fraco:</p>';
-    gapChakras.forEach(g=>{ h+='<div class="summary-item"><span>'+g.chakra.emoji+'</span><span><strong>'+esc(g.chakra.name)+'</strong> — Desequilíbrio + Resultado fraco</span></div>'; });
+    gapChakras.forEach(g=>{ h+='<div class="summary-item"><span>'+g.chakra.emoji+'</span><span><strong>'+esc(g.chakra.name)+'</strong>: Desequilíbrio + Resultado fraco</span></div>'; });
     h+='</div>';
   }
 
@@ -544,7 +544,7 @@ window.downloadPDF=function(){
     resP.forEach(function(c){
       checkPage(5);
       var rv=respostas[c.id+'_resultado'];
-      var lbl=rv?(rv==='alto'?'Forte':rv==='medio'?'Parcial':'Fraco'):'—';
+      var lbl=rv?(rv==='alto'?'Forte':rv==='medio'?'Parcial':'Fraco'):'·';
       doc.text(c.name+' -- '+c.resultadoPergunta+' ('+lbl+')',M+6,y);
       y+=4.5;
     });
