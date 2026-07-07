@@ -94,8 +94,13 @@ body > nav {
 
 .nav-cta:hover { background: var(--accent); }
 
+.nav-lang { font-size: .82rem; color: var(--text-muted); white-space: nowrap; }
+.nav-lang a { color: var(--text-secondary); text-decoration: none; }
+.nav-lang a:hover { color: var(--text); }
+.nav-lang strong { color: var(--accent); font-weight: 700; }
+
 @media (max-width: 720px) {
-    .nav-links a:not(.nav-cta) { display: none; }
+    .nav-links > a:not(.nav-cta) { display: none; }
 }
 
 footer.site-footer {

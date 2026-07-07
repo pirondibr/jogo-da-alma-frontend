@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chakra Coronário: Problemas, Necessidades e Estratégias | Jogo da Alma</title>
-<meta name="description" content="Entenda os problemas mais comuns do Chakra Coronário: vazio existencial, falta de propósito, crise de sentido, desconexão espiritual, fuga da realidade e fanatismo.">
-<link rel="alternate" hreflang="pt-BR" href="https://pirondibr.github.io/jogo-da-alma-frontend/chakra-coronario-problemas.html">
-<link rel="alternate" hreflang="en" href="https://pirondibr.github.io/jogo-da-alma-frontend/en/chakra-coronario-problemas.html">
-<link rel="alternate" hreflang="x-default" href="https://pirondibr.github.io/jogo-da-alma-frontend/chakra-coronario-problemas.html">
+<title>Third Eye Chakra: Problems, Needs and Strategies | The Soul Game</title>
+<meta name="description" content="Understand the most common Third Eye Chakra problems: mental fog, overthinking, trouble deciding, lack of clarity, illusion and analysis paralysis.">
+<link rel="alternate" hreflang="pt-BR" href="https://pirondibr.github.io/jogo-da-alma-frontend/chakra-frontal-problemas.html">
+<link rel="alternate" hreflang="en" href="https://pirondibr.github.io/jogo-da-alma-frontend/en/chakra-frontal-problemas.html">
+<link rel="alternate" hreflang="x-default" href="https://pirondibr.github.io/jogo-da-alma-frontend/chakra-frontal-problemas.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
     --surface: #1E1E2A; --surface-light: #252535;
     --text: #F0EFF4; --text-secondary: #B8B5C8; --text-muted: #7A7690;
     --accent: #A78BFA; --accent-light: #C4B5FD; --accent-dark: #7C3AED;
-    --red: #A855F7; --red-light: #C084FC; --red-glow: rgba(168,85,247,.16);
+    --red: #6366F1; --red-light: #818CF8; --red-glow: rgba(99,102,241,.16);
     --gold: #F59E0B; --green: #22C55E; --blue: #3B82F6;
     --radius-md: 12px; --radius-lg: 20px; --transition: .3s cubic-bezier(.4,0,.2,1);
 }
@@ -71,7 +71,7 @@ section.block.last { padding-bottom: 90px; }
 
 .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 34px; }
 .card { background: var(--bg-card); border: 1px solid var(--surface); border-radius: var(--radius-lg); padding: 24px; border-top: 3px solid var(--red); transition: transform var(--transition), border-color var(--transition); }
-.card:hover { transform: translateY(-3px); border-color: rgba(168,85,247,.4); }
+.card:hover { transform: translateY(-3px); border-color: rgba(99,102,241,.4); }
 .card .icon { font-size: 1.65rem; margin-bottom: 12px; }
 .card h3 { font-size: 1.17rem; margin-bottom: 9px; }
 .card p { font-size: .93rem; margin: 0; }
@@ -84,7 +84,7 @@ section.block.last { padding-bottom: 90px; }
 .table-wrap { overflow-x: auto; margin-top: 34px; border: 1px solid var(--surface); border-radius: var(--radius-lg); }
 table { width: 100%; border-collapse: collapse; min-width: 720px; background: var(--bg-card); }
 th, td { padding: 18px 20px; text-align: left; border-bottom: 1px solid var(--surface); vertical-align: top; }
-th { color: var(--red-light); font-size: .78rem; text-transform: uppercase; letter-spacing: .11em; background: rgba(168,85,247,.07); }
+th { color: var(--red-light); font-size: .78rem; text-transform: uppercase; letter-spacing: .11em; background: rgba(99,102,241,.07); }
 td { color: var(--text-secondary); font-size: .94rem; }
 td strong { color: var(--text); }
 tr:last-child td { border-bottom: none; }
@@ -146,80 +146,80 @@ footer { border-top: 1px solid var(--surface); padding: 40px 24px; text-align: c
 
 <nav>
     <div class="nav-inner">
-        <a href="index.html" class="logo"><span>✦</span> Jogo da Alma</a>
+        <a href="index.html" class="logo"><span>✦</span> The Soul Game</a>
         <div class="nav-links">
-            <a href="index.html#p4">As 7 Perguntas</a>
-            <a href="perguntas/4-como-alcancar-a-felicidade.html">Como alcançar a felicidade</a>
-            <a href="questionario.html">Quiz Chakras</a>
-            <a href="questionario.html" class="nav-cta">Fazer diagnóstico</a>
-            <span class="nav-lang"><strong>PT</strong> · <a href="en/chakra-coronario-problemas.html">EN</a></span>
+            <a href="index.html#p4">The 7 Questions</a>
+            <a href="perguntas/4-como-alcancar-a-felicidade.html">How to reach happiness</a>
+            <a href="questionario.html">Chakra Quiz</a>
+            <a href="questionario.html" class="nav-cta">Take the assessment</a>
+            <span class="nav-lang"><a href="../chakra-frontal-problemas.html">PT</a> · <strong>EN</strong></span>
         </div>
     </div>
 </nav>
 
 <header class="hero">
-    <p class="breadcrumb"><a href="index.html">Jogo da Alma</a> / <a href="perguntas/4-como-alcancar-a-felicidade.html">Como alcançar a felicidade?</a> / Coronário</p>
-    <p class="eyebrow">7º Chakra · Sentido</p>
-    <h1>Chakra Coronário: quando a vida perde o sentido<span style="color:var(--red-light)">.</span></h1>
-    <p class="sub">O Chakra Coronário representa sua necessidade de sentido, propósito e conexão com algo maior. Quando ele está equilibrado, você sente direção profunda, paz e confiança na vida. Quando está em desequilíbrio, aparece vazio existencial, desconexão, fuga espiritual ou rigidez de crenças.</p>
+    <p class="breadcrumb"><a href="index.html">The Soul Game</a> / <a href="perguntas/4-como-alcancar-a-felicidade.html">How to reach happiness?</a> / Third Eye</p>
+    <p class="eyebrow">6th Chakra · Clarity</p>
+    <h1>Third Eye Chakra: when your mind loses its direction<span style="color:var(--red-light)">.</span></h1>
+    <p class="sub">The Third Eye Chakra represents your need for clarity, understanding and vision. When it is balanced, you see patterns, make better decisions and learn deeply. When it is out of balance, the mind turns into a maze: too much analysis, confusion, false certainty or disconnection from reality.</p>
     <div class="hero-card">
-        <div><small>Necessidade central</small><strong>Sentido e propósito</strong></div>
-        <div><small>Em equilíbrio</small><strong>Paz, confiança e direção espiritual</strong></div>
-        <div><small>Em desequilíbrio</small><strong>Vazio, fuga ou fanatismo</strong></div>
+        <div><small>Core need</small><strong>Clarity and understanding</strong></div>
+        <div><small>In balance</small><strong>Vision, discernment and learning</strong></div>
+        <div><small>Out of balance</small><strong>Confusion, illusion or paralysis</strong></div>
     </div>
 </header>
 
 <section class="answer">
-    <p><em>O problema não é buscar propósito.</em> O problema é quando a busca por sentido vira fuga da vida, vazio, dependência de sinais externos ou crença rígida que substitui a experiência real.</p>
+    <p><em>The problem isn't thinking a lot.</em> The problem is when your search for understanding turns into confusion, too much analysis, false certainty or distance from action.</p>
 </section>
 
 <section class="block">
     <div class="container narrow reveal">
-        <p class="eyebrow">Problemas mais comuns</p>
-        <h2>Você se identifica com alguma dessas situações?</h2>
-        <p>Antes de falar sobre chakra, o Jogo da Alma começa pelo que você vive na prática. O Coronário aparece quando temas de sentido, propósito, fé, confiança na vida e conexão com o todo começam a travar sua vida.</p>
+        <p class="eyebrow">Most common problems</p>
+        <h2>Do any of these situations sound like you?</h2>
+        <p>Before talking about the chakra, The Soul Game starts with what you actually live through. The Third Eye shows up when themes of clarity, perception, decision, learning and reality start to stall your life.</p>
     </div>
     <div class="container reveal">
         <div class="cards">
-            <div class="card"><div class="icon">🌌</div><h3>Vazio existencial</h3><p>Você sente que a vida perdeu profundidade, como se nada fosse suficiente para gerar sentido verdadeiro.</p></div>
-            <div class="card"><div class="icon">🧭</div><h3>Falta de propósito</h3><p>Você até funciona no dia a dia, mas sente que está caminhando sem uma direção maior.</p></div>
-            <div class="card"><div class="icon">🕳️</div><h3>Crise de sentido</h3><p>Uma situação difícil faz você questionar tudo: sua vida, suas escolhas, sua fé e seu futuro.</p></div>
-            <div class="card"><div class="icon">☁️</div><h3>Fuga espiritual</h3><p>Você usa ideias elevadas para não lidar com decisões práticas, emoções difíceis ou responsabilidades concretas.</p></div>
-            <div class="card"><div class="icon">🛐</div><h3>Fanatismo ou rigidez</h3><p>A necessidade de certeza vira apego a uma crença, guru, teoria ou explicação única para tudo.</p></div>
-            <div class="card"><div class="icon">🔌</div><h3>Desconexão da vida</h3><p>Você se sente separado do mundo, das pessoas ou do próprio corpo, como se estivesse observando a vida de longe.</p></div>
+            <div class="card"><div class="icon">🌫️</div><h3>Mental fog</h3><p>You feel like you have a lot of information, possibilities and thoughts, but you can't organize it all into a clear direction.</p></div>
+            <div class="card"><div class="icon">🔁</div><h3>Analysis paralysis</h3><p>You research, compare, think and review, but you take way too long to decide and act.</p></div>
+            <div class="card"><div class="icon">🧠</div><h3>Overthinking</h3><p>Your mind won't switch off. Even when your body stops, your thoughts keep trying to solve everything.</p></div>
+            <div class="card"><div class="icon">🧩</div><h3>Trouble deciding</h3><p>You see too many sides, too many variables and too many scenarios, until you lose the simple next step.</p></div>
+            <div class="card"><div class="icon">🪞</div><h3>Self-deception or false certainty</h3><p>Sometimes the mind locks in on an explanation too fast and mistakes interpretation for truth.</p></div>
+            <div class="card"><div class="icon">📚</div><h3>Learning a lot, applying little</h3><p>You pile up knowledge, courses and ideas, but you struggle to turn understanding into practice.</p></div>
         </div>
     </div>
 </section>
 
 <section class="block">
     <div class="container narrow reveal">
-        <p class="eyebrow">A necessidade por trás</p>
-        <h2>O que todos esses problemas têm em comum?</h2>
-        <p>Todos são tentativas diferentes de preencher a mesma necessidade: <strong>sentido</strong>. Seu sistema quer sentir que a vida tem direção, que sua existência importa e que seus desafios fazem parte de uma jornada maior.</p>
+        <p class="eyebrow">The need behind it</p>
+        <h2>What do all these problems have in common?</h2>
+        <p>They are all different attempts to fill the same need: <strong>clarity</strong>. Your system wants to understand what's happening, see the path and know which decision makes the most sense.</p>
         <div class="center-flow">
-            <div class="flow-step"><strong>Problema visível</strong><span style="color:var(--text-secondary)">vazio, falta de propósito, crise de sentido, fuga espiritual, rigidez de crença</span></div>
+            <div class="flow-step"><strong>Visible problem</strong><span style="color:var(--text-secondary)">confusion, too much analysis, indecision, false certainty, information overload</span></div>
             <div class="flow-arrow">↓</div>
-            <div class="flow-step"><strong>Necessidade escondida</strong><span style="color:var(--text-secondary)">sentido, propósito, conexão, confiança e pertencimento</span></div>
+            <div class="flow-step"><strong>Hidden need</strong><span style="color:var(--text-secondary)">clarity, understanding, discernment, vision and direction</span></div>
             <div class="flow-arrow">↓</div>
-            <div class="flow-step"><strong>Chakra relacionado</strong><span style="color:var(--text-secondary)">Coronário</span></div>
+            <div class="flow-step"><strong>Related chakra</strong><span style="color:var(--text-secondary)">Third Eye</span></div>
         </div>
     </div>
 </section>
 
 <section class="block">
     <div class="container reveal">
-        <p class="eyebrow">Diagnóstico prático</p>
-        <h2>O que normalmente está acontecendo?</h2>
-        <p>O Jogo da Alma traduz o problema em necessidade, depois em padrão e estratégia. Assim você deixa de brigar com o sintoma e começa a agir na raiz.</p>
+        <p class="eyebrow">Practical diagnosis</p>
+        <h2>What is usually going on?</h2>
+        <p>The Soul Game translates the problem into a need, then into a pattern and a strategy. That way you stop fighting the symptom and start acting at the root.</p>
         <div class="table-wrap">
             <table>
-                <thead><tr><th>Problema</th><th>O que existe por trás</th><th>Estratégia negativa comum</th></tr></thead>
+                <thead><tr><th>Problem</th><th>What's behind it</th><th>Common negative strategy</th></tr></thead>
                 <tbody>
-                    <tr><td><strong>Vazio existencial</strong></td><td>Necessidade de sentir que a vida tem significado.</td><td>Buscar estímulos, distrações ou respostas prontas para não encarar o vazio.</td></tr>
-                    <tr><td><strong>Falta de propósito</strong></td><td>Desejo de direção profunda e contribuição.</td><td>Esperar uma revelação perfeita antes de agir no próximo passo.</td></tr>
-                    <tr><td><strong>Crise de sentido</strong></td><td>Uma antiga narrativa deixou de sustentar sua vida.</td><td>Entrar em desespero, negar a dor ou tentar forçar uma explicação imediata.</td></tr>
-                    <tr><td><strong>Fuga espiritual</strong></td><td>Necessidade de paz e transcendência.</td><td>Usar espiritualidade para evitar corpo, dinheiro, limites, conflitos e rotina.</td></tr>
-                    <tr><td><strong>Fanatismo</strong></td><td>Busca por certeza absoluta.</td><td>Substituir experiência viva por dogma, superioridade ou dependência de autoridade externa.</td></tr>
+                    <tr><td><strong>Mental fog</strong></td><td>A need to organize variables and see a direction.</td><td>Consuming more information without building a synthesis.</td></tr>
+                    <tr><td><strong>Analysis paralysis</strong></td><td>A wish for certainty before acting.</td><td>Waiting to understand 100% before taking the next step.</td></tr>
+                    <tr><td><strong>False certainty</strong></td><td>A need for cognitive safety.</td><td>Locking in an explanation too early to avoid doubt.</td></tr>
+                    <tr><td><strong>Overthinking</strong></td><td>An attempt to control reality through the mind.</td><td>Thinking instead of acting, feeling or testing.</td></tr>
+                    <tr><td><strong>Learning but not applying</strong></td><td>Mental pleasure in understanding patterns.</td><td>Turning knowledge into a refuge from execution.</td></tr>
                 </tbody>
             </table>
         </div>
@@ -228,28 +228,28 @@ footer { border-top: 1px solid var(--surface); padding: 40px 24px; text-align: c
 
 <section class="block">
     <div class="container reveal">
-        <p class="eyebrow">Forma positiva e negativa</p>
-        <h2>Toda necessidade pode ser preenchida de duas maneiras.</h2>
-        <p>A necessidade de sentido não precisa ser eliminada. Ela precisa ser preenchida de um jeito que gere presença, responsabilidade e confiança, não fuga da realidade, superioridade espiritual ou vazio paralisante.</p>
+        <p class="eyebrow">Positive and negative forms</p>
+        <h2>Every need can be filled in two ways.</h2>
+        <p>The need for clarity doesn't have to be eliminated. It needs to be filled in a way that creates discernment, decision and movement, not a mental maze or intellectual arrogance.</p>
         <div class="dual">
             <div class="dual-card good">
-                <h3>Forma saudável</h3>
+                <h3>Healthy form</h3>
                 <ul>
-                    <li>Transformar propósito em pequenos atos concretos.</li>
-                    <li>Usar espiritualidade para viver melhor a realidade.</li>
-                    <li>Confiar na vida sem abandonar responsabilidade.</li>
-                    <li>Encontrar sentido no presente, não apenas em um futuro ideal.</li>
-                    <li>Integrar intuição, corpo, relações, trabalho e ação.</li>
+                    <li>Organizing variables before deciding.</li>
+                    <li>Turning information into synthesis.</li>
+                    <li>Testing hypotheses in reality.</li>
+                    <li>Learning enough to act better.</li>
+                    <li>Using doubt as investigation, not as paralysis.</li>
                 </ul>
             </div>
             <div class="dual-card bad">
-                <h3>Forma negativa</h3>
+                <h3>Negative form</h3>
                 <ul>
-                    <li>Esperar sinais para tudo e evitar decisão.</li>
-                    <li>Usar propósito como desculpa para não executar.</li>
-                    <li>Negar problemas práticos em nome do espiritual.</li>
-                    <li>Se prender a dogmas, gurus ou explicações absolutas.</li>
-                    <li>Buscar transcendência sem enraizamento.</li>
+                    <li>Thinking without ever acting.</li>
+                    <li>Hoarding information to avoid risk.</li>
+                    <li>Mistaking opinion for truth.</li>
+                    <li>Using intelligence to justify avoidance.</li>
+                    <li>Getting stuck in endless scenarios, theories and possibilities.</li>
                 </ul>
             </div>
         </div>
@@ -258,17 +258,17 @@ footer { border-top: 1px solid var(--surface); padding: 40px 24px; text-align: c
 
 <section class="block">
     <div class="container narrow reveal">
-        <p class="eyebrow">Como o Jogo da Alma resolve</p>
-        <h2>O método transforma vazio em direção viva.</h2>
-        <p>Em vez de dizer apenas “confie no universo” ou “encontre seu propósito”, o Jogo da Alma pergunta: qual necessidade está vazia, qual sentido está sendo perdido e qual ação concreta reconecta você com a vida?</p>
+        <p class="eyebrow">How The Soul Game solves it</p>
+        <h2>The method turns confusion into direction.</h2>
+        <p>Instead of just saying "think positive" or "stop thinking," The Soul Game asks: which variables matter, which interpretation is running the show and what small experiment could reveal the truth?</p>
         <div class="center-flow">
-            <div class="flow-step"><strong>1. Identificar a crise de sentido</strong><span style="color:var(--text-secondary)">o que perdeu significado ou deixou de sustentar sua vida?</span></div>
+            <div class="flow-step"><strong>1. Identify the real question</strong><span style="color:var(--text-secondary)">what are you trying to understand or decide?</span></div>
             <div class="flow-arrow">↓</div>
-            <div class="flow-step"><strong>2. Separar fé, fuga e responsabilidade</strong><span style="color:var(--text-secondary)">o que é confiança real e o que é evitação do próximo passo?</span></div>
+            <div class="flow-step"><strong>2. Separate fact, interpretation and prediction</strong><span style="color:var(--text-secondary)">what happened, why you think it happened and what you think will happen?</span></div>
             <div class="flow-arrow">↓</div>
-            <div class="flow-step"><strong>3. Traduzir propósito em prática</strong><span style="color:var(--text-secondary)">qual ação pequena expressa sua direção maior hoje?</span></div>
+            <div class="flow-step"><strong>3. Shrink it to the next test</strong><span style="color:var(--text-secondary)">which small action produces real information?</span></div>
             <div class="flow-arrow">↓</div>
-            <div class="flow-step"><strong>4. Integrar céu e terra</strong><span style="color:var(--text-secondary)">sentido vira vida quando atravessa corpo, rotina, relações e ação.</span></div>
+            <div class="flow-step"><strong>4. Turn clarity into movement</strong><span style="color:var(--text-secondary)">understanding becomes a result when it guides action.</span></div>
         </div>
     </div>
 </section>
@@ -276,16 +276,16 @@ footer { border-top: 1px solid var(--surface); padding: 40px 24px; text-align: c
 <section class="block">
     <div class="container reveal">
         <div class="example">
-            <p class="eyebrow">Exemplo prático</p>
-            <h2>“Nada faz sentido.”</h2>
-            <p>O Jogo da Alma não trata isso apenas como tristeza ou desmotivação. Ele investiga qual conexão foi perdida e como reconstruir sentido sem fugir da realidade.</p>
+            <p class="eyebrow">Practical example</p>
+            <h2>"I don't know which path to choose."</h2>
+            <p>The Soul Game doesn't treat this as mere indecision. It organizes the confusion until it finds a decision that is possible, proportional and testable.</p>
             <div class="example-grid">
-                <div class="example-item"><small>Problema</small><span>Sinto que minha vida está sem propósito.</span></div>
-                <div class="example-item"><small>Necessidade</small><span>Sentido, propósito e conexão.</span></div>
-                <div class="example-item"><small>Forma negativa</small><span>Esperar uma grande revelação antes de viver o próximo passo.</span></div>
-                <div class="example-item"><small>Custo</small><span>Vazio, isolamento e desconexão da vida prática.</span></div>
-                <div class="example-item"><small>Forma saudável</small><span>Criar uma prática pequena que gere conexão real com a vida.</span></div>
-                <div class="example-item"><small>Estratégia</small><span>Escolher uma contribuição simples, uma prática espiritual enraizada e uma ação concreta por 7 dias.</span></div>
+                <div class="example-item"><small>Problem</small><span>I have too many options and I can't decide.</span></div>
+                <div class="example-item"><small>Need</small><span>Clarity and direction.</span></div>
+                <div class="example-item"><small>Negative form</small><span>Waiting for total certainty before acting.</span></div>
+                <div class="example-item"><small>Cost</small><span>Paralysis, anxiety and missed opportunity.</span></div>
+                <div class="example-item"><small>Healthy form</small><span>Choosing a small test that increases real information.</span></div>
+                <div class="example-item"><small>Strategy</small><span>Set your criteria, pick your main hypothesis and run it for 7 days.</span></div>
             </div>
         </div>
     </div>
@@ -293,59 +293,59 @@ footer { border-top: 1px solid var(--surface); padding: 40px 24px; text-align: c
 
 <section class="practice">
     <div class="container reveal">
-        <p class="eyebrow">Protocolo inicial</p>
-        <h2>O que praticar quando o Coronário ativa?</h2>
-        <p>O objetivo não é abandonar a espiritualidade. É fazer o sentido descer para a vida prática, sem transformar transcendência em fuga.</p>
+        <p class="eyebrow">Starter protocol</p>
+        <h2>What to practice when the Third Eye activates?</h2>
+        <p>The goal isn't to shut the mind off. It's to teach the mind to serve movement, not replace life.</p>
         <div class="practice-steps">
-            <div class="practice-step"><div class="num">1</div><div><h3>Voltar ao corpo e ao presente</h3><p>Quando o vazio ou a fuga ativar, faça algo simples e concreto: caminhar, respirar, organizar o ambiente, cuidar do corpo. O Coronário precisa de Básico para virar vida.</p></div></div>
-            <div class="practice-step"><div class="num">2</div><div><h3>Transformar sentido em serviço</h3><p>Pergunte: “qual pequena ação hoje melhora minha vida ou a vida de alguém?” Propósito fica mais claro quando vira contribuição.</p></div></div>
-            <div class="practice-step"><div class="num">3</div><div><h3>Confiar sem terceirizar escolha</h3><p>Use sinais, intuição e fé como orientação, não como substitutos da sua responsabilidade de escolher e agir.</p></div></div>
+            <div class="practice-step"><div class="num">1</div><div><h3>Separate fact, story and future</h3><p>Write three lines: what happened, why I think it happened and what I think will happen. This pulls the mind out of the tangle.</p></div></div>
+            <div class="practice-step"><div class="num">2</div><div><h3>Define your decision criteria</h3><p>Before choosing, define what matters: speed, safety, learning, money, energy, alignment. Clarity is born from a reference point.</p></div></div>
+            <div class="practice-step"><div class="num">3</div><div><h3>Trade certainty for an experiment</h3><p>Pick a small action that tests your hypothesis. Reality gives better feedback than endless thinking.</p></div></div>
         </div>
     </div>
 </section>
 
 <section class="block">
     <div class="container reveal">
-        <p class="eyebrow">Capacidades desenvolvidas</p>
-        <h2>Quando o Coronário se fortalece, você desenvolve sentido.</h2>
+        <p class="eyebrow">Capacities you build</p>
+        <h2>When the Third Eye grows stronger, you develop vision.</h2>
         <div class="checks">
-            <div class="check">Propósito</div>
-            <div class="check">Paz interior</div>
-            <div class="check">Confiança na vida</div>
-            <div class="check">Aceitação</div>
-            <div class="check">Visão do todo</div>
-            <div class="check">Espiritualidade enraizada</div>
-            <div class="check">Resiliência existencial</div>
-            <div class="check">Capacidade de transformar dor em sentido</div>
+            <div class="check">Mental clarity</div>
+            <div class="check">Discernment</div>
+            <div class="check">Analytical ability</div>
+            <div class="check">Synthesizing information</div>
+            <div class="check">Decision-making</div>
+            <div class="check">Accelerated learning</div>
+            <div class="check">Pattern recognition</div>
+            <div class="check">Action-oriented thinking</div>
         </div>
     </div>
 </section>
 
 <section class="block last">
     <div class="container reveal">
-        <p class="eyebrow">Portas de entrada</p>
-        <h2>Você pode começar por um objetivo ou por uma situação.</h2>
+        <p class="eyebrow">Ways in</p>
+        <h2>You can start from a goal or from a situation.</h2>
         <div class="objectives">
             <div class="objective-card">
-                <h3>Quero...</h3>
+                <h3>I want to...</h3>
                 <ul>
-                    <li>Encontrar meu propósito</li>
-                    <li>Ter mais paz interior</li>
-                    <li>Confiar mais na vida</li>
-                    <li>Transformar dor em aprendizado</li>
-                    <li>Conectar espiritualidade e prática</li>
-                    <li>Sentir que minha vida tem sentido</li>
+                    <li>Have more clarity</li>
+                    <li>Make better decisions</li>
+                    <li>Learn faster</li>
+                    <li>Organize my ideas</li>
+                    <li>Get out of mental fog</li>
+                    <li>Turn knowledge into action</li>
                 </ul>
             </div>
             <div class="objective-card">
-                <h3>Estou...</h3>
+                <h3>I'm...</h3>
                 <ul>
-                    <li>Sem propósito</li>
-                    <li>Vazio por dentro</li>
-                    <li>Em crise existencial</li>
-                    <li>Desconectado da vida</li>
-                    <li>Fugindo da realidade</li>
-                    <li>Preso em crenças rígidas ou medo do futuro</li>
+                    <li>Lost</li>
+                    <li>Overthinking</li>
+                    <li>Unsure what to do</li>
+                    <li>Stuck from too much analysis</li>
+                    <li>Full of information and without direction</li>
+                    <li>Learning a lot and applying little</li>
                 </ul>
             </div>
         </div>
@@ -353,20 +353,20 @@ footer { border-top: 1px solid var(--surface); padding: 40px 24px; text-align: c
 </section>
 
 <section class="diag">
-    <h2 class="reveal">Descubra como está o seu Chakra Coronário.</h2>
-    <p class="reveal">O diagnóstico dos 7 chakras mostra quais necessidades estão pedindo atenção agora, e quais estratégias podem criar movimento de forma saudável.</p>
-    <a href="questionario.html" class="btn btn-primary reveal">Fazer diagnóstico</a>
-    <a href="perguntas/4-como-alcancar-a-felicidade.html" class="btn btn-ghost reveal">Explorar outros chakras</a>
+    <h2 class="reveal">Find out where your Third Eye Chakra stands.</h2>
+    <p class="reveal">The 7 chakra assessment shows which needs are asking for attention right now, and which strategies can create movement in a healthy way.</p>
+    <a href="questionario.html" class="btn btn-primary reveal">Take the assessment</a>
+    <a href="perguntas/4-como-alcancar-a-felicidade.html" class="btn btn-ghost reveal">Explore other chakras</a>
 </section>
 
 <div class="next">
-    <a href="chakra-frontal-problemas.html">← Chakra anterior: Frontal</a>
-    <a href="perguntas/4-como-alcancar-a-felicidade.html">Voltar ao mapa dos chakras →</a>
+    <a href="chakra-laringeo-problemas.html">← Previous chakra: Throat</a>
+    <a href="chakra-coronario-problemas.html">Next chakra: Crown →</a>
 </div>
 
 <footer>
-    <div>✦ Jogo da Alma · © 2026. Todos os direitos reservados.</div>
-    <div>Não substitui acompanhamento profissional.</div>
+    <div>✦ The Soul Game · © 2026. All rights reserved.</div>
+    <div>Not a substitute for professional care.</div>
 </footer>
 
 <script>

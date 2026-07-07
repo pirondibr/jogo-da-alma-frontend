@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Qual é o nosso futuro? · Jogo da Alma</title>
-<meta name="description" content="O futuro da humanidade como atualização de consciência: Humano 1.0, 2.0 e 3.0 criando sociedades e civilizações correspondentes.">
-<link rel="alternate" hreflang="pt-BR" href="https://pirondibr.github.io/jogo-da-alma-frontend/perguntas/6-qual-e-o-nosso-futuro.html">
-<link rel="alternate" hreflang="en" href="https://pirondibr.github.io/jogo-da-alma-frontend/en/perguntas/6-qual-e-o-nosso-futuro.html">
-<link rel="alternate" hreflang="x-default" href="https://pirondibr.github.io/jogo-da-alma-frontend/perguntas/6-qual-e-o-nosso-futuro.html">
+<title>What is your role in this future? · The Soul Game</title>
+<meta name="description" content="Discover your role in the future: update yourself, understand your dominant frequency, and turn your evolution into a collective contribution.">
+<link rel="alternate" hreflang="pt-BR" href="https://pirondibr.github.io/jogo-da-alma-frontend/perguntas/7-qual-e-o-seu-papel-nesse-futuro.html">
+<link rel="alternate" hreflang="en" href="https://pirondibr.github.io/jogo-da-alma-frontend/en/perguntas/7-qual-e-o-seu-papel-nesse-futuro.html">
+<link rel="alternate" hreflang="x-default" href="https://pirondibr.github.io/jogo-da-alma-frontend/perguntas/7-qual-e-o-seu-papel-nesse-futuro.html">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
@@ -21,7 +21,7 @@
     --gold: #F59E0B; --positive: #4ADE80; --negative: #FF6B6B;
     --q1: #EF4444; --q2: #F97316; --q3: #EAB308; --q4: #22C55E;
     --q5: #3B82F6; --q6: #8B5CF6; --q7: #A855F7;
-    --qc: var(--q6);
+    --qc: var(--q7);
     --radius-sm: 10px; --radius-md: 12px; --radius-lg: 20px;
     --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -49,7 +49,7 @@ nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba
 .nav-lang strong { color: var(--accent); font-weight: 700; }
 @media (max-width: 720px) { .nav-links > a:not(.nav-cta) { display: none; } }
 
-.hero { padding: 150px 24px 74px; text-align: center; background: radial-gradient(ellipse 60% 45% at 50% 0%, rgba(139,92,246,.20), transparent), var(--bg); }
+.hero { padding: 150px 24px 74px; text-align: center; background: radial-gradient(ellipse 60% 45% at 50% 0%, rgba(168,85,247,.20), transparent), var(--bg); }
 .breadcrumb { font-size: .85rem; color: var(--text-muted); margin-bottom: 26px; }
 .breadcrumb a { color: var(--text-muted); text-decoration: none; }
 .breadcrumb a:hover { color: var(--text-secondary); }
@@ -108,14 +108,14 @@ td { padding: 18px; border-top: 1px solid var(--surface); color: #DCD8FF; vertic
 .example-card b { color: var(--text); }
 @media (max-width: 900px) { .examples { grid-template-columns: 1fr; } }
 
-.insight { margin-top: 40px; background: linear-gradient(135deg, rgba(139,92,246,.16), rgba(168,85,247,.08)); border: 1px solid rgba(139,92,246,.28); border-radius: var(--radius-lg); padding: 30px; }
+.insight { margin-top: 40px; background: linear-gradient(135deg, rgba(168,85,247,.16), rgba(168,85,247,.08)); border: 1px solid rgba(168,85,247,.28); border-radius: var(--radius-lg); padding: 30px; }
 .insight h3 { font-size: 1.4rem; margin-bottom: 10px; }
 .insight p { color: var(--text-secondary); }
 .quote { margin-top: 34px; padding: 34px; border-radius: var(--radius-lg); background: var(--bg-card); border: 1px solid var(--surface); text-align: center; }
 .quote p { font-family: 'Fraunces', serif; font-size: clamp(1.2rem, 2.4vw, 1.65rem); line-height: 1.45; color: var(--text); }
 .quote em { color: var(--accent-light); }
 
-.diag { margin-top: 90px; text-align: center; padding: 90px 24px; background: radial-gradient(ellipse 55% 50% at 50% 100%, rgba(139,92,246,.16), transparent), var(--bg-alt); border-top: 1px solid var(--surface); }
+.diag { margin-top: 90px; text-align: center; padding: 90px 24px; background: radial-gradient(ellipse 55% 50% at 50% 100%, rgba(168,85,247,.16), transparent), var(--bg-alt); border-top: 1px solid var(--surface); }
 .diag h2 { font-size: clamp(1.8rem, 4vw, 2.7rem); max-width: 700px; margin: 0 auto 18px; }
 .diag p { color: var(--text-secondary); max-width: 600px; margin: 0 auto 34px; font-size: 1.05rem; }
 .btn { display: inline-block; text-decoration: none; font-weight: 500; padding: 14px 32px; border-radius: 999px; font-size: 1rem; transition: transform var(--transition), background var(--transition), border-color var(--transition); }
@@ -141,81 +141,78 @@ footer .disclaimer { margin-top: 8px; }
 
 <nav>
     <div class="nav-inner">
-        <a href="../index.html" class="logo"><span>✦</span> Jogo da Alma</a>
+        <a href="../index.html" class="logo"><span>✦</span> The Soul Game</a>
         <div class="nav-links">
-            <a href="../index.html#p6">As 7 Perguntas</a>
-            <a href="../questionario.html">Quiz Chakras</a>
-            <a href="../questionario-personalidade.html" class="nav-cta">Quiz Personalidade</a>
-            <span class="nav-lang"><strong>PT</strong> · <a href="../en/perguntas/6-qual-e-o-nosso-futuro.html">EN</a></span>
+            <a href="../index.html#p7">The 7 Questions</a>
+            <a href="../questionario.html">Chakra Quiz</a>
+            <a href="../questionario-personalidade.html" class="nav-cta">Personality Quiz</a>
+            <span class="nav-lang"><a href="../../perguntas/7-qual-e-o-seu-papel-nesse-futuro.html">PT</a> · <strong>EN</strong></span>
         </div>
     </div>
 </nav>
 
 <header class="hero">
-    <p class="breadcrumb"><a href="../index.html">Jogo da Alma</a> / As 7 Perguntas / 6</p>
-    <p class="q-label">Pergunta 06 de 7</p>
-    <h1>Qual é o nosso futuro<span class="qmark">?</span></h1>
-    <p class="sub">O futuro não será definido apenas por tecnologia, economia ou política. Ele será definido pelo tipo de humano que aprende a usar tudo isso.</p>
+    <p class="breadcrumb"><a href="../index.html">The Soul Game</a> / The 7 Questions / 7</p>
+    <p class="q-label">Question 07 of 7</p>
+    <h1>What is your role in this future<span class="qmark">?</span></h1>
+    <p class="sub">You don't have to save the world by yourself. But there's a part of the collective update that can only happen through your own evolution.</p>
 </header>
 
 <section class="answer">
-    <p class="eyebrow">A resposta do Jogo</p>
-    <p class="main">O futuro da humanidade é a atualização coletiva do estado interno que a compõe. <em>Humano 1.0 cria sociedade 1.0. Humano 2.0 cria sociedade 2.0. Humano 3.0 cria sociedade 3.0.</em></p>
+    <p class="eyebrow">The Game's answer</p>
+    <p class="main">Your role is to update yourself, discover your dominant frequency, and turn that evolution into contribution. <em>The future doesn't need you to be everything, it needs you to offer your part.</em></p>
 </section>
 
 <section class="block">
     <div class="container narrow reveal">
-        <p class="eyebrow">O framework</p>
-        <h2>O mundo externo escala o humano interno.</h2>
-        <p>Famílias, empresas, governos, economias e culturas não surgem do nada. Eles são extensões do nível de consciência, medo, desejo, poder, comunicação e propósito das pessoas que os constroem.</p>
-        <p>Por isso, o futuro não é apenas uma previsão. É uma consequência.</p>
+        <p class="eyebrow">The framework</p>
+        <h2>Individual journey → collective transformation.</h2>
+        <p>The world changes when people change how they live, work, love, create, lead, and communicate. Collective transformation starts with the individual, but it doesn't end there.</p>
+        <p>In The Soul Game, your role in the future is born from the union of <strong>who you are</strong>, <strong>what you develop</strong>, and <strong>how that serves the life around you</strong>.</p>
         <div class="evolution">
-            <div class="evo-card"><h3>Humano 1.0</h3><p>Medo, escassez, reação, dominação e sobrevivência.</p></div>
+            <div class="evo-card"><h3>Identity</h3><p>Recognizing your frequencies, talents, needs, and shadows.</p></div>
             <div class="evo-arrow">→</div>
-            <div class="evo-card"><h3>Sociedade 1.0</h3><p>Instituições criadas pela mesma frequência: competição predatória, controle e polarização.</p></div>
+            <div class="evo-card"><h3>Update</h3><p>Meeting your needs in a healthy way and evolving from 1.0 to 3.0.</p></div>
             <div class="evo-arrow">→</div>
-            <div class="evo-card"><h3>Civilização 1.0</h3><p>Um mundo avançado em ferramentas, mas ainda antigo em consciência.</p></div>
+            <div class="evo-card"><h3>Contribution</h3><p>Turning your evolution into value for people, projects, and society.</p></div>
         </div>
     </div>
 </section>
 
 <section class="block">
     <div class="container reveal">
-        <p class="eyebrow">Os níveis de civilização</p>
-        <h2>Civilização 1.0, 2.0 e 3.0.</h2>
-        <p>A humanidade não evolui apenas criando máquinas melhores. Ela evolui quando aprende a preencher suas necessidades de forma mais saudável, individualmente e coletivamente.</p>
+        <p class="eyebrow">The 3 levels of your role</p>
+        <h2>You don't discover your role by thinking. You discover it by playing.</h2>
+        <p>A mission isn't just a nice-sounding phrase. It's a path that reveals itself when you learn the game, update your own energy, and start acting usefully in the world.</p>
         <div class="levels">
-            <div class="level-card" style="--cc: var(--negative)">
-                <div class="tag">Civilização 1.0</div>
-                <h3>Sobrevivência</h3>
-                <p>Uma sociedade organizada pelo medo, pela escassez e pela disputa.</p>
+            <div class="level-card" style="--cc: var(--q6)">
+                <div class="tag">Level 1</div>
+                <h3>Know the game</h3>
+                <p>Understand the 7 frequencies, their needs, your patterns, and how life sends back challenges to generate evolution.</p>
                 <ul>
-                    <li>Segurança pelo controle</li>
-                    <li>Prazer pelo vício</li>
-                    <li>Poder pela dominação</li>
-                    <li>Comunicação pela manipulação</li>
+                    <li>Who am I?</li>
+                    <li>What are my dominant frequencies?</li>
+                    <li>Where am I playing out of fear?</li>
                 </ul>
             </div>
-            <div class="level-card" style="--cc: var(--qc)">
-                <div class="tag">Civilização 2.0</div>
-                <h3>Consciência</h3>
-                <p>Uma sociedade que começa a curar seus excessos e construir estruturas mais humanas.</p>
+            <div class="level-card" style="--cc: var(--q4)">
+                <div class="tag">Level 2</div>
+                <h3>Update yourself</h3>
+                <p>Turn reaction into awareness, deficiency into balance, and excess into a proportional direction.</p>
                 <ul>
-                    <li>Segurança com dignidade</li>
-                    <li>Prazer consciente</li>
-                    <li>Liderança responsável</li>
-                    <li>Comunicação transparente</li>
+                    <li>Which needs are asking for care?</li>
+                    <li>Which shadows keep repeating cycles?</li>
+                    <li>What is my next move?</li>
                 </ul>
             </div>
-            <div class="level-card" style="--cc: var(--positive)">
-                <div class="tag">Civilização 3.0</div>
-                <h3>Criação</h3>
-                <p>Uma civilização onde tecnologia, consciência e propósito trabalham juntos.</p>
+            <div class="level-card" style="--cc: var(--q7)">
+                <div class="tag">Level 3</div>
+                <h3>Contribute to the future</h3>
+                <p>Use your personality, your talents, and your story as a bridge between individual and collective transformation.</p>
                 <ul>
-                    <li>Abundância sustentável</li>
-                    <li>Criatividade como cultura</li>
-                    <li>Cooperação entre diferenças</li>
-                    <li>Propósito coletivo</li>
+                    <li>What value do I generate?</li>
+                    <li>What problem do I help solve?</li>
+                    <li>What future do I help build?</li>
                 </ul>
             </div>
         </div>
@@ -224,27 +221,27 @@ footer .disclaimer { margin-top: 8px; }
 
 <section class="block">
     <div class="container reveal">
-        <p class="eyebrow">Os 7 chakras na sociedade</p>
-        <h2>Cada centro humano também aparece em escala coletiva.</h2>
-        <p>O mesmo mapa usado para compreender uma pessoa pode ser usado para compreender uma civilização. O futuro depende de como a humanidade aprende a jogar cada frequência.</p>
+        <p class="eyebrow">The 7 forms of contribution</p>
+        <h2>Each frequency has its own way of serving the world.</h2>
+        <p>You don't have to contribute the same way as someone else. Each chakra points to a type of value you can offer society when it's in its positive form.</p>
         <div class="table-wrap">
             <table>
                 <thead>
                     <tr>
                         <th>Chakra</th>
-                        <th>Sociedade 1.0</th>
-                        <th>Sociedade 2.0 / 3.0</th>
-                        <th>Pergunta coletiva</th>
+                        <th>When updated</th>
+                        <th>Contribution to the future</th>
+                        <th>The role's question</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr style="--cc: var(--q1)"><td><span class="badge">Básico</span></td><td>Medo, escassez, insegurança material.</td><td>Moradia, saúde, alimento, segurança e estabilidade como fundação.</td><td>Todos têm base para viver?</td></tr>
-                    <tr style="--cc: var(--q2)"><td><span class="badge">Sacral</span></td><td>Vício, consumo compulsivo, entretenimento anestésico.</td><td>Prazer consciente, arte, criatividade, cultura e vitalidade.</td><td>Nosso prazer cria vida ou nos adormece?</td></tr>
-                    <tr style="--cc: var(--q3)"><td><span class="badge">Plexo</span></td><td>Dominação, status, competição predatória.</td><td>Liderança, mérito saudável, desafio, coragem e responsabilidade.</td><td>O poder serve ao ego ou à evolução?</td></tr>
-                    <tr style="--cc: var(--q4)"><td><span class="badge">Cardíaco</span></td><td>Tribalismo, culpa, carência coletiva, exclusão.</td><td>Cooperação, empatia, justiça, cuidado e vínculos saudáveis.</td><td>Conseguimos incluir sem nos perder?</td></tr>
-                    <tr style="--cc: var(--q5)"><td><span class="badge">Laríngeo</span></td><td>Propaganda, manipulação, silenciamento, narrativa de medo.</td><td>Transparência, diálogo, educação, comunicação responsável.</td><td>A verdade circula ou é controlada?</td></tr>
-                    <tr style="--cc: var(--q6)"><td><span class="badge">Frontal</span></td><td>Confusão, desinformação, falsa certeza, visão curta.</td><td>Conhecimento, ciência, sabedoria aplicada, visão sistêmica.</td><td>Entendemos as consequências do que criamos?</td></tr>
-                    <tr style="--cc: var(--q7)"><td><span class="badge">Coronário</span></td><td>Vazio, fanatismo, desconexão do propósito.</td><td>Sentido, liberdade espiritual, propósito comum e reverência pela vida.</td><td>Para que estamos usando nosso poder?</td></tr>
+                    <tr style="--cc: var(--q1)"><td><span class="badge">Root</span></td><td>Safety, stability, presence, and consistency.</td><td>Building foundations: family, health, routine, finances, operations, sustainable systems.</td><td>What do I help hold up?</td></tr>
+                    <tr style="--cc: var(--q2)"><td><span class="badge">Sacral</span></td><td>Healthy pleasure, creativity, vitality, and adaptability.</td><td>Bringing life: art, culture, experiences, innovation, lightness, and movement.</td><td>What do I help make more alive?</td></tr>
+                    <tr style="--cc: var(--q3)"><td><span class="badge">Solar Plexus</span></td><td>Courage, leadership, discipline, and the drive to achieve.</td><td>Producing results: building ventures, leading, executing, protecting, overcoming challenges.</td><td>Where does my strength create progress?</td></tr>
+                    <tr style="--cc: var(--q4)"><td><span class="badge">Heart</span></td><td>Love, cooperation, care, fairness, and bonding.</td><td>Healing relationships: welcoming, mediating, teaching, caring, connecting people and groups.</td><td>Who needs my care?</td></tr>
+                    <tr style="--cc: var(--q5)"><td><span class="badge">Throat</span></td><td>Truthful expression, communication, and responsible influence.</td><td>Giving voice: teaching, selling, communicating, defending ideas, translating important messages.</td><td>Which truth needs to pass through me?</td></tr>
+                    <tr style="--cc: var(--q6)"><td><span class="badge">Third Eye</span></td><td>Clarity, systemic vision, analysis, and applied wisdom.</td><td>Organizing knowledge: diagnosing, researching, creating methods, strategies, and maps.</td><td>What confusion do I help clear up?</td></tr>
+                    <tr style="--cc: var(--q7)"><td><span class="badge">Crown</span></td><td>Meaning, purpose, a wide view, and connection to something greater.</td><td>Inspiring direction: reminding people of the why, opening awareness, uniting spirituality and practical life.</td><td>What meaning do I help reveal?</td></tr>
                 </tbody>
             </table>
         </div>
@@ -253,65 +250,69 @@ footer .disclaimer { margin-top: 8px; }
 
 <section class="block">
     <div class="container narrow reveal">
-        <p class="eyebrow">Tecnologia e IA</p>
-        <h2>A tecnologia amplifica o nível de consciência de quem a usa.</h2>
-        <p>A tecnologia não salva a humanidade sozinha. Ela aumenta alcance, velocidade e poder. Se for usada por um humano 1.0, amplifica medo, vício, controle e manipulação. Se for usada por um humano 2.0 ou 3.0, pode amplificar educação, cura, cooperação, criação e abundância.</p>
+        <p class="eyebrow">From abstract to concrete</p>
+        <h2>Purpose only becomes a role when it meets action.</h2>
+        <p>A lot of people get stuck trying to figure out a perfect mission. But your role in the future doesn't start as an absolute certainty. It starts as a proportional next step.</p>
         <div class="tech-grid">
             <div class="tech-card warning">
-                <h3>Tecnologia em frequência 1.0</h3>
-                <p>Algoritmos que viciam, IA que manipula, informação que confunde, produtividade que esgota e sistemas que concentram poder.</p>
+                <h3>Abstract purpose</h3>
+                <p>“I need to figure out my mission before I act.” This path can turn into waiting, comparison, idealizing, and paralysis.</p>
             </div>
             <div class="tech-card promise">
-                <h3>Tecnologia em frequência 3.0</h3>
-                <p>Ferramentas que educam, organizam conhecimento, aceleram cura, distribuem oportunidades e ajudam pessoas a criar com mais consciência.</p>
+                <h3>Embodied purpose</h3>
+                <p>“I'll use what I have right now to create real value.” This path turns identity into movement and movement into clarity.</p>
             </div>
         </div>
-        <div class="insight reveal">
-            <h3>O próximo salto não é apenas tecnológico.</h3>
-            <p>É psicológico, espiritual, social e estrutural. A pergunta não é só “o que a tecnologia vai permitir?”, mas “qual nível de consciência vai dirigir esse poder?”.</p>
+        <div class="insight">
+            <h3>The practical formula for your role</h3>
+            <p><strong>Dominant frequency + evolved need + real problem + consistent action = contribution.</strong></p>
         </div>
     </div>
 </section>
 
 <section class="block">
     <div class="container reveal">
-        <p class="eyebrow">Sinais de transição</p>
-        <h2>O futuro já aparece em pequenas versões.</h2>
-        <p>A civilização 2.0 não chega de uma vez. Ela surge em pessoas, comunidades, empresas, escolas, tecnologias e relações que já operam em outra lógica.</p>
+        <p class="eyebrow">Closing the 7 questions</p>
+        <h2>The seventh question is only answered by living the other six.</h2>
+        <p>Your role in the future isn't separate from your happiness, your material success, your identity, your reading of the world, and your understanding of the game. It's the synthesis of all of it.</p>
         <div class="examples">
-            <div class="example-card"><h3>No trabalho</h3><p><b>1.0:</b> exploração, medo e hierarquia abusiva.</p><p><b>2.0/3.0:</b> autonomia, propósito, transparência, criação de valor real e liderança responsável.</p></div>
-            <div class="example-card"><h3>Na educação</h3><p><b>1.0:</b> decorar, obedecer e competir.</p><p><b>2.0/3.0:</b> aprender a aprender, desenvolver consciência, criatividade e capacidade de resolver problemas reais.</p></div>
-            <div class="example-card"><h3>Nas relações</h3><p><b>1.0:</b> posse, carência, controle e disputa.</p><p><b>2.0/3.0:</b> vínculo, liberdade, responsabilidade emocional e crescimento mútuo.</p></div>
+            <div class="example-card">
+                <h3>You know yourself</h3>
+                <p>So you stop copying paths that don't belong to your frequency.</p>
+                <p><b>Question 1:</b> Who are you?</p>
+            </div>
+            <div class="example-card">
+                <h3>You understand the board</h3>
+                <p>So you don't react to the world as if the chaos were meaningless.</p>
+                <p><b>Questions 2 and 3:</b> Why is the world the way it is? Why are we here?</p>
+            </div>
+            <div class="example-card">
+                <h3>You learn to create</h3>
+                <p>So you turn needs, value, and purpose into real contribution.</p>
+                <p><b>Questions 4, 5, 6, and 7:</b> Happiness, success, future, and role.</p>
+            </div>
         </div>
-    </div>
-</section>
-
-<section class="block">
-    <div class="container narrow reveal">
-        <p class="eyebrow">A escolha coletiva</p>
-        <h2>O futuro não está pronto. Ele está sendo jogado.</h2>
-        <p>Cada pessoa que atualiza sua forma de lidar com medo, prazer, poder, amor, voz, visão e propósito muda o campo ao redor. A transformação coletiva começa como transformação individual, mas não termina nela.</p>
         <div class="quote">
-            <p>O futuro da humanidade não será decidido apenas por quem cria as ferramentas mais poderosas. Será decidido por <em>quem se torna capaz de usá-las com consciência.</em></p>
+            <p>Your role isn't to be perfect. It's to <em>play your part better</em> and let that evolution become useful to the whole.</p>
         </div>
     </div>
 </section>
 
 <section class="diag">
-    <h2 class="reveal">Que frequência você quer fortalecer no futuro?</h2>
-    <p class="reveal">O diagnóstico mostra onde sua evolução individual começa, e como a sua transformação pode se tornar parte da atualização coletiva.</p>
-    <a href="../questionario.html" class="btn btn-primary reveal">Fazer o Quiz dos Chakras</a>
-    <a href="../index.html#p7" class="btn btn-ghost reveal">Continuar a jornada</a>
+    <h2 class="reveal">Start by discovering your dominant frequency.</h2>
+    <p class="reveal">The assessment helps you identify your chakras, your personality, your current needs, and where to begin your own individual update.</p>
+    <a href="../questionario.html" class="btn btn-primary reveal">Take the Chakra Quiz</a>
+    <a href="../questionario-personalidade.html" class="btn btn-ghost reveal">Discover my Personality</a>
 </section>
 
 <div class="next">
-    <a href="5-como-alcancar-o-sucesso-material.html">← Pergunta 5: Como alcançar o sucesso material?</a>
-    <a href="7-qual-e-o-seu-papel-nesse-futuro.html" class="next-q"><small>O futuro é coletivo. E a sua parte nele?</small>Qual é o seu papel nesse futuro? →</a>
+    <a href="6-qual-e-o-nosso-futuro.html">← Question 6: What is our future?</a>
+    <a href="../index.html#p1" class="next-q"><small>You've walked through all 7 questions</small>Back to the start →</a>
 </div>
 
 <footer>
-    <div>✦ Jogo da Alma · © 2026. Todos os direitos reservados.</div>
-    <div class="disclaimer">Não substitui acompanhamento profissional.</div>
+    <div>✦ The Soul Game · © 2026. All rights reserved.</div>
+    <div class="disclaimer">This is not a substitute for professional support.</div>
 </footer>
 
 <script>

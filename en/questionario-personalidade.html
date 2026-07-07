@@ -1,30 +1,30 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil de Personalidade: Questionário | Jogo da Alma</title>
-    <meta name="description" content="Descubra qual das 7 personalidades mais combina com você. Questionário baseado nos arquétipos dos 7 chakras.">
+    <title>Personality Profile: Quiz | The Soul Game</title>
+    <meta name="description" content="Find out which of the 7 personalities fits you best. A quiz based on the archetypes of the 7 chakras.">
     <link rel="alternate" hreflang="pt-BR" href="https://pirondibr.github.io/jogo-da-alma-frontend/questionario-personalidade.html">
     <link rel="alternate" hreflang="en" href="https://pirondibr.github.io/jogo-da-alma-frontend/en/questionario-personalidade.html">
     <link rel="alternate" hreflang="x-default" href="https://pirondibr.github.io/jogo-da-alma-frontend/questionario-personalidade.html">
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="quiz-base.css">
-    <link rel="stylesheet" href="questionario-personalidade.css">
+    <link rel="stylesheet" href="../quiz-base.css">
+    <link rel="stylesheet" href="../questionario-personalidade.css">
     <script src="https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
 </head>
 <body>
 <nav>
     <div class="nav-inner">
-        <a href="index.html" class="logo"><span>✦</span> Jogo da Alma</a>
+        <a href="index.html" class="logo"><span>✦</span> The Soul Game</a>
         <div class="nav-links">
-            <a href="index.html#p1">As 7 Perguntas</a>
-            <a href="perguntas/1-quem-voce-e.html">Quem você é</a>
-            <a href="questionario.html">Quiz Chakras</a>
-            <a href="questionario-personalidade.html" class="nav-cta">Quiz Personalidade</a>
-            <span class="nav-lang"><strong>PT</strong> · <a href="en/questionario-personalidade.html">EN</a></span>
+            <a href="index.html#p1">The 7 Questions</a>
+            <a href="perguntas/1-quem-voce-e.html">Who You Are</a>
+            <a href="questionario.html">Chakra Quiz</a>
+            <a href="questionario-personalidade.html" class="nav-cta">Personality Quiz</a>
+            <span class="nav-lang"><a href="../questionario-personalidade.html">PT</a> · <strong>EN</strong></span>
         </div>
     </div>
 </nav>
@@ -32,82 +32,82 @@
     <div id="pqApp" class="pq-wrapper"></div>
 
     <footer class="site-footer">
-    <div>✦ Jogo da Alma · © 2026. Todos os direitos reservados.</div>
-    <div class="disclaimer">Não substitui acompanhamento profissional.</div>
+    <div>✦ The Soul Game · © 2026. All rights reserved.</div>
+    <div class="disclaimer">This does not replace professional care.</div>
 </footer>
 
 <script>
 (function(){
 
 const ARCHETYPES = [
-  { id:'tradicional', name:'Tradicional / Consistente', chakra:'Básico', color:'#EF4444', article:'personalidade-basico.html' },
-  { id:'criativa',    name:'Dinâmica / Social',      chakra:'Sacral', color:'#F97316', article:'personalidade-sacral.html' },
-  { id:'ambiciosa',   name:'Ambiciosa / Confiante',  chakra:'Plexo Solar', color:'#EAB308', article:'personalidade-plexo-solar.html' },
-  { id:'empatica',    name:'Empática / Amigável',    chakra:'Cardíaco', color:'#22C55E', article:'personalidade-cardiaco.html' },
-  { id:'intelectual', name:'Intelectual / Curiosa',  chakra:'Frontal', color:'#8B5CF6', article:'personalidade-frontal.html' },
-  { id:'expressiva',  name:'Expressiva / Comunicativa', chakra:'Laríngeo', color:'#3B82F6', article:'personalidade-laringeo.html' },
-  { id:'espiritualista', name:'Espiritualista / Intuitiva', chakra:'Coronário', color:'#A855F7', article:'personalidade-coronario.html' }
+  { id:'tradicional', name:'Traditional / Consistent', chakra:'Root', color:'#EF4444', article:'personalidade-basico.html' },
+  { id:'criativa',    name:'Dynamic / Social',      chakra:'Sacral', color:'#F97316', article:'personalidade-sacral.html' },
+  { id:'ambiciosa',   name:'Ambitious / Confident',  chakra:'Solar Plexus', color:'#EAB308', article:'personalidade-plexo-solar.html' },
+  { id:'empatica',    name:'Empathetic / Friendly',    chakra:'Heart', color:'#22C55E', article:'personalidade-cardiaco.html' },
+  { id:'intelectual', name:'Intellectual / Curious',  chakra:'Third Eye', color:'#8B5CF6', article:'personalidade-frontal.html' },
+  { id:'expressiva',  name:'Expressive / Communicative', chakra:'Throat', color:'#3B82F6', article:'personalidade-laringeo.html' },
+  { id:'espiritualista', name:'Spiritual / Intuitive', chakra:'Crown', color:'#A855F7', article:'personalidade-coronario.html' }
 ];
 
 const QUESTIONS = [
   {
-    title:'O que mais você procura em uma amizade?',
+    title:'What matters most to you in a friendship?',
     options:[
-      { archId:'tradicional',    text:'Pessoas que sempre estiveram ao meu lado, que pensam como eu e têm o mesmo estilo de vida.' },
-      { archId:'criativa',       text:'Pessoas divertidas, sociáveis, leves, com bom humor.' },
-      { archId:'ambiciosa',      text:'Pessoas que têm destaque, poder, sucesso, influência e ambição.' },
-      { archId:'empatica',       text:'Pessoas a quem eu possa ajudar ou dar apoio, seja intelectual, material, emocional ou físico.' },
-      { archId:'intelectual',    text:'Pessoas com quem eu possa conversar de forma profunda ou aprender.' },
-      { archId:'expressiva',     text:'Pessoas a quem eu possa influenciar, impactar, que me admirem, me deem atenção ou me reconheçam.' },
-      { archId:'espiritualista', text:'Pessoas que são espirituais, intuitivas, que não se importam tanto com o material.' }
+      { archId:'tradicional',    text:'People who have always been by my side, who think like me and share the same lifestyle.' },
+      { archId:'criativa',       text:'People who are fun, sociable, easygoing and good-humored.' },
+      { archId:'ambiciosa',      text:'People who stand out, with power, success, influence and ambition.' },
+      { archId:'empatica',       text:'People I can help or support, whether intellectually, materially, emotionally or physically.' },
+      { archId:'intelectual',    text:'People I can have deep conversations with or learn from.' },
+      { archId:'expressiva',     text:'People I can influence and impact, who admire me, give me attention or recognize me.' },
+      { archId:'espiritualista', text:'People who are spiritual and intuitive, who do not care so much about material things.' }
     ]
   },
   {
-    title:'O que você mais gostaria de fazer no seu tempo livre?',
+    title:'What would you most enjoy doing in your free time?',
     options:[
-      { archId:'tradicional',    text:'Fazer atividades que me relaxam ou que eu já domino e com as quais tenho familiaridade.' },
-      { archId:'criativa',       text:'Fazer coisas diferentes e me divertir, como participar de eventos, festas, ouvir música, estar com amigos, praticar esportes, apreciar arte, culinária, dança, entre outros.' },
-      { archId:'ambiciosa',      text:'Estar fazendo algo que me traga destaque, dinheiro, desafios, capacidades ou que esteja relacionado à minha ambição.' },
-      { archId:'empatica',       text:'Estar ajudando, contribuindo ou dando suporte a pessoas ou animais, seja de forma intelectual, material, física ou emocional.' },
-      { archId:'intelectual',    text:'Estar aprendendo assuntos novos ou me aprofundando em algum conhecimento.' },
-      { archId:'expressiva',     text:'Estar me comunicando, influenciando ou recebendo atenção de pessoas.' },
-      { archId:'espiritualista', text:'Estar realizando alguma prática espiritual, em busca de experiências ou missões espirituais, ou integrando diferentes áreas.' }
+      { archId:'tradicional',    text:'Doing things that relax me or that I already know well and feel comfortable with.' },
+      { archId:'criativa',       text:'Doing different things and having fun, like going to events and parties, listening to music, being with friends, playing sports, enjoying art, cooking, dancing and more.' },
+      { archId:'ambiciosa',      text:'Doing something that brings me recognition, money, challenges, new skills or that ties into my ambition.' },
+      { archId:'empatica',       text:'Helping, contributing or supporting people or animals, whether intellectually, materially, physically or emotionally.' },
+      { archId:'intelectual',    text:'Learning new subjects or going deeper into some field of knowledge.' },
+      { archId:'expressiva',     text:'Communicating, influencing or getting attention from people.' },
+      { archId:'espiritualista', text:'Doing some spiritual practice, seeking spiritual experiences or missions, or bringing different areas together.' }
     ]
   },
   {
-    title:'Qual das opções de emprego mais combinaria com você?',
+    title:'Which of these job options would suit you best?',
     options:[
-      { archId:'tradicional',    text:'Poder ter uma profissão ou vocação em que eu consiga ter um bom desempenho e estabilidade, sem mudanças drásticas ou grande pressão.' },
-      { archId:'criativa',       text:'Poder ter uma profissão ou vocação que seja divertida e envolva pessoas, socialização ou atividades como arte, esporte, dança, culinária, pintura, entre outras.' },
-      { archId:'ambiciosa',      text:'Poder ter uma profissão ou vocação que corresponda à minha ambição, trazendo sucesso, dinheiro, influência, impacto e crescimento.' },
-      { archId:'empatica',       text:'Poder ter uma profissão ou vocação em que eu possa ajudar ou contribuir com pessoas, seja de forma intelectual, física ou material.' },
-      { archId:'intelectual',    text:'Poder ter uma profissão ou vocação onde você possa explorar sua inteligência, estar em constante aprendizado e aprofundamento, criar novas soluções ou aprimorar soluções existentes.' },
-      { archId:'expressiva',     text:'Poder ter uma profissão ou vocação em que eu possa influenciar ou receber a atenção de pessoas, seja de forma digital ou física, utilizando meu corpo, voz ou intelecto.' },
-      { archId:'espiritualista', text:'Poder ter uma profissão ou vocação em que você exerça sua missão espiritual ou contribua para a espiritualidade das pessoas.' }
+      { archId:'tradicional',    text:'Having a profession or calling where I can perform well and enjoy stability, without drastic changes or heavy pressure.' },
+      { archId:'criativa',       text:'Having a profession or calling that is fun and involves people, socializing, or activities like art, sports, dance, cooking, painting and more.' },
+      { archId:'ambiciosa',      text:'Having a profession or calling that matches my ambition, bringing success, money, influence, impact and growth.' },
+      { archId:'empatica',       text:'Having a profession or calling where I can help or contribute to people, whether intellectually, physically or materially.' },
+      { archId:'intelectual',    text:'Having a profession or calling where you can put your intelligence to work, keep learning and going deeper, create new solutions or improve existing ones.' },
+      { archId:'expressiva',     text:'Having a profession or calling where I can influence people or get their attention, whether online or in person, using my body, voice or intellect.' },
+      { archId:'espiritualista', text:'Having a profession or calling where you carry out your spiritual mission or contribute to people\'s spirituality.' }
     ]
   },
   {
-    title:'Qual é o estereótipo que mais combina com você?',
+    title:'Which stereotype fits you best?',
     options:[
-      { archId:'tradicional',    text:'Sou uma pessoa que gosta de seguir o fluxo da vida, ter um bom emprego, curtir os momentos, e aproveitar a família, os amigos e os filhos.' },
-      { archId:'criativa',       text:'Sou uma pessoa que quer experimentar a vida, me divertir, fazer coisas diferentes, emocional e sensível.' },
-      { archId:'ambiciosa',      text:'Sou uma pessoa muito ambiciosa, preciso me destacar no que faço, gosto de competir e quero estar entre os melhores.' },
-      { archId:'empatica',       text:'Sou uma pessoa empática, gosto de ajudar pessoas ou animais e tenho dificuldade em dizer \'não\' ou em não me conectar com as emoções e problemas dos outros.' },
-      { archId:'intelectual',    text:'Sou uma pessoa muito curiosa, estou sempre questionando as coisas e buscando aprender mais. Tenho um perfil analítico.' },
-      { archId:'expressiva',     text:'Sou uma pessoa comunicativa, gosto de poder expressar minhas ideias e ser ouvido e notado por outras pessoas. Sempre estou procurando me comunicar ou ter atenção/influência de pessoas.' },
-      { archId:'espiritualista', text:'Sou uma pessoa intuitiva ou espiritual, procuro ver as coisas de forma mais holística e não apenas material.' }
+      { archId:'tradicional',    text:'I am someone who likes to go with the flow of life, hold a good job, enjoy the moment, and make the most of family, friends and children.' },
+      { archId:'criativa',       text:'I am someone who wants to experience life, have fun and do different things, and I am emotional and sensitive.' },
+      { archId:'ambiciosa',      text:'I am a very ambitious person. I need to stand out in what I do, I like to compete and I want to be among the best.' },
+      { archId:'empatica',       text:'I am an empathetic person. I like to help people or animals, and I find it hard to say \'no\' or to disconnect from other people\'s emotions and problems.' },
+      { archId:'intelectual',    text:'I am a very curious person. I am always questioning things and looking to learn more. I have an analytical mind.' },
+      { archId:'expressiva',     text:'I am a communicative person. I like to express my ideas and to be heard and noticed by others. I am always looking to communicate or to get attention and influence from people.' },
+      { archId:'espiritualista', text:'I am an intuitive or spiritual person. I try to see things in a more holistic way, not just in material terms.' }
     ]
   },
   {
-    title:'Se você tivesse uma quantia de dinheiro para ficar sem trabalhar e utilizar para o que quiser, como utilizaria esse dinheiro?',
+    title:'If you had a sum of money that let you stop working and use it however you wanted, how would you use it?',
     options:[
-      { archId:'tradicional',    text:'Vou utilizar esse dinheiro com prudência, e deixar ele guardado.' },
-      { archId:'criativa',       text:'Vou usar esse dinheiro para aproveitar a vida, investindo em diversão, viagens, socialização, arte, cultura e gastronomia.' },
-      { archId:'ambiciosa',      text:'Vou utilizar esse dinheiro para ele poder gerar mais dinheiro de forma direta ou indireta, ou para comprar algo material significante.' },
-      { archId:'empatica',       text:'Vou usar esse dinheiro tanto para meu benefício quanto para ajudar outras pessoas.' },
-      { archId:'intelectual',    text:'Vou usar esse dinheiro para ampliar meu conhecimento, investindo em cursos, livros e ferramentas, experimentos.' },
-      { archId:'expressiva',     text:'Vou usar esse dinheiro para expandir minha influência, investindo em formas de me promover e aumentar minha visibilidade.' },
-      { archId:'espiritualista', text:'Vou usar esse dinheiro para reduzir minhas obrigações e dedicar mais tempo às minhas práticas espirituais ou à minha missão espiritual.' }
+      { archId:'tradicional',    text:'I would use this money wisely and keep it saved.' },
+      { archId:'criativa',       text:'I would use this money to enjoy life, spending it on fun, travel, socializing, art, culture and food.' },
+      { archId:'ambiciosa',      text:'I would use this money to make more money, directly or indirectly, or to buy something meaningful.' },
+      { archId:'empatica',       text:'I would use this money both for my own benefit and to help other people.' },
+      { archId:'intelectual',    text:'I would use this money to broaden my knowledge, investing in courses, books, tools and experiments.' },
+      { archId:'expressiva',     text:'I would use this money to expand my influence, investing in ways to promote myself and grow my visibility.' },
+      { archId:'espiritualista', text:'I would use this money to cut back on my obligations and devote more time to my spiritual practices or my spiritual mission.' }
     ]
   }
 ];
@@ -150,11 +150,11 @@ function renderWelcome(app) {
   app.innerHTML = `
     <div class="pq-welcome">
       <div class="pq-welcome-icon">&#10022;</div>
-      <h1>Perfil de Personalidade</h1>
-      <p>Descubra dentro das <strong>7 frequências/personalidades</strong> quais mais combinam com você, baseado nos arquétipos dos chakras do Jogo da Alma.</p>
-      <p>Você vai responder <strong>5 perguntas</strong>. Em cada uma, ordene as 7 opções da que mais te representa (topo) até a que menos te representa (base).</p>
-      <p><strong>Importante:</strong> tente responder de acordo com o que você mais gostaria de cada opção, e não naquilo que você é ou precisa ser atualmente.</p>
-      <button class="pq-btn-start" onclick="startQuiz()">Começar</button>
+      <h1>Personality Profile</h1>
+      <p>Discover which of the <strong>7 frequencies/personalities</strong> fit you best, based on the chakra archetypes of The Soul Game.</p>
+      <p>You will answer <strong>5 questions</strong>. In each one, rank the 7 options from the one that represents you most (top) to the one that represents you least (bottom).</p>
+      <p><strong>Important:</strong> try to answer based on what you would most like about each option, not on what you are or feel you have to be right now.</p>
+      <button class="pq-btn-start" onclick="startQuiz()">Start</button>
     </div>`;
 }
 
@@ -182,8 +182,8 @@ function renderQuiz(app) {
         <span class="pq-rank-text">${opt.text}</span>
         <span class="pq-rank-pts ${ptsClass}">${pts}pts</span>
         <span class="pq-rank-arrows">
-          <button class="pq-arrow-btn" onclick="moveItem(${i},-1)" ${i === 0 ? 'disabled' : ''} aria-label="Subir">&#9650;</button>
-          <button class="pq-arrow-btn" onclick="moveItem(${i},1)" ${i === 6 ? 'disabled' : ''} aria-label="Descer">&#9660;</button>
+          <button class="pq-arrow-btn" onclick="moveItem(${i},-1)" ${i === 0 ? 'disabled' : ''} aria-label="Move up">&#9650;</button>
+          <button class="pq-arrow-btn" onclick="moveItem(${i},1)" ${i === 6 ? 'disabled' : ''} aria-label="Move down">&#9660;</button>
         </span>
       </div>`;
   });
@@ -193,18 +193,18 @@ function renderQuiz(app) {
   app.innerHTML = `
     <div class="pq-progress">
       <div class="pq-progress-track"><div class="pq-progress-fill" style="width:${pct}%"></div></div>
-      <div class="pq-progress-label"><span>Pergunta ${currentQ + 1} de ${QUESTIONS.length}</span><span>${pct}%</span></div>
+      <div class="pq-progress-label"><span>Question ${currentQ + 1} of ${QUESTIONS.length}</span><span>${pct}%</span></div>
     </div>
     <div class="pq-question-header">
       <h2>${q.title}</h2>
-      <p class="pq-instruction">Arraste ou use as setas para ordenar do que mais combina com você (topo) ao que menos combina (base).</p>
+      <p class="pq-instruction">Drag or use the arrows to rank from what fits you most (top) to what fits you least (bottom).</p>
     </div>
     <div class="pq-ranking-list" id="rankingList">${items}</div>
     <div class="pq-nav">
-      <button class="pq-btn-prev" onclick="prevQ()" ${currentQ === 0 ? 'disabled' : ''}>Anterior</button>
+      <button class="pq-btn-prev" onclick="prevQ()" ${currentQ === 0 ? 'disabled' : ''}>Previous</button>
       ${isLast
-        ? '<button class="pq-btn-result" onclick="showResult()">Ver Resultado</button>'
-        : '<button class="pq-btn-next" onclick="nextQ()">Próxima</button>'}
+        ? '<button class="pq-btn-result" onclick="showResult()">See Result</button>'
+        : '<button class="pq-btn-next" onclick="nextQ()">Next</button>'}
     </div>`;
 }
 
@@ -241,8 +241,8 @@ function renderResult(app) {
         <span class="pq-result-rank ${rankClass}">${rankNum}</span>
         <div class="pq-result-info">
           <p class="pq-result-name">${a.name}</p>
-          <span class="pq-result-chakra">Chakra ${a.chakra}</span>
-          <a class="pq-result-link" href="${a.article}" style="color:${a.color}">Conhecer o perfil →</a>
+          <span class="pq-result-chakra">${a.chakra} Chakra</span>
+          <a class="pq-result-link" href="${a.article}" style="color:${a.color}">Explore this profile →</a>
         </div>
         <div class="pq-result-bar-wrap">
           <div class="pq-result-bar-track"><div class="pq-result-bar-fill" style="width:${pct}%;background:${a.color}"></div></div>
@@ -254,18 +254,18 @@ function renderResult(app) {
   app.innerHTML = `
     <div class="pq-result-header">
       <div class="pq-result-icon">&#10022;</div>
-      <h2>Seu Perfil de Personalidade</h2>
-      <p>Baseado nas suas respostas, esta é a ordem das personalidades que mais combinam com você.</p>
+      <h2>Your Personality Profile</h2>
+      <p>Based on your answers, this is the order of the personalities that fit you best.</p>
     </div>
     <div class="pq-result-list">${cards}</div>
     <div class="pq-caveat">
-      <p><strong>Importante:</strong> Todas as pessoas possuem todas as 7 personalidades em diferentes intensidades. Este resultado é um indicativo inicial. Segundo a metodologia, cerca de 50% das pessoas se identificam de imediato com o resultado, enquanto as outras 50% podem perceber mudanças conforme aprofundam o autoconhecimento.</p>
+      <p><strong>Important:</strong> Everyone carries all 7 personalities at different intensities. This result is an initial indication. According to the methodology, about 50% of people recognize themselves in the result right away, while the other 50% may notice shifts as they go deeper into self-knowledge.</p>
     </div>
     <div class="pq-result-actions">
-      <button class="pq-btn-prev" onclick="backToQuiz()">Refazer</button>
-      <button class="pq-btn-result" onclick="downloadPDF()">Baixar PDF</button>
+      <button class="pq-btn-prev" onclick="backToQuiz()">Retake</button>
+      <button class="pq-btn-result" onclick="downloadPDF()">Download PDF</button>
     </div>
-    <p class="pq-disclaimer">Jogo da Alma &mdash; Autoconhecimento e transformacao pessoal</p>`;
+    <p class="pq-disclaimer">The Soul Game &middot; Self-knowledge and personal growth</p>`;
 }
 
 /* ---- Navigation ---- */
@@ -439,16 +439,16 @@ window.downloadPDF = function() {
 
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(18);
-  doc.text('Perfil de Personalidade', pw / 2, y, { align: 'center' });
+  doc.text('Personality Profile', pw / 2, y, { align: 'center' });
   y += 7;
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(186, 181, 200);
-  doc.text('Jogo da Alma - Questionario de Personalidade', pw / 2, y, { align: 'center' });
+  doc.text('The Soul Game - Personality Quiz', pw / 2, y, { align: 'center' });
   y += 5;
   const today = new Date();
   doc.setFontSize(8);
-  doc.text('Data: ' + today.toLocaleDateString('pt-BR'), pw / 2, y, { align: 'center' });
+  doc.text('Date: ' + today.toLocaleDateString('en-US'), pw / 2, y, { align: 'center' });
   y += 12;
 
   // Line
@@ -460,7 +460,7 @@ window.downloadPDF = function() {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(13);
   doc.setTextColor(240, 239, 244);
-  doc.text('SUAS RESPOSTAS', mx, y);
+  doc.text('YOUR ANSWERS', mx, y);
   y += 8;
 
   QUESTIONS.forEach((q, qi) => {
@@ -468,7 +468,7 @@ window.downloadPDF = function() {
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(10);
     doc.setTextColor(167, 139, 250);
-    doc.text('Pergunta ' + (qi + 1) + ': ' + q.title.substring(0, 80), mx, y);
+    doc.text('Question ' + (qi + 1) + ': ' + q.title.substring(0, 80), mx, y);
     y += 6;
 
     const rank = rankings[qi];
@@ -485,7 +485,7 @@ window.downloadPDF = function() {
         doc.setTextColor(186, 181, 200);
       }
 
-      const posLabel = (pos + 1) + 'o (' + pts + 'pts)';
+      const posLabel = '#' + (pos + 1) + ' (' + pts + 'pts)';
       doc.text(posLabel, mx, y);
 
       doc.setTextColor(220, 218, 230);
@@ -505,7 +505,7 @@ window.downloadPDF = function() {
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(13);
   doc.setTextColor(240, 239, 244);
-  doc.text('RESULTADO FINAL', mx, y);
+  doc.text('FINAL RESULT', mx, y);
   y += 8;
 
   const sorted = calcScores();
@@ -522,11 +522,11 @@ window.downloadPDF = function() {
     else if (i === 2) doc.setTextColor(236, 72, 153);
     else doc.setTextColor(186, 181, 200);
 
-    doc.text(rankNum + 'o  ' + a.name, mx, y);
+    doc.text('#' + rankNum + '  ' + a.name, mx, y);
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8);
-    doc.text('Chakra ' + a.chakra + '  -  ' + a.score + ' pts (' + ((a.score / maxPts) * 100).toFixed(0) + '%)', mx + 2, y + 4);
+    doc.text(a.chakra + ' Chakra  -  ' + a.score + ' pts (' + ((a.score / maxPts) * 100).toFixed(0) + '%)', mx + 2, y + 4);
 
     // Bar
     const barX = pw - mx - 50;
@@ -549,16 +549,16 @@ window.downloadPDF = function() {
   doc.setFont('helvetica', 'italic');
   doc.setFontSize(7);
   doc.setTextColor(122, 118, 144);
-  const caveat = 'Importante: Todas as pessoas possuem todas as 7 personalidades em diferentes intensidades. Este resultado e um indicativo inicial. Segundo a metodologia, cerca de 50% das pessoas se identificam de imediato com o resultado, enquanto as outras 50% podem perceber mudancas conforme aprofundam o autoconhecimento.';
+  const caveat = 'Important: Everyone carries all 7 personalities at different intensities. This result is an initial indication. According to the methodology, about 50% of people recognize themselves in the result right away, while the other 50% may notice shifts as they go deeper into self-knowledge.';
   const cavLines = doc.splitTextToSize(caveat, pw - mx * 2);
   doc.text(cavLines, mx, y);
   y += cavLines.length * 3 + 6;
 
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(7);
-  doc.text('Jogo da Alma - Autoconhecimento e transformacao pessoal', pw / 2, y, { align: 'center' });
+  doc.text('The Soul Game - Self-knowledge and personal growth', pw / 2, y, { align: 'center' });
 
-  doc.save('perfil-personalidade-' + today.toISOString().slice(0, 10) + '.pdf');
+  doc.save('personality-profile-' + today.toISOString().slice(0, 10) + '.pdf');
 };
 
 function hexToRgb(hex) {

@@ -28,7 +28,11 @@ body > nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; backgroun
 .nav-links a:hover { color: var(--text); }
 .nav-cta { background: var(--accent-dark); color: #fff !important; padding: 8px 18px; border-radius: 999px; font-weight: 500; }
 .nav-cta:hover { background: var(--accent); }
-@media (max-width: 720px) { .nav-links a:not(.nav-cta) { display: none; } }
+.nav-lang { font-size: .82rem; color: var(--text-muted); white-space: nowrap; }
+.nav-lang a { color: var(--text-secondary); text-decoration: none; }
+.nav-lang a:hover { color: var(--text); }
+.nav-lang strong { color: var(--accent); font-weight: 700; }
+@media (max-width: 720px) { .nav-links > a:not(.nav-cta) { display: none; } }
 .btn { display: inline-block; text-decoration: none; font-weight: 500; padding: 14px 32px; border-radius: 999px; font-size: 1rem; transition: transform var(--transition), background var(--transition), border-color var(--transition); }
 .btn-primary { background: var(--accent-dark); color: #fff; }
 .btn-primary:hover { background: var(--accent); transform: translateY(-2px); }

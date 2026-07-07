@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chakra Map: Quiz | The Soul Game</title>
+    <meta name="description" content="Discover your energy map. Spot imbalances across the 7 chakras and understand how they shape your real life.">
+    <link rel="alternate" hreflang="pt-BR" href="https://pirondibr.github.io/jogo-da-alma-frontend/questionario.html">
+    <link rel="alternate" hreflang="en" href="https://pirondibr.github.io/jogo-da-alma-frontend/en/questionario.html">
+    <link rel="alternate" hreflang="x-default" href="https://pirondibr.github.io/jogo-da-alma-frontend/questionario.html">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../quiz-base.css">
+    <link rel="stylesheet" href="../questionario.css">
+    <script src="https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+</head>
+<body>
+<nav>
+    <div class="nav-inner">
+        <a href="index.html" class="logo"><span>✦</span> The Soul Game</a>
+        <div class="nav-links">
+            <a href="index.html#p1">The 7 Questions</a>
+            <a href="perguntas/4-como-alcancar-a-felicidade.html">How to find happiness</a>
+            <a href="questionario.html">Chakra Quiz</a>
+            <a href="questionario-personalidade.html" class="nav-cta">Personality Quiz</a>
+            <span class="nav-lang"><a href="../questionario.html">PT</a> · <strong>EN</strong></span>
+        </div>
+    </div>
+</nav>
+
+    <div id="quizApp" class="quiz-wrapper"></div>
+
+    <footer class="site-footer">
+    <div>✦ The Soul Game · © 2026. All rights reserved.</div>
+    <div class="disclaimer">Not a substitute for professional care.</div>
+</footer>
+
+<script>
+(function(){
+const CHAKRAS = [
+  { id:"basico", name:"Root", color:"#DC2626", emoji:"🔴", article:"chakra-basico-problemas.html",
+    resultadoPergunta:"Does my life have a stable, secure foundation?",
+    blocos:[
+      { id:"emocao_bloqueada", tipo:"Blocked Emotion", subtitulo:"What do I feel? (deficiency)", itens:["I often feel afraid of losing money, stability, or security","I feel constantly insecure even when everything is fine","I feel uprooted, as if nothing is truly my ground"]},
+      { id:"emocao_excessiva", tipo:"Excessive Emotion", subtitulo:"What do I feel? (excess)", itens:["I feel constantly on high alert","I feel anxiety in my body even without a clear reason","I have a hard time relaxing, my body stays tense"]},
+      { id:"pensamento_bloqueado", tipo:"Blocked Thought", subtitulo:"What do I tell myself? (deficiency)", itens:["I often think I won't be able to handle it","I have the sense that I'll never have enough","I feel like things tend to go wrong for me"]},
+      { id:"pensamento_excessivo", tipo:"Excessive Thought", subtitulo:"What do I tell myself? (excess)", itens:["I feel I need to anticipate everything before acting","I think that if I don't control it, something will go wrong","I have a hard time trusting that things will work out"]},
+      { id:"acao_bloqueada", tipo:"Blocked Action", subtitulo:"What do I do? (deficiency)", itens:["I procrastinate on important tasks out of fear or insecurity","I avoid acting when I'm not sure it'll go well","I have a hard time leaving my comfort zone"]},
+      { id:"acao_excessiva", tipo:"Excessive Action", subtitulo:"What do I do? (excess)", itens:["I overwork out of fear of falling short or things going wrong","I have a hard time delegating or letting go of responsibilities","I feel the need to always be producing something"]}
+    ],
+    resultado:["I have a satisfying, stable source of income","My body is healthy and free of illness","I'm able to meet my own expectations","My current routine is healthy, I can handle everything I need to","I feel safe and prepared for the future"]
+  },
+  { id:"sacral", name:"Sacral", color:"#EA580C", emoji:"🟠", article:"chakra-sacral-problemas.html",
+    resultadoPergunta:"Does my life have pleasure, connection, and variety?",
+    blocos:[
+      { id:"emocao_bloqueada", tipo:"Blocked Emotion", subtitulo:"What do I feel? (deficiency)", itens:["I feel emotionally numb most of the time","I have a hard time identifying what I'm feeling","I feel little pleasure even in things that used to bring me joy"]},
+      { id:"emocao_excessiva", tipo:"Excessive Emotion", subtitulo:"What do I feel? (excess)", itens:["My mood swings easily throughout the day","My emotions take me over completely when they surface","I feel everything so intensely that it throws me off balance"]},
+      { id:"pensamento_bloqueado", tipo:"Blocked Thought", subtitulo:"What do I tell myself? (deficiency)", itens:["I feel guilty when I put my pleasure or well-being first","I think feeling too much is a sign of weakness","I feel like I have no right to want the things I want"]},
+      { id:"pensamento_excessivo", tipo:"Excessive Thought", subtitulo:"What do I tell myself? (excess)", itens:["When I want something, I feel I need to have it right away","I easily convince myself I deserve an escape or a reward","I justify my excesses as something I need to feel good"]},
+      { id:"acao_bloqueada", tipo:"Blocked Action", subtitulo:"What do I do? (deficiency)", itens:["I do my tasks on autopilot, without enthusiasm","I avoid leisure, rest, or fun","I don't allow myself breaks or moments to enjoy life"]},
+      { id:"acao_excessiva", tipo:"Excessive Action", subtitulo:"What do I do? (excess)", itens:["I seek out frequent distractions to escape discomfort","I overdo it with food, shopping, entertainment, or other pleasures","I constantly need novelty or a new stimulus"]}
+    ],
+    resultado:["I have hobbies or activities I enjoy","I have friends or easygoing connections","I have an active, healthy sex life or an equivalent creative energy","I have time for fun","My life has variety (it's not repetitive and empty)"]
+  },
+  { id:"plexo", name:"Solar Plexus", color:"#CA8A04", emoji:"🟡", article:"chakra-plexo-solar-problemas.html",
+    resultadoPergunta:"Do I feel capable, relevant, and in motion?",
+    blocos:[
+      { id:"emocao_bloqueada", tipo:"Blocked Emotion", subtitulo:"What do I feel? (deficiency)", itens:["I'm afraid to speak up or take up my space","I often feel ashamed of myself","I feel small next to other people"]},
+      { id:"emocao_excessiva", tipo:"Excessive Emotion", subtitulo:"What do I feel? (excess)", itens:["I get irritated easily when something goes against what I want","I feel disproportionate anger when I feel challenged","I have bursts of frustration when things don't go my way"]},
+      { id:"pensamento_bloqueado", tipo:"Blocked Thought", subtitulo:"What do I tell myself? (deficiency)", itens:["I often think \"who am I to want this\"","I compare myself to others and feel inferior","I feel I need other people's approval before I act"]},
+      { id:"pensamento_excessivo", tipo:"Excessive Thought", subtitulo:"What do I tell myself? (excess)", itens:["I think no one can tell me what to do","I feel I need to be right all the time","I think others should do things my way"]},
+      { id:"acao_bloqueada", tipo:"Blocked Action", subtitulo:"What do I do? (deficiency)", itens:["I avoid taking a stand even when I disagree","I start things but don't finish them","I wait for validation before making decisions"]},
+      { id:"acao_excessiva", tipo:"Excessive Action", subtitulo:"What do I do? (excess)", itens:["I try to control the people or situations around me","I impose my will even when no one asked","I overload myself by taking on everything alone"]}
+    ],
+    resultado:["I feel important in some area of my life","I'm facing challenges (not avoiding everything)","I'm winning or growing through those challenges","I have the autonomy to make decisions","I feel my life is heading somewhere"]
+  },
+  { id:"cardiaco", name:"Heart", color:"#16A34A", emoji:"💚", article:"chakra-cardiaco-problemas.html",
+    resultadoPergunta:"Am I loved, and do I belong?",
+    blocos:[
+      { id:"emocao_bloqueada", tipo:"Blocked Emotion", subtitulo:"What do I feel? (deficiency)", itens:["I feel my chest closed off or emotionally shut down","I have a hard time being moved or feeling tenderness","I feel alone even when surrounded by people"]},
+      { id:"emocao_excessiva", tipo:"Excessive Emotion", subtitulo:"What do I feel? (excess)", itens:["I feel other people's pain as if it were my own","I feel emotionally overwhelmed by my relationships","I'm constantly afraid of losing the people I love"]},
+      { id:"pensamento_bloqueado", tipo:"Blocked Thought", subtitulo:"What do I tell myself? (deficiency)", itens:["I think it's safer not to depend on anyone","I feel like if I open up, I'll get hurt","I think I have to be strong all the time"]},
+      { id:"pensamento_excessivo", tipo:"Excessive Thought", subtitulo:"What do I tell myself? (excess)", itens:["I feel responsible for other people's well-being","I think I have to please others to be loved","I feel it's selfish to put my own needs first"]},
+      { id:"acao_bloqueada", tipo:"Blocked Action", subtitulo:"What do I do? (deficiency)", itens:["I avoid showing vulnerability","I'd rather handle everything alone than ask for help","I pull back when someone gets too close"]},
+      { id:"acao_excessiva", tipo:"Excessive Action", subtitulo:"What do I do? (excess)", itens:["I have a hard time saying \"no\"","I put other people's needs above my own","I put up with situations that aren't good for me just to keep the connection"]}
+    ],
+    resultado:["I'm part of a group or network of people","I feel accepted for who I am","I receive affection and emotional support","My relationships aren't just about interest or trade-offs","I feel a genuine connection with other people"]
+  },
+  { id:"laringeo", name:"Throat", color:"#2563EB", emoji:"🔵", article:"chakra-laringeo-problemas.html",
+    resultadoPergunta:"Can I express myself and be heard?",
+    blocos:[
+      { id:"emocao_bloqueada", tipo:"Blocked Emotion", subtitulo:"What do I feel? (deficiency)", itens:["I feel my throat tighten when I need to say something important","I'm afraid of being misunderstood when I express myself","I feel frustrated for swallowing what I'd like to say"]},
+      { id:"emocao_excessiva", tipo:"Excessive Emotion", subtitulo:"What do I feel? (excess)", itens:["I feel an urge to speak and can't hold back","I get agitated when someone disagrees with me","I feel irritated when I'm not heard"]},
+      { id:"pensamento_bloqueado", tipo:"Blocked Thought", subtitulo:"What do I tell myself? (deficiency)", itens:["I think my voice has no value","I feel it's better to stay quiet than to cause conflict","I think what I have to say isn't important"]},
+      { id:"pensamento_excessivo", tipo:"Excessive Thought", subtitulo:"What do I tell myself? (excess)", itens:["I feel I need to convince others of my point","I think that if I don't speak, no one will understand properly","I think my opinion is the most correct one"]},
+      { id:"acao_bloqueada", tipo:"Blocked Action", subtitulo:"What do I do? (deficiency)", itens:["I keep to myself things I'd like to say","I adjust what I say to please whoever's listening","I avoid setting boundaries out loud"]},
+      { id:"acao_excessiva", tipo:"Excessive Action", subtitulo:"What do I do? (excess)", itens:["I interrupt or talk over others","I speak without thinking and regret it afterward","I communicate in a harsh or aggressive way"]}
+    ],
+    resultado:["I'm able to say what I think","I feel heard when I communicate","I can influence people or situations","I don't have to constantly hide or stay silent","My communication is clear and authentic"]
+  },
+  { id:"frontal", name:"Third Eye", color:"#7C3AED", emoji:"🟣", article:"chakra-frontal-problemas.html",
+    resultadoPergunta:"Do I understand my life and know what to do?",
+    blocos:[
+      { id:"emocao_bloqueada", tipo:"Blocked Emotion", subtitulo:"What do I feel? (deficiency)", itens:["I often feel mentally confused","I feel lost, not knowing where to go","I constantly doubt my own perceptions"]},
+      { id:"emocao_excessiva", tipo:"Excessive Emotion", subtitulo:"What do I feel? (excess)", itens:["I feel my mind racing all the time","I feel overwhelmed by too many thoughts","I feel anxious from wanting to understand everything perfectly"]},
+      { id:"pensamento_bloqueado", tipo:"Blocked Thought", subtitulo:"What do I tell myself? (deficiency)", itens:["I think I can't understand what's going on","I feel others see things more clearly than I do","I feel I have no long-term vision"]},
+      { id:"pensamento_excessivo", tipo:"Excessive Thought", subtitulo:"What do I tell myself? (excess)", itens:["I create too many hypotheses and scenarios in my mind","I question everything all the time, even what's already decided","I think I need to analyze more before acting"]},
+      { id:"acao_bloqueada", tipo:"Blocked Action", subtitulo:"What do I do? (deficiency)", itens:["I make decisions without really understanding the context","I get easily swayed by outside opinions","I don't reflect on my own mistakes and patterns"]},
+      { id:"acao_excessiva", tipo:"Excessive Action", subtitulo:"What do I do? (excess)", itens:["I get stuck analyzing and don't act","I second-guess decisions I've already made instead of moving forward","I look for more information instead of getting started"]}
+    ],
+    resultado:["I understand my current problems","I know possible solutions","I'm learning and growing","I'm clear about my next steps","I feel I'm making progress in life"]
+  },
+  { id:"coronario", name:"Crown", color:"#8B5CF6", emoji:"⚪", article:"chakra-coronario-problemas.html",
+    resultadoPergunta:"Does my life have a greater meaning?",
+    blocos:[
+      { id:"emocao_bloqueada", tipo:"Blocked Emotion", subtitulo:"What do I feel? (deficiency)", itens:["I feel an inner emptiness even when everything is \"okay\"","I feel unmotivated for no clear reason","I feel disconnected from something greater"]},
+      { id:"emocao_excessiva", tipo:"Excessive Emotion", subtitulo:"What do I feel? (excess)", itens:["I feel a strangeness toward the concrete world","I often feel \"outside\" of reality","I feel like I don't belong in this world"]},
+      { id:"pensamento_bloqueado", tipo:"Blocked Thought", subtitulo:"What do I tell myself? (deficiency)", itens:["I think life doesn't have much meaning","I feel I'm just surviving, living for the sake of living","I feel something is missing but can't name what"]},
+      { id:"pensamento_excessivo", tipo:"Excessive Thought", subtitulo:"What do I tell myself? (excess)", itens:["I think practical matters are less important","I look for spiritual answers to avoid dealing with the concrete","I think I've already understood things others don't"]},
+      { id:"acao_bloqueada", tipo:"Blocked Action", subtitulo:"What do I do? (deficiency)", itens:["I live on autopilot, without connecting my actions to a purpose","I don't set aside time to reflect on the meaning of what I do","I avoid thinking about bigger questions because it brings anguish"]},
+      { id:"acao_excessiva", tipo:"Excessive Action", subtitulo:"What do I do? (excess)", itens:["I use meditation, spirituality, or study as an escape from practical life","I have a hard time keeping up with routine and concrete commitments","I live more in the world of ideas than in action"]}
+    ],
+    resultado:["I believe in something greater than myself","I feel connected to something beyond the material","I feel my life has purpose","I feel special in the sense of having a unique role","I have moments of spiritual connection or transcendence"]
+  }
+];
+
+let respostas = {};
+let currentChakra = 0;
+let page = 'blocos';
+const app = document.getElementById('quizApp');
+
+function isImpactful(v){ return v==='identifico'||v==='prejudica'; }
+
+function getTotalMarked(){
+  let t=0;
+  CHAKRAS.forEach(c=>c.blocos.forEach(b=>{ if(isImpactful(respostas[c.id+'_'+b.id])) t++; }));
+  return t;
+}
+
+function chakraMarked(idx){
+  const c=CHAKRAS[idx];
+  return c.blocos.filter(b=>isImpactful(respostas[c.id+'_'+b.id])).length;
+}
+
+function chakraAnsweredCount(idx){
+  const c=CHAKRAS[idx];
+  return c.blocos.filter(b=>respostas[c.id+'_'+b.id]).length;
+}
+
+function chakraComplete(idx){
+  const c=CHAKRAS[idx];
+  return c.blocos.every(b=>respostas[c.id+'_'+b.id]);
+}
+
+function allChakrasComplete(){
+  return CHAKRAS.every((_,i)=>chakraComplete(i));
+}
+
+function getChakraData(chakra){
+  const marcados=chakra.blocos.filter(b=>isImpactful(respostas[chakra.id+'_'+b.id]));
+  const prejudicam=chakra.blocos.filter(b=>respostas[chakra.id+'_'+b.id]==='prejudica');
+  const identificam=chakra.blocos.filter(b=>respostas[chakra.id+'_'+b.id]==='identifico');
+  const resVal=respostas[chakra.id+'_resultado']||null;
+  const resPrioridade=!!respostas[chakra.id+'_resultado_prioridade'];
+  const total=chakra.blocos.length;
+  let deseqLevel=marcados.length/total;
+  if(prejudicam.length>0) deseqLevel=Math.min(deseqLevel+(prejudicam.length/total)*0.3,1);
+  let deseqStatus='Balanced',deseqColor='#22c55e';
+  if(prejudicam.length>=2){deseqStatus='Critical';deseqColor='#ef4444';}
+  else if(marcados.length>=4||prejudicam.length>=1){deseqStatus='Imbalanced';deseqColor='#f97316';}
+  else if(marcados.length>=2){deseqStatus='Mild Attention';deseqColor='#eab308';}
+  let resStatus='·',resColor='#6b7280';
+  if(resVal==='alto'){resStatus='Strong';resColor='#22c55e';}
+  else if(resVal==='medio'){resStatus='Partial';resColor='#eab308';}
+  else if(resVal==='baixo'){resStatus='Weak';resColor='#ef4444';}
+  return{marcados,prejudicam,identificam,resVal,resPrioridade,deseqLevel,deseqStatus,deseqColor,resStatus,resColor};
+}
+
+function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function renderBlocos(){
+  const c=CHAKRAS[currentChakra];
+  const total=getTotalMarked();
+  const cm=chakraMarked(currentChakra);
+  const progress=((currentChakra)/CHAKRAS.length)*100;
+
+  let h='<div class="quiz-header">';
+  h+='<h1>Chakra Map</h1>';
+  h+='<p class="quiz-desc">Read each block and choose one of the <strong>3 options</strong>.</p>';
+  h+='<p class="quiz-hint">The <strong>"It really harms me"</strong> option is for issues you consider to have a strong negative impact on your life right now.</p>';
+  h+='</div>';
+
+  h+='<div class="quiz-progress"><div class="quiz-progress-track"><div class="quiz-progress-fill" style="width:'+progress+'%"></div></div>';
+  h+='<div class="quiz-progress-label"><span>Chakra '+(currentChakra+1)+' of '+CHAKRAS.length+'</span><span>'+c.name+'</span></div></div>';
+
+  if(total>0){
+    h+='<div class="quiz-counter"><span class="quiz-counter-badge">'+total+' block'+(total>1?'s':'')+' marked</span></div>';
+  }
+
+  h+='<div class="quiz-chakra-nav">';
+  CHAKRAS.forEach((ch,i)=>{
+    const active=i===currentChakra;
+    const cnt=chakraMarked(i);
+    h+='<button class="quiz-nav-btn'+(active?' active':'')+'" onclick="goToChakra('+i+')" style="'+(active?'border-color:'+ch.color+';background:'+ch.color+'12;':'')+'"><span class="nav-emoji">'+ch.emoji+'</span><span class="nav-count" style="'+(active?'color:'+ch.color:'')+'">'+( cnt>0?cnt:'·')+'</span></button>';
+  });
+  h+='</div>';
+
+  const answered=chakraAnsweredCount(currentChakra);
+  const totalBlocos=c.blocos.length;
+  const isComplete=answered===totalBlocos;
+  let subText;
+  if(isComplete){
+    subText=cm>0?(cm+' block'+(cm>1?'s':'')+' marked as an imbalance'):'No imbalance identified';
+  } else {
+    subText=answered+' of '+totalBlocos+' blocks answered';
+  }
+  h+='<div class="quiz-chakra-title"><span class="chakra-emoji-lg">'+c.emoji+'</span><div><h2>'+esc(c.name)+' Chakra</h2><p class="chakra-sub'+(isComplete?'':' chakra-sub-pending')+'">'+subText+'</p></div></div>';
+
+  h+='<div class="quiz-blocos">';
+  c.blocos.forEach(b=>{
+    const key=c.id+'_'+b.id;
+    const val=respostas[key]||null;
+    const isN=val==='nao_identifico',isI=val==='identifico',isP=val==='prejudica';
+    const isUnanswered=!val;
+    h+='<div class="bloco-card'+(isN?' selected-nao-identifico':'')+(isI?' selected-identifico':'')+(isP?' selected-prejudica':'')+(isUnanswered?' bloco-unanswered':'')+'">';
+    h+='<div class="bloco-header"><span class="bloco-dot" style="background:'+c.color+'"></span><span class="bloco-tipo">'+esc(b.tipo)+'</span><span class="bloco-required">*</span></div>';
+    h+='<p class="bloco-subtitulo">'+esc(b.subtitulo)+'</p>';
+    h+='<div class="bloco-itens">';
+    b.itens.forEach((item,i)=>{
+      h+='<div class="bloco-item"><span class="bloco-bullet">•</span><span class="bloco-text">'+esc(item)+'</span></div>';
+    });
+    h+='</div>';
+    h+='<div class="bloco-actions">';
+    h+='<button class="bloco-btn'+(isN?' active-nao-identifico':'')+'" onclick="setBloco(\''+key+'\',\'nao_identifico\')">'+(isN?'✓ ':'')+'I don\'t relate</button>';
+    h+='<button class="bloco-btn'+(isI?' active-identifico':'')+'" onclick="setBloco(\''+key+'\',\'identifico\')">'+(isI?'✓ ':'')+'I relate</button>';
+    h+='<button class="bloco-btn'+(isP?' active-prejudica':'')+'" onclick="setBloco(\''+key+'\',\'prejudica\')">'+(isP?'⚠ ':'')+'It really harms me</button>';
+    h+='</div></div>';
+  });
+
+  const resKey=c.id+'_resultado';
+  const resVal=respostas[resKey]||null;
+  const prioKey=c.id+'_resultado_prioridade';
+  const isPrio=!!respostas[prioKey];
+
+  h+='<div class="resultado-divider"><div class="resultado-card">';
+  h+='<div class="bloco-header"><span class="bloco-dot" style="background:'+c.color+'"></span><span class="bloco-tipo">Result in Life</span></div>';
+  h+='<p class="resultado-pergunta">'+esc(c.resultadoPergunta)+'</p>';
+  h+='<div class="resultado-itens">';
+  c.resultado.forEach(item=>{
+    h+='<div class="resultado-item"><span class="resultado-bullet" style="color:'+c.color+'">•</span><span class="resultado-text">'+esc(item)+'</span></div>';
+  });
+  h+='</div>';
+  h+='<span class="resultado-nivel-label">How much of this does your life have?</span>';
+  h+='<div class="resultado-nivel-btns">';
+  ['baixo','medio','alto'].forEach(v=>{
+    const lbl=v==='baixo'?'Low':v==='medio'?'Medium':'High';
+    h+='<button class="nivel-btn'+(resVal===v?' active-'+v:'')+'" onclick="setResultado(\''+c.id+'\',\''+(resVal===v?'':v)+'\')">'+lbl+'</button>';
+  });
+  h+='</div>';
+  h+='<button class="prioridade-btn'+(isPrio?' active':'')+'" onclick="togglePrioridade(\''+c.id+'\')">'+(isPrio?'★ A priority to improve':'☆ A priority to improve?')+'</button>';
+  h+='</div></div>';
+
+  h+='</div>';
+
+  const currentComplete=chakraComplete(currentChakra);
+  if(!currentComplete){
+    h+='<p class="quiz-validation-msg">⚠ Answer every block in this chakra to continue.</p>';
+  }
+  h+='<div class="quiz-nav-bottom">';
+  h+='<button class="quiz-btn-prev"'+(currentChakra===0?' disabled':'')+' onclick="goToChakra('+(currentChakra-1)+')">← Previous</button>';
+  if(currentChakra<CHAKRAS.length-1){
+    h+='<button class="quiz-btn-next" style="background:'+(currentComplete?c.color:'#4b5563')+'"'+(currentComplete?'':' disabled')+' onclick="goToChakra('+(currentChakra+1)+')">Next →</button>';
+  } else {
+    const canFinal=allChakrasComplete();
+    h+='<button class="quiz-btn-final"'+(canFinal?'':' disabled')+' onclick="showFinal()">See Final Map ✨</button>';
+  }
+  h+='</div>';
+
+  app.innerHTML=h;
+}
+
+function renderFinal(){
+  let h='<div class="mapa-header"><div class="mapa-icon">🪷</div><h2>Your Energy Map</h2><p>An overview of the 7 chakras</p></div>';
+
+  const allPrejudica=[];
+  const resPrioridades=[];
+  const gapChakras=[];
+
+  h+='<div class="mapa-chakras">';
+  CHAKRAS.forEach(c=>{
+    const d=getChakraData(c);
+    c.blocos.forEach(b=>{ if(respostas[c.id+'_'+b.id]==='prejudica') allPrejudica.push({chakra:c,bloco:b}); });
+    if(d.resPrioridade) resPrioridades.push(c);
+    if(d.resVal==='baixo'&&d.marcados.length>=2) gapChakras.push({chakra:c,data:d});
+
+    h+='<div class="mapa-row"><div class="mapa-row-header"><div class="mapa-row-title"><span class="row-emoji">'+c.emoji+'</span><span class="row-name">'+esc(c.name)+'</span></div>';
+    if(d.marcados.length===0&&!d.resVal) h+='<span class="mapa-row-empty">No items marked</span>';
+    h+='</div>';
+
+    const resW=d.resVal?(d.resVal==='alto'?'100':d.resVal==='medio'?'50':'15'):'0';
+    h+='<div class="mapa-meters"><div class="mapa-meter"><div class="meter-label">Imbalance</div><div class="meter-row"><div class="meter-bar-track"><div class="meter-bar-fill" style="width:'+(d.deseqLevel*100)+'%;background:'+d.deseqColor+'"></div></div><span class="meter-status" style="color:'+d.deseqColor+'">'+d.deseqStatus+'</span></div></div>';
+    h+='<div class="mapa-meter"><div class="meter-label">Result in Life</div><div class="meter-row"><div class="meter-bar-track"><div class="meter-bar-fill" style="width:'+resW+'%;background:'+d.resColor+'"></div></div><span class="meter-status" style="color:'+d.resColor+'">'+d.resStatus+'</span></div></div></div>';
+
+    if(d.marcados.length>0||d.resVal||d.resPrioridade){
+      h+='<div class="mapa-tags">';
+      d.prejudicam.forEach(b=>{ h+='<span class="mapa-tag tag-prejudica">⚠ '+esc(b.tipo)+'</span>'; });
+      d.identificam.forEach(b=>{ h+='<span class="mapa-tag tag-identifico">'+esc(b.tipo)+'</span>'; });
+      if(d.resPrioridade) h+='<span class="mapa-tag tag-prioridade">★ Result is a priority</span>';
+      h+='</div>';
+    }
+    h+='<a class="mapa-row-link" href="'+c.article+'" style="color:'+c.color+'">See problems and strategies →</a>';
+    h+='</div>';
+  });
+  h+='</div>';
+
+  if(allPrejudica.length>0){
+    h+='<div class="mapa-summary-box summary-critical"><h3>⚠ Priority imbalances</h3>';
+    allPrejudica.forEach(p=>{ h+='<div class="summary-item"><span>'+p.chakra.emoji+'</span><span><strong>'+esc(p.chakra.name)+'</strong>: '+esc(p.bloco.tipo)+'</span></div>'; });
+    h+='</div>';
+  }
+
+  if(resPrioridades.length>0){
+    h+='<div class="mapa-summary-box summary-priority"><h3>★ Priority results to improve</h3>';
+    resPrioridades.forEach(c=>{
+      const rv=respostas[c.id+'_resultado'];
+      const lbl=rv?(rv==='alto'?'Strong':rv==='medio'?'Partial':'Weak'):'·';
+      h+='<div class="summary-item"><span>'+c.emoji+'</span><span><strong>'+esc(c.name)+'</strong>: '+esc(c.resultadoPergunta)+' <span style="opacity:0.6">('+lbl+')</span></span></div>';
+    });
+    h+='</div>';
+  }
+
+  if(gapChakras.length>0){
+    h+='<div class="mapa-summary-box summary-gaps"><h3>💡 Key gaps</h3><p>Chakras with an identified imbalance and a weak result:</p>';
+    gapChakras.forEach(g=>{ h+='<div class="summary-item"><span>'+g.chakra.emoji+'</span><span><strong>'+esc(g.chakra.name)+'</strong>: Imbalance + Weak result</span></div>'; });
+    h+='</div>';
+  }
+
+  h+='<p class="mapa-disclaimer">This map is a tool for self-knowledge, not a diagnosis.</p>';
+  h+='<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px">';
+  h+='<button class="quiz-btn-back" onclick="backToQuiz()">← Back to the quiz</button>';
+  h+='<button class="quiz-btn-download" onclick="downloadPDF()">⬇ Download PDF answer sheet</button>';
+  h+='</div>';
+
+  app.innerHTML=h;
+}
+
+window.downloadPDF=function(){
+  const{jsPDF}=window.jspdf;
+  const doc=new jsPDF({unit:'mm',format:'a4'});
+  const W=210,M=15;
+  const cW=W-2*M;
+  let y=M;
+
+  const COLORS={
+    bg:[18,18,30], surface:[30,30,48], accent:[139,92,246],
+    textPrimary:[240,240,245], textSecondary:[180,180,195], textMuted:[120,120,140],
+    identifico:[251,191,36], prejudica:[248,113,113],
+    baixo:[248,113,113], medio:[251,191,36], alto:[74,222,128],
+    green:[34,197,94], orange:[249,115,22], yellow:[234,179,8], red:[239,68,68]
+  };
+
+  function pageBg(){doc.setFillColor(...COLORS.bg);doc.rect(0,0,W,297,'F');}
+  function checkPage(need){if(y+need>280){doc.addPage();pageBg();y=M;}}
+  function setFont(size,style){doc.setFontSize(size);if(style==='bold')doc.setFont('helvetica','bold');else doc.setFont('helvetica','normal');}
+
+  pageBg();
+
+  doc.setFillColor(...COLORS.accent);
+  doc.roundedRect(M,y,cW,28,3,3,'F');
+  setFont(18,'bold');doc.setTextColor(255,255,255);
+  doc.text('Chakra Map - Answer Sheet',W/2,y+12,{align:'center'});
+  setFont(10,'normal');doc.setTextColor(220,220,235);
+  var today=new Date();
+  doc.text('Generated on '+today.toLocaleDateString('en-US')+' at '+today.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}),W/2,y+20,{align:'center'});
+  y+=36;
+
+  setFont(13,'bold');doc.setTextColor(...COLORS.accent);
+  doc.text('PART 1 - ANSWERS BY CHAKRA',M,y);
+  y+=3;
+  doc.setDrawColor(...COLORS.accent);doc.setLineWidth(0.5);doc.line(M,y,M+cW,y);
+  y+=8;
+
+  CHAKRAS.forEach(function(c){
+    checkPage(50);
+    var cColor;
+    if(c.color==='#DC2626')cColor=[220,38,38];
+    else if(c.color==='#EA580C')cColor=[234,88,12];
+    else if(c.color==='#CA8A04')cColor=[202,138,4];
+    else if(c.color==='#16A34A')cColor=[22,163,74];
+    else if(c.color==='#2563EB')cColor=[37,99,235];
+    else if(c.color==='#7C3AED')cColor=[124,58,237];
+    else cColor=[139,92,246];
+
+    doc.setFillColor(...COLORS.surface);
+    doc.roundedRect(M,y,cW,8,2,2,'F');
+    doc.setFillColor(...cColor);doc.circle(M+5,y+4,2,'F');
+    setFont(11,'bold');doc.setTextColor(...COLORS.textPrimary);
+    doc.text(c.name+' Chakra',M+10,y+5.5);
+    y+=12;
+
+    var hasMark=false;
+    c.blocos.forEach(function(b){
+      var val=respostas[c.id+'_'+b.id];
+      if(!val||val==='nao_identifico')return;
+      hasMark=true;
+      checkPage(18);
+      var isP=val==='prejudica';
+      var tagColor=isP?COLORS.prejudica:COLORS.identifico;
+      var tagText=isP?'IT HARMS ME':'I RELATE';
+
+      setFont(8,'bold');doc.setTextColor(...tagColor);
+      doc.text(tagText,M+4,y);
+      setFont(8,'normal');doc.setTextColor(...COLORS.textMuted);
+      doc.text(' - '+b.tipo,M+4+doc.getTextWidth(tagText)+1,y);
+      y+=4;
+
+      setFont(7.5,'normal');doc.setTextColor(...COLORS.textSecondary);
+      b.itens.forEach(function(item){
+        checkPage(5);
+        var lines=doc.splitTextToSize('• '+item,cW-10);
+        doc.text(lines,M+6,y);
+        y+=lines.length*3.5;
+      });
+      y+=3;
+    });
+
+    if(!hasMark){
+      setFont(8,'normal');doc.setTextColor(...COLORS.textMuted);
+      doc.text('No blocks marked',M+4,y);
+      y+=5;
+    }
+
+    var resVal=respostas[c.id+'_resultado'];
+    var resPrio=respostas[c.id+'_resultado_prioridade'];
+    if(resVal||resPrio){
+      checkPage(14);
+      setFont(8,'bold');doc.setTextColor(...COLORS.textMuted);
+      doc.text('RESULT IN LIFE:',M+4,y);
+
+      if(resVal){
+        var rvColor=resVal==='alto'?COLORS.alto:resVal==='medio'?COLORS.medio:COLORS.baixo;
+        var rvLabel=resVal==='alto'?'High':resVal==='medio'?'Medium':'Low';
+        setFont(8,'bold');doc.setTextColor(...rvColor);
+        doc.text(rvLabel,M+4+doc.getTextWidth('RESULT IN LIFE: ')+1,y);
+      }
+      y+=4;
+
+      if(resPrio){
+        setFont(7.5,'bold');doc.setTextColor(...COLORS.accent);
+        doc.text('* PRIORITY TO IMPROVE',M+6,y);
+        y+=4;
+      }
+
+      setFont(7.5,'normal');doc.setTextColor(...COLORS.textSecondary);
+      c.resultado.forEach(function(item){
+        checkPage(5);
+        var lines=doc.splitTextToSize('• '+item,cW-10);
+        doc.text(lines,M+6,y);
+        y+=lines.length*3.5;
+      });
+      y+=3;
+    }
+
+    y+=4;
+  });
+
+  doc.addPage();pageBg();y=M;
+
+  setFont(13,'bold');doc.setTextColor(...COLORS.accent);
+  doc.text('PART 2 - ENERGY MAP',M,y);
+  y+=3;
+  doc.setDrawColor(...COLORS.accent);doc.setLineWidth(0.5);doc.line(M,y,M+cW,y);
+  y+=10;
+
+  CHAKRAS.forEach(function(c){
+    checkPage(28);
+    var d=getChakraData(c);
+
+    doc.setFillColor(...COLORS.surface);
+    doc.roundedRect(M,y,cW,22,2,2,'F');
+
+    setFont(10,'bold');doc.setTextColor(...COLORS.textPrimary);
+    doc.text(c.name+' Chakra',M+4,y+6);
+
+    setFont(7.5,'bold');doc.setTextColor(...COLORS.textMuted);
+    doc.text('Imbalance:',M+4,y+12);
+    var dc;
+    if(d.deseqColor==='#22c55e')dc=COLORS.green;
+    else if(d.deseqColor==='#f97316')dc=COLORS.orange;
+    else if(d.deseqColor==='#eab308')dc=COLORS.yellow;
+    else dc=COLORS.red;
+    setFont(7.5,'bold');doc.setTextColor(...dc);
+    doc.text(d.deseqStatus,M+4+doc.getTextWidth('Imbalance: ')+1,y+12);
+
+    setFont(7.5,'bold');doc.setTextColor(...COLORS.textMuted);
+    doc.text('Result:',M+4,y+17);
+    var rc=d.resColor==='#22c55e'?COLORS.green:d.resColor==='#eab308'?COLORS.yellow:d.resColor==='#ef4444'?COLORS.red:COLORS.textMuted;
+    setFont(7.5,'bold');doc.setTextColor(...rc);
+    doc.text(d.resStatus,M+4+doc.getTextWidth('Result: ')+1,y+17);
+
+    var tags=[];
+    d.prejudicam.forEach(function(b){tags.push({t:'! '+b.tipo,c:COLORS.prejudica});});
+    d.identificam.forEach(function(b){tags.push({t:b.tipo,c:COLORS.identifico});});
+    if(d.resPrioridade)tags.push({t:'* Priority',c:COLORS.accent});
+
+    if(tags.length>0){
+      var tx=cW/2+M;
+      setFont(6.5,'bold');
+      tags.forEach(function(tag){
+        checkPage(5);
+        doc.setTextColor(...tag.c);
+        if(tx+doc.getTextWidth(tag.t)+4>M+cW){tx=cW/2+M;y+=4;}
+        doc.text(tag.t,tx,y+6);
+        tx+=doc.getTextWidth(tag.t)+6;
+      });
+    }
+
+    y+=26;
+  });
+
+  var allP=[];
+  CHAKRAS.forEach(function(c){c.blocos.forEach(function(b){if(respostas[c.id+'_'+b.id]==='prejudica')allP.push({chakra:c,bloco:b});});});
+
+  if(allP.length>0){
+    checkPage(20);
+    doc.setFillColor(60,20,20);doc.roundedRect(M,y,cW,6+allP.length*5,2,2,'F');
+    setFont(9,'bold');doc.setTextColor(...COLORS.prejudica);
+    doc.text('PRIORITY IMBALANCES',M+4,y+5);
+    y+=9;
+    setFont(7.5,'normal');doc.setTextColor(252,165,165);
+    allP.forEach(function(p){
+      checkPage(5);
+      doc.text(p.chakra.name+' -- '+p.bloco.tipo,M+6,y);
+      y+=4.5;
+    });
+    y+=6;
+  }
+
+  var resP=CHAKRAS.filter(function(c){return respostas[c.id+'_resultado_prioridade'];});
+  if(resP.length>0){
+    checkPage(20);
+    doc.setFillColor(40,20,60);doc.roundedRect(M,y,cW,6+resP.length*5,2,2,'F');
+    setFont(9,'bold');doc.setTextColor(...COLORS.accent);
+    doc.text('PRIORITY RESULTS TO IMPROVE',M+4,y+5);
+    y+=9;
+    setFont(7.5,'normal');doc.setTextColor(196,181,253);
+    resP.forEach(function(c){
+      checkPage(5);
+      var rv=respostas[c.id+'_resultado'];
+      var lbl=rv?(rv==='alto'?'Strong':rv==='medio'?'Partial':'Weak'):'·';
+      doc.text(c.name+' -- '+c.resultadoPergunta+' ('+lbl+')',M+6,y);
+      y+=4.5;
+    });
+    y+=6;
+  }
+
+  var gaps=CHAKRAS.map(function(c){var d=getChakraData(c);if(d.resVal==='baixo'&&d.marcados.length>=2)return{chakra:c};return null;}).filter(Boolean);
+  if(gaps.length>0){
+    checkPage(20);
+    doc.setFillColor(50,40,10);doc.roundedRect(M,y,cW,6+gaps.length*5,2,2,'F');
+    setFont(9,'bold');doc.setTextColor(...COLORS.identifico);
+    doc.text('KEY GAPS',M+4,y+5);
+    y+=9;
+    setFont(7.5,'normal');doc.setTextColor(253,224,71);
+    gaps.forEach(function(g){
+      checkPage(5);
+      doc.text(g.chakra.name+' -- Imbalance + Weak result',M+6,y);
+      y+=4.5;
+    });
+    y+=6;
+  }
+
+  checkPage(10);
+  setFont(7,'normal');doc.setTextColor(...COLORS.textMuted);
+  doc.text('This map is a tool for self-knowledge, not a diagnosis.',W/2,y+4,{align:'center'});
+  doc.text('The Soul Game - jogodaalma.com',W/2,y+9,{align:'center'});
+
+  doc.save('chakra-map-'+today.toISOString().slice(0,10)+'.pdf');
+};
+
+function render(){
+  if(page==='final') renderFinal();
+  else renderBlocos();
+}
+
+window.setBloco=function(key,val){
+  respostas[key]=val;
+  render();
+};
+
+window.setResultado=function(chakraId,val){
+  const key=chakraId+'_resultado';
+  if(!val||val==='') delete respostas[key];
+  else respostas[key]=val;
+  render();
+};
+
+window.togglePrioridade=function(chakraId){
+  const key=chakraId+'_resultado_prioridade';
+  if(respostas[key]) delete respostas[key];
+  else respostas[key]=true;
+  render();
+};
+
+window.goToChakra=function(idx){
+  if(idx<0||idx>=CHAKRAS.length) return;
+  if(idx===currentChakra+1 && !chakraComplete(currentChakra)){
+    alert('Answer every block in this chakra before moving on.');
+    return;
+  }
+  currentChakra=idx;
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+
+window.showFinal=function(){
+  if(!allChakrasComplete()){
+    alert('Answer every block in all chakras before viewing the final map.');
+    return;
+  }
+  page='final';
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+
+window.backToQuiz=function(){
+  page='blocos';
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+
+render();
+})();
+</script>
+</body>
+</html>
