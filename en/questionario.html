@@ -369,6 +369,36 @@ function buildChakraSummary(){
   };
 }
 
+const ANSWER_LABELS = {
+  nao_identifico: "I don't relate",
+  identifico: 'I relate',
+  prejudica: 'It really harms me',
+  alto: 'Strong',
+  medio: 'Partial',
+  baixo: 'Weak',
+};
+
+function buildChakraAnswers(){
+  return {
+    chakras: CHAKRAS.map(c => {
+      const d = getChakraData(c);
+      return {
+        name: c.name,
+        imbalance: d.deseqStatus,
+        resultInLife: d.resStatus,
+        resultPriority: d.resPrioridade,
+        resultQuestion: c.resultadoPergunta,
+        blocks: c.blocos.map(b => ({
+          question: b.tipo + ' — ' + b.subtitulo,
+          items: b.itens,
+          answer: ANSWER_LABELS[respostas[c.id + '_' + b.id]] || respostas[c.id + '_' + b.id] || '—',
+          answerKey: respostas[c.id + '_' + b.id] || null,
+        })),
+      };
+    }),
+  };
+}
+
 async function persistChakraResults(){
   if (savedOnce) return;
   saveState = 'saving';
@@ -377,7 +407,7 @@ async function persistChakraResults(){
     const result = await QuizLead.saveQuizSubmission({
       quizType: 'chakra',
       summary: buildChakraSummary(),
-      answers: { ...respostas },
+      answers: buildChakraAnswers(),
     });
     if (result && result.skipped) return;
     savedOnce = true;

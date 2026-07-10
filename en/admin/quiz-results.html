@@ -101,18 +101,84 @@
     .detail {
       display: none;
       margin-top: 10px;
-      padding: 12px;
+      padding: 16px;
       background: var(--bg);
-      border-radius: 10px;
+      border-radius: 12px;
       border: 1px solid var(--surface);
-      white-space: pre-wrap;
-      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 0.75rem;
-      color: var(--text-secondary);
-      max-height: 280px;
+      max-height: 520px;
       overflow: auto;
+      text-align: left;
+      min-width: min(720px, 70vw);
     }
     .detail.open { display: block; }
+    .detail-section { margin-bottom: 18px; }
+    .detail-section h4 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      margin-bottom: 8px;
+      color: var(--accent-light);
+    }
+    .detail-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .detail-chip {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--text-secondary);
+    }
+    .qa-block {
+      border: 1px solid var(--surface);
+      border-radius: 12px;
+      padding: 12px 14px;
+      margin-bottom: 10px;
+      background: rgba(255,255,255,0.02);
+    }
+    .qa-q {
+      font-weight: 700;
+      font-size: 0.92rem;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    .qa-a {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+    .qa-rank {
+      display: grid;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .qa-rank-row {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 8px;
+      align-items: start;
+      font-size: 0.84rem;
+      color: var(--text-secondary);
+    }
+    .qa-rank-row b {
+      color: var(--accent-light);
+      font-size: 0.78rem;
+    }
+    .qa-answer-pill {
+      display: inline-block;
+      margin-top: 6px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+    }
+    .ans-relate { background: rgba(251,191,36,.15); color: #fbbf24; }
+    .ans-harm { background: rgba(248,113,113,.15); color: #f87171; }
+    .ans-none { background: rgba(34,197,94,.12); color: #86efac; }
+    .ans-other { background: rgba(167,139,250,.12); color: #c4b5fd; }
+    .detail-empty { color: var(--text-muted); font-size: 0.88rem; }
     .toolbar { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 8px; }
     #dashboard { display: none; }
     #loginCard { display: block; }
@@ -264,6 +330,103 @@
     }
   }
 
+  function answerPill(label) {
+    const t = String(label || '');
+    let cls = 'ans-other';
+    if (/harm/i.test(t)) cls = 'ans-harm';
+    else if (/don.?t relate|não/i.test(t)) cls = 'ans-none';
+    else if (/relate/i.test(t)) cls = 'ans-relate';
+    return `<span class="qa-answer-pill ${cls}">${escapeHtml(t)}</span>`;
+  }
+
+  function renderPersonalityDetails(row) {
+    const summary = row.summary || {};
+    const answers = row.answers || {};
+    const questions = answers.questions || [];
+    const ranking = summary.ranking || [];
+
+    let html = '<div class="detail-section"><h4>Result overview</h4><div class="detail-meta">';
+    if (summary.top) {
+      html += `<span class="detail-chip">Top: ${escapeHtml(summary.top.name)} (${escapeHtml(summary.top.score)} pts)</span>`;
+    }
+    ranking.slice(0, 3).forEach((a, i) => {
+      html += `<span class="detail-chip">#${i + 1} ${escapeHtml(a.name)}</span>`;
+    });
+    html += '</div></div>';
+
+    html += '<div class="detail-section"><h4>Questions & ranked answers</h4>';
+    if (!questions.length) {
+      html += '<p class="detail-empty">This older submission only has scores. New submissions will show each question and the ranked options.</p>';
+      if (ranking.length) {
+        html += '<div class="qa-block"><div class="qa-q">Final ranking</div><div class="qa-rank">';
+        ranking.forEach((a) => {
+          html += `<div class="qa-rank-row"><b>#${a.rank}</b><span>${escapeHtml(a.name)} · ${escapeHtml(a.chakra)} · ${escapeHtml(a.score)} pts</span></div>`;
+        });
+        html += '</div></div>';
+      }
+    } else {
+      questions.forEach((q) => {
+        html += `<div class="qa-block"><div class="qa-q">Q${q.number}. ${escapeHtml(q.title)}</div><div class="qa-rank">`;
+        (q.ranking || []).forEach((r) => {
+          html += `<div class="qa-rank-row"><b>#${r.rank}</b><span><strong>${escapeHtml(r.archetype)}</strong> (${escapeHtml(r.points)} pts)<br>${escapeHtml(r.answer)}</span></div>`;
+        });
+        html += '</div></div>';
+      });
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function renderChakraDetails(row) {
+    const summary = row.summary || {};
+    const answers = row.answers || {};
+    const chakras = answers.chakras || summary.chakras || [];
+
+    let html = '<div class="detail-section"><h4>Map overview</h4><div class="detail-meta">';
+    html += `<span class="detail-chip">${escapeHtml(summary.criticalCount ?? 0)} critical</span>`;
+    (summary.priorityResults || []).forEach((name) => {
+      html += `<span class="detail-chip">Priority: ${escapeHtml(name)}</span>`;
+    });
+    html += '</div></div>';
+
+    html += '<div class="detail-section"><h4>Answers by chakra</h4>';
+    if (!chakras.length) {
+      html += '<p class="detail-empty">No readable answers stored for this submission.</p>';
+    } else if (answers.chakras) {
+      answers.chakras.forEach((c) => {
+        html += `<div class="qa-block"><div class="qa-q">${escapeHtml(c.name)} Chakra</div>`;
+        html += `<div class="qa-a">Imbalance: <strong>${escapeHtml(c.imbalance)}</strong> · Result in life: <strong>${escapeHtml(c.resultInLife)}</strong>${c.resultPriority ? ' · Priority' : ''}</div>`;
+        if (c.resultQuestion) {
+          html += `<div class="qa-a" style="margin-top:8px"><em>${escapeHtml(c.resultQuestion)}</em></div>`;
+        }
+        (c.blocks || []).forEach((b) => {
+          html += `<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--surface)">`;
+          html += `<div class="qa-q" style="font-size:0.86rem">${escapeHtml(b.question)}</div>`;
+          html += answerPill(b.answer);
+          html += `</div>`;
+        });
+        html += '</div>';
+      });
+    } else {
+      // Older summary-only shape
+      chakras.forEach((c) => {
+        html += `<div class="qa-block"><div class="qa-q">${escapeHtml(c.name)}</div>`;
+        html += `<div class="qa-a">Imbalance: <strong>${escapeHtml(c.imbalance)}</strong> · Result: <strong>${escapeHtml(c.result)}</strong></div>`;
+        if (c.harms && c.harms.length) html += `<div class="qa-a" style="margin-top:6px">Harms: ${escapeHtml(c.harms.join(', '))}</div>`;
+        if (c.relates && c.relates.length) html += `<div class="qa-a">Relates: ${escapeHtml(c.relates.join(', '))}</div>`;
+        html += '</div>';
+      });
+    }
+    html += '</div>';
+    return html;
+  }
+
+  function renderDetails(row) {
+    if (row.quiz_type === 'personality') return renderPersonalityDetails(row);
+    if (row.quiz_type === 'chakra') return renderChakraDetails(row);
+    return `<p class="detail-empty">Unknown quiz type.</p>`;
+  }
+
   function renderRows(rows) {
     if (!rows || !rows.length) {
       resultsBody.innerHTML = '<tr><td colspan="6" style="color:var(--text-muted)">No submissions found.</td></tr>';
@@ -275,7 +438,6 @@
         ? '<span class="badge badge-chakra">Chakra</span>'
         : '<span class="badge badge-personality">Personality</span>';
       const detailId = 'detail-' + i;
-      const payload = JSON.stringify({ summary: row.summary, answers: row.answers }, null, 2);
       return `
         <tr>
           <td>${formatDate(row.created_at)}</td>
@@ -285,7 +447,7 @@
           <td>${escapeHtml(shortSummary(row))}</td>
           <td class="row-actions">
             <button type="button" data-toggle="${detailId}">Details</button>
-            <pre class="detail" id="${detailId}">${escapeHtml(payload)}</pre>
+            <div class="detail" id="${detailId}">${renderDetails(row)}</div>
           </td>
         </tr>`;
     }).join('');

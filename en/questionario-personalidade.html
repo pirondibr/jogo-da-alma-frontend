@@ -300,6 +300,26 @@ function buildPersonalitySummary() {
   };
 }
 
+function buildPersonalityAnswers() {
+  return {
+    questions: QUESTIONS.map((q, qi) => ({
+      number: qi + 1,
+      title: q.title,
+      ranking: rankings[qi].map((archId, pos) => {
+        const opt = q.options.find(o => o.archId === archId);
+        const arch = getArchetype(archId);
+        return {
+          rank: pos + 1,
+          points: POINTS[pos],
+          archetype: arch ? arch.name : archId,
+          chakra: arch ? arch.chakra : '',
+          answer: opt ? opt.text : archId,
+        };
+      }),
+    })),
+  };
+}
+
 async function persistPersonalityResults() {
   if (savedOnce) return;
   saveState = 'saving';
@@ -308,7 +328,7 @@ async function persistPersonalityResults() {
     const result = await QuizLead.saveQuizSubmission({
       quizType: 'personality',
       summary: buildPersonalitySummary(),
-      answers: { rankings: rankings.map(r => r.slice()) },
+      answers: buildPersonalityAnswers(),
     });
     if (result && result.skipped) return;
     savedOnce = true;

@@ -155,7 +155,7 @@ export default async function handler(req) {
     if (action === 'recent') {
       const limit = Math.min(Number(payload.limit) || 50, 100);
       const { data } = await supabaseRequest('quiz_submissions', {
-        select: 'id,created_at,quiz_type,name,email,summary',
+        select: 'id,created_at,quiz_type,name,email,summary,answers',
         order: 'created_at.desc',
         limit: String(limit),
       });
