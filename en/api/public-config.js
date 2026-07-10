@@ -29,15 +29,15 @@ export default async function handler(req) {
     return json({ error: 'Method not allowed' }, 405);
   }
 
-  const url = process.env.SUPABASE_URL;
-  const anonKey = process.env.SUPABASE_ANON_KEY;
+  const rawUrl = String(process.env.SUPABASE_URL || '').trim().replace(/\/+$/, '').replace(/\/rest\/v1$/i, '');
+  const anonKey = String(process.env.SUPABASE_ANON_KEY || '').trim();
 
-  if (!url || !anonKey) {
+  if (!rawUrl || !anonKey) {
     return json({ error: 'Supabase public config is not set on the server' }, 500);
   }
 
   return json({
-    supabaseUrl: url,
+    supabaseUrl: rawUrl,
     supabaseAnonKey: anonKey,
   });
 }
