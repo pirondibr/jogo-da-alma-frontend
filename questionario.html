@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapa dos Chakras: Questionário | Jogo da Alma</title>
     <meta name="description" content="Descubra seu mapa energético. Identifique desequilíbrios nos 7 chakras e entenda como eles afetam sua vida real.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Mapa dos Chakras: Questionário | Jogo da Alma">
+<meta property="og:description" content="Descubra seu mapa energético. Identifique desequilíbrios nos 7 chakras e entenda como eles afetam sua vida real.">
+<meta property="og:url" content="https://pirondibr.github.io/jogo-da-alma-frontend/questionario.html">
+<meta property="og:image" content="https://pirondibr.github.io/jogo-da-alma-frontend/og-image.jpg">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://pirondibr.github.io/jogo-da-alma-frontend/og-image.jpg">
     <link rel="alternate" hreflang="pt-BR" href="https://pirondibr.github.io/jogo-da-alma-frontend/questionario.html">
     <link rel="alternate" hreflang="en" href="https://pirondibr.github.io/jogo-da-alma-frontend/en/questionario.html">
     <link rel="alternate" hreflang="x-default" href="https://pirondibr.github.io/jogo-da-alma-frontend/questionario.html">
@@ -14,6 +23,7 @@
     <link rel="stylesheet" href="quiz-base.css">
     <link rel="stylesheet" href="questionario.css">
     <script src="https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+    <script src="quiz-lead.js"></script>
 </head>
 <body>
 <nav>
@@ -127,7 +137,9 @@ const CHAKRAS = [
 
 let respostas = {};
 let currentChakra = 0;
-let page = 'blocos';
+let page = 'lead';
+let saveState = null;
+let savedOnce = false;
 const app = document.getElementById('quizApp');
 
 function isImpactful(v){ return v==='identifico'||v==='prejudica'; }
@@ -337,12 +349,96 @@ function renderFinal(){
   }
 
   h+='<p class="mapa-disclaimer">Este mapa é uma ferramenta de autoconhecimento, não um diagnóstico.</p>';
+  if (saveState) h += QuizLead.saveStatusHtml(saveState);
   h+='<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px">';
   h+='<button class="quiz-btn-back" onclick="backToQuiz()">← Voltar ao questionário</button>';
   h+='<button class="quiz-btn-download" onclick="downloadPDF()">⬇ Baixar Gabarito PDF</button>';
   h+='</div>';
 
   app.innerHTML=h;
+}
+
+function buildChakraSummary(){
+  const chakras = CHAKRAS.map(c => {
+    const d = getChakraData(c);
+    return {
+      id: c.id,
+      name: c.name,
+      imbalance: d.deseqStatus,
+      result: d.resStatus,
+      priorityResult: d.resPrioridade,
+      harms: d.prejudicam.map(b => b.tipo),
+      relates: d.identificam.map(b => b.tipo),
+    };
+  });
+  return {
+    chakras,
+    criticalCount: chakras.filter(c => c.imbalance === 'Crítico').length,
+    priorityResults: chakras.filter(c => c.priorityResult).map(c => c.name),
+  };
+}
+
+const ANSWER_LABELS = {
+  nao_identifico: 'Não me identifico',
+  identifico: 'Me identifico',
+  prejudica: 'Me prejudica muito',
+  alto: 'Forte',
+  medio: 'Parcial',
+  baixo: 'Fraco',
+};
+
+function buildChakraAnswers(){
+  return {
+    chakras: CHAKRAS.map(c => {
+      const d = getChakraData(c);
+      return {
+        name: c.name,
+        imbalance: d.deseqStatus,
+        resultInLife: d.resStatus,
+        resultPriority: d.resPrioridade,
+        resultQuestion: c.resultadoPergunta,
+        blocks: c.blocos.map(b => ({
+          question: b.tipo + ': ' + b.subtitulo,
+          items: b.itens,
+          answer: ANSWER_LABELS[respostas[c.id + '_' + b.id]] || respostas[c.id + '_' + b.id] || '-',
+          answerKey: respostas[c.id + '_' + b.id] || null,
+        })),
+      };
+    }),
+  };
+}
+
+async function persistChakraResults(){
+  if (savedOnce) return;
+  saveState = 'saving';
+  render();
+  try {
+    const result = await QuizLead.saveQuizSubmission({
+      quizType: 'chakra-pt',
+      summary: buildChakraSummary(),
+      answers: buildChakraAnswers(),
+    });
+    if (result && result.skipped) return;
+    savedOnce = true;
+    saveState = 'saved';
+  } catch (err) {
+    console.warn('Quiz save failed', err);
+    saveState = 'error';
+  }
+  render();
+}
+
+function renderLead(){
+  app.innerHTML = QuizLead.renderLeadForm({
+    title: 'Mapa dos Chakras',
+    subtitle: 'Digite seu nome e e-mail para começar. Salvamos seu mapa energético para você (e a gente) encontrar depois.',
+    buttonLabel: 'Começar o questionário',
+  });
+  QuizLead.bindLeadForm(() => {
+    page = 'blocos';
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 }
 
 window.downloadPDF=function(){
@@ -580,7 +676,8 @@ window.downloadPDF=function(){
 };
 
 function render(){
-  if(page==='final') renderFinal();
+  if(page==='lead') renderLead();
+  else if(page==='final') renderFinal();
   else renderBlocos();
 }
 
@@ -619,13 +716,21 @@ window.showFinal=function(){
     alert('Responda todos os blocos de todos os chakras antes de ver o mapa final.');
     return;
   }
+  if(!QuizLead.getLead()){
+    page='lead';
+    render();
+    return;
+  }
   page='final';
   render();
   window.scrollTo({top:0,behavior:'smooth'});
+  persistChakraResults();
 };
 
 window.backToQuiz=function(){
   page='blocos';
+  saveState=null;
+  savedOnce=false;
   render();
   window.scrollTo({top:0,behavior:'smooth'});
 };

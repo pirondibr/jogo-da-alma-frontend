@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /en/admin/
+Sitemap: https://pirondibr.github.io/jogo-da-alma-frontend/sitemap.xml

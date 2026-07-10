@@ -237,10 +237,10 @@
         <button class="admin-btn secondary" type="button" id="logoutBtn">Lock</button>
       </div>
       <div class="stats-grid" id="statsGrid">
-        <div class="stat"><b>—</b><span>Total</span></div>
-        <div class="stat"><b>—</b><span>Chakra</span></div>
-        <div class="stat"><b>—</b><span>Personality</span></div>
-        <div class="stat"><b>—</b><span>Last 7 days</span></div>
+        <div class="stat"><b>-</b><span>Total</span></div>
+        <div class="stat"><b>-</b><span>Chakra</span></div>
+        <div class="stat"><b>-</b><span>Personality</span></div>
+        <div class="stat"><b>-</b><span>Last 7 days</span></div>
       </div>
     </section>
 
@@ -327,7 +327,7 @@
     const s = row.summary || {};
     if (row.quiz_type === 'personality') {
       const top = s.top;
-      return top ? (top.name + ' · ' + top.score + ' pts') : '—';
+      return top ? (top.name + ' · ' + top.score + ' pts') : '-';
     }
     if (row.quiz_type === 'chakra') {
       const critical = s.criticalCount != null ? s.criticalCount + ' critical' : '';
@@ -336,7 +336,7 @@
         : '';
       return [critical, prios].filter(Boolean).join(' · ') || 'Map saved';
     }
-    return '—';
+    return '-';
   }
 
   function formatDate(iso) {
@@ -529,7 +529,7 @@
           doc.setTextColor(r.rank <= 2 ? 245 : 186, r.rank <= 2 ? 158 : 181, r.rank <= 2 ? 11 : 200);
           doc.text('#' + r.rank + ' (' + r.points + 'pts)', mx, y);
           doc.setTextColor(220, 218, 230);
-          const lines = doc.splitTextToSize((r.archetype ? r.archetype + ' — ' : '') + (r.answer || ''), pw - mx * 2 - 30);
+          const lines = doc.splitTextToSize((r.archetype ? r.archetype + ': ' : '') + (r.answer || ''), pw - mx * 2 - 30);
           doc.text(lines, mx + 28, y);
           y += lines.length * 4 + 2;
         });
@@ -678,7 +678,7 @@
         checkPage(12);
         setFont(8, 'bold');
         doc.setTextColor(...COLORS.textMuted);
-        doc.text('RESULT IN LIFE: ' + (c.resultInLife || '—') + (c.resultPriority ? ' * PRIORITY' : ''), M + 4, y);
+        doc.text('RESULT IN LIFE: ' + (c.resultInLife || '-') + (c.resultPriority ? ' * PRIORITY' : ''), M + 4, y);
         y += 5;
         if (c.resultQuestion) {
           setFont(7.5, 'normal');
@@ -714,8 +714,8 @@
       doc.text((c.name || '') + ' Chakra', M + 4, y + 6);
       setFont(8, 'normal');
       doc.setTextColor(...COLORS.textSecondary);
-      const imbalance = c.imbalance || '—';
-      const result = c.resultInLife || c.result || '—';
+      const imbalance = c.imbalance || '-';
+      const result = c.resultInLife || c.result || '-';
       doc.text('Imbalance: ' + imbalance + '   |   Result: ' + result + (c.resultPriority || c.priorityResult ? '   |   Priority' : ''), M + 4, y + 12);
       y += 20;
     });
