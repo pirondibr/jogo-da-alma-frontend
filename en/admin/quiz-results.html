@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../quiz-base.css">
+  <script src="https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
   <style>
     .admin-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
     .admin-card {
@@ -89,6 +90,17 @@
     }
     .badge-chakra { background: rgba(167,139,250,.15); color: #c4b5fd; }
     .badge-personality { background: rgba(34,197,94,.12); color: #86efac; }
+    .row-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: flex-start;
+    }
+    .row-actions .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
     .row-actions button {
       background: transparent;
       border: 1px solid var(--surface-light);
@@ -97,6 +109,14 @@
       padding: 6px 10px;
       cursor: pointer;
       font-size: 0.8rem;
+    }
+    .row-actions button.pdf-btn {
+      border-color: rgba(167,139,250,.45);
+      color: var(--accent-light);
+    }
+    .row-actions button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
     }
     .detail {
       display: none;
@@ -427,7 +447,313 @@
     return `<p class="detail-empty">Unknown quiz type.</p>`;
   }
 
+  function slugify(s) {
+    return String(s || 'user').toLowerCase().normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-|-$/g, '') || 'user';
+  }
+
+  function canDownloadPdf(row) {
+    if (row.quiz_type === 'personality') {
+      return !!(row.answers && (row.answers.questions || row.summary?.ranking));
+    }
+    if (row.quiz_type === 'chakra') {
+      return !!(row.answers && row.answers.chakras) || !!(row.summary && row.summary.chakras);
+    }
+    return false;
+  }
+
+  function downloadPersonalityPdf(row) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const pw = doc.internal.pageSize.getWidth();
+    const ph = doc.internal.pageSize.getHeight();
+    const mx = 18;
+    let y = 20;
+    const today = new Date(row.created_at || Date.now());
+    const questions = (row.answers && row.answers.questions) || [];
+    const ranking = (row.summary && row.summary.ranking) || [];
+    const maxPts = 175;
+
+    function checkPage(need) {
+      if (y + need > ph - 20) {
+        doc.addPage();
+        doc.setFillColor(10, 10, 15);
+        doc.rect(0, 0, pw, ph, 'F');
+        y = 20;
+      }
+    }
+
+    doc.setFillColor(10, 10, 15);
+    doc.rect(0, 0, pw, ph, 'F');
+    doc.setTextColor(240, 239, 244);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
+    doc.text('Personality Profile', pw / 2, y, { align: 'center' });
+    y += 7;
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(186, 181, 200);
+    doc.text('The Soul Game - Personality Quiz', pw / 2, y, { align: 'center' });
+    y += 5;
+    doc.setFontSize(8);
+    doc.text(row.name + ' · ' + row.email, pw / 2, y, { align: 'center' });
+    y += 4;
+    doc.text('Date: ' + today.toLocaleDateString('en-US'), pw / 2, y, { align: 'center' });
+    y += 10;
+    doc.setDrawColor(60, 60, 80);
+    doc.line(mx, y, pw - mx, y);
+    y += 8;
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.setTextColor(240, 239, 244);
+    doc.text('YOUR ANSWERS', mx, y);
+    y += 8;
+
+    if (questions.length) {
+      questions.forEach((q) => {
+        checkPage(50);
+        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(10);
+        doc.setTextColor(167, 139, 250);
+        const titleLines = doc.splitTextToSize('Question ' + q.number + ': ' + q.title, pw - mx * 2);
+        doc.text(titleLines, mx, y);
+        y += titleLines.length * 5 + 2;
+
+        (q.ranking || []).forEach((r) => {
+          checkPage(10);
+          doc.setFont('helvetica', 'normal');
+          doc.setFontSize(8);
+          doc.setTextColor(r.rank <= 2 ? 245 : 186, r.rank <= 2 ? 158 : 181, r.rank <= 2 ? 11 : 200);
+          doc.text('#' + r.rank + ' (' + r.points + 'pts)', mx, y);
+          doc.setTextColor(220, 218, 230);
+          const lines = doc.splitTextToSize((r.archetype ? r.archetype + ' — ' : '') + (r.answer || ''), pw - mx * 2 - 30);
+          doc.text(lines, mx + 28, y);
+          y += lines.length * 4 + 2;
+        });
+        y += 4;
+      });
+    } else {
+      checkPage(20);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(186, 181, 200);
+      doc.text('Detailed question rankings were not stored for this older submission.', mx, y);
+      y += 8;
+    }
+
+    checkPage(40);
+    doc.setDrawColor(60, 60, 80);
+    doc.line(mx, y, pw - mx, y);
+    y += 8;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(13);
+    doc.setTextColor(240, 239, 244);
+    doc.text('FINAL RESULT', mx, y);
+    y += 8;
+
+    ranking.forEach((a, i) => {
+      checkPage(12);
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(10);
+      if (i === 0) doc.setTextColor(245, 158, 11);
+      else if (i === 1) doc.setTextColor(139, 92, 246);
+      else if (i === 2) doc.setTextColor(236, 72, 153);
+      else doc.setTextColor(186, 181, 200);
+      doc.text('#' + (a.rank || i + 1) + '  ' + a.name, mx, y);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(8);
+      const pct = maxPts ? ((a.score / maxPts) * 100).toFixed(0) : '0';
+      doc.text((a.chakra || '') + ' Chakra  -  ' + a.score + ' pts (' + pct + '%)', mx + 2, y + 4);
+      y += 12;
+    });
+
+    y += 6;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(7);
+    doc.setTextColor(122, 118, 144);
+    doc.text('The Soul Game - Self-knowledge and personal growth', pw / 2, y, { align: 'center' });
+
+    doc.save('personality-profile-' + slugify(row.name) + '-' + today.toISOString().slice(0, 10) + '.pdf');
+  }
+
+  function downloadChakraPdf(row) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const W = 210;
+    const M = 15;
+    const cW = W - 2 * M;
+    let y = M;
+    const today = new Date(row.created_at || Date.now());
+    const chakras = (row.answers && row.answers.chakras) || [];
+    const summaryChakras = (row.summary && row.summary.chakras) || [];
+    const COLORS = {
+      bg: [18, 18, 30], surface: [30, 30, 48], accent: [139, 92, 246],
+      textPrimary: [240, 240, 245], textSecondary: [180, 180, 195], textMuted: [120, 120, 140],
+      identifico: [251, 191, 36], prejudica: [248, 113, 113],
+      green: [34, 197, 94], orange: [249, 115, 22], yellow: [234, 179, 8], red: [239, 68, 68],
+    };
+
+    function pageBg() {
+      doc.setFillColor(...COLORS.bg);
+      doc.rect(0, 0, W, 297, 'F');
+    }
+    function checkPage(need) {
+      if (y + need > 280) {
+        doc.addPage();
+        pageBg();
+        y = M;
+      }
+    }
+    function setFont(size, style) {
+      doc.setFontSize(size);
+      doc.setFont('helvetica', style === 'bold' ? 'bold' : 'normal');
+    }
+
+    pageBg();
+    doc.setFillColor(...COLORS.accent);
+    doc.roundedRect(M, y, cW, 32, 3, 3, 'F');
+    setFont(18, 'bold');
+    doc.setTextColor(255, 255, 255);
+    doc.text('Chakra Map - Answer Sheet', W / 2, y + 11, { align: 'center' });
+    setFont(9, 'normal');
+    doc.setTextColor(220, 220, 235);
+    doc.text(row.name + ' · ' + row.email, W / 2, y + 19, { align: 'center' });
+    doc.text('Generated on ' + today.toLocaleDateString('en-US'), W / 2, y + 26, { align: 'center' });
+    y += 40;
+
+    setFont(13, 'bold');
+    doc.setTextColor(...COLORS.accent);
+    doc.text('PART 1 - ANSWERS BY CHAKRA', M, y);
+    y += 8;
+
+    if (chakras.length) {
+      chakras.forEach((c) => {
+        checkPage(28);
+        doc.setFillColor(...COLORS.surface);
+        doc.roundedRect(M, y, cW, 8, 2, 2, 'F');
+        setFont(11, 'bold');
+        doc.setTextColor(...COLORS.textPrimary);
+        doc.text(c.name + ' Chakra', M + 4, y + 5.5);
+        y += 12;
+
+        let hasMark = false;
+        (c.blocks || []).forEach((b) => {
+          const key = b.answerKey;
+          const label = b.answer || '';
+          const isHarm = key === 'prejudica' || /harm/i.test(label);
+          const isRelate = key === 'identifico' || (/relate/i.test(label) && !/don.?t/i.test(label));
+          if (!isHarm && !isRelate) return;
+          hasMark = true;
+          checkPage(16);
+          setFont(8, 'bold');
+          doc.setTextColor(...(isHarm ? COLORS.prejudica : COLORS.identifico));
+          doc.text(isHarm ? 'IT HARMS ME' : 'I RELATE', M + 4, y);
+          setFont(8, 'normal');
+          doc.setTextColor(...COLORS.textMuted);
+          doc.text(' - ' + (b.question || ''), M + 4 + doc.getTextWidth(isHarm ? 'IT HARMS ME' : 'I RELATE') + 1, y);
+          y += 5;
+          if (Array.isArray(b.items) && b.items.length) {
+            setFont(7.5, 'normal');
+            doc.setTextColor(...COLORS.textSecondary);
+            b.items.forEach((item) => {
+              checkPage(5);
+              const lines = doc.splitTextToSize('• ' + item, cW - 10);
+              doc.text(lines, M + 6, y);
+              y += lines.length * 3.5;
+            });
+          }
+          y += 3;
+        });
+
+        if (!hasMark) {
+          setFont(8, 'normal');
+          doc.setTextColor(...COLORS.textMuted);
+          doc.text('No blocks marked as imbalance', M + 4, y);
+          y += 5;
+        }
+
+        checkPage(12);
+        setFont(8, 'bold');
+        doc.setTextColor(...COLORS.textMuted);
+        doc.text('RESULT IN LIFE: ' + (c.resultInLife || '—') + (c.resultPriority ? ' * PRIORITY' : ''), M + 4, y);
+        y += 5;
+        if (c.resultQuestion) {
+          setFont(7.5, 'normal');
+          doc.setTextColor(...COLORS.textSecondary);
+          const lines = doc.splitTextToSize(c.resultQuestion, cW - 8);
+          doc.text(lines, M + 4, y);
+          y += lines.length * 3.5 + 4;
+        }
+        y += 4;
+      });
+    } else {
+      setFont(9, 'normal');
+      doc.setTextColor(...COLORS.textMuted);
+      doc.text('Detailed block answers were not stored for this older submission.', M, y);
+      y += 10;
+    }
+
+    doc.addPage();
+    pageBg();
+    y = M;
+    setFont(13, 'bold');
+    doc.setTextColor(...COLORS.accent);
+    doc.text('PART 2 - ENERGY MAP', M, y);
+    y += 10;
+
+    const mapRows = chakras.length ? chakras : summaryChakras;
+    mapRows.forEach((c) => {
+      checkPage(20);
+      doc.setFillColor(...COLORS.surface);
+      doc.roundedRect(M, y, cW, 16, 2, 2, 'F');
+      setFont(10, 'bold');
+      doc.setTextColor(...COLORS.textPrimary);
+      doc.text((c.name || '') + ' Chakra', M + 4, y + 6);
+      setFont(8, 'normal');
+      doc.setTextColor(...COLORS.textSecondary);
+      const imbalance = c.imbalance || '—';
+      const result = c.resultInLife || c.result || '—';
+      doc.text('Imbalance: ' + imbalance + '   |   Result: ' + result + (c.resultPriority || c.priorityResult ? '   |   Priority' : ''), M + 4, y + 12);
+      y += 20;
+    });
+
+    if (row.summary && Array.isArray(row.summary.priorityResults) && row.summary.priorityResults.length) {
+      checkPage(20);
+      setFont(9, 'bold');
+      doc.setTextColor(...COLORS.accent);
+      doc.text('PRIORITY RESULTS: ' + row.summary.priorityResults.join(', '), M, y);
+      y += 8;
+    }
+
+    checkPage(12);
+    setFont(7, 'normal');
+    doc.setTextColor(...COLORS.textMuted);
+    doc.text('This map is a tool for self-knowledge, not a diagnosis.', W / 2, y + 4, { align: 'center' });
+    doc.text('The Soul Game', W / 2, y + 9, { align: 'center' });
+
+    doc.save('chakra-map-' + slugify(row.name) + '-' + today.toISOString().slice(0, 10) + '.pdf');
+  }
+
+  function downloadRowPdf(index) {
+    const row = window.__adminRows && window.__adminRows[index];
+    if (!row) return;
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+      alert('PDF library failed to load. Refresh and try again.');
+      return;
+    }
+    if (!canDownloadPdf(row)) {
+      alert('This older submission does not have enough data to rebuild the PDF. Ask them to retake the quiz.');
+      return;
+    }
+    if (row.quiz_type === 'personality') downloadPersonalityPdf(row);
+    else if (row.quiz_type === 'chakra') downloadChakraPdf(row);
+  }
+
   function renderRows(rows) {
+    window.__adminRows = rows || [];
     if (!rows || !rows.length) {
       resultsBody.innerHTML = '<tr><td colspan="6" style="color:var(--text-muted)">No submissions found.</td></tr>';
       return;
@@ -438,6 +764,7 @@
         ? '<span class="badge badge-chakra">Chakra</span>'
         : '<span class="badge badge-personality">Personality</span>';
       const detailId = 'detail-' + i;
+      const pdfDisabled = canDownloadPdf(row) ? '' : ' disabled title="Not enough data on this older submission"';
       return `
         <tr>
           <td>${formatDate(row.created_at)}</td>
@@ -446,7 +773,10 @@
           <td>${escapeHtml(row.email)}</td>
           <td>${escapeHtml(shortSummary(row))}</td>
           <td class="row-actions">
-            <button type="button" data-toggle="${detailId}">Details</button>
+            <div class="btn-row">
+              <button type="button" data-toggle="${detailId}">Details</button>
+              <button type="button" class="pdf-btn" data-pdf="${i}"${pdfDisabled}>Download PDF</button>
+            </div>
             <div class="detail" id="${detailId}">${renderDetails(row)}</div>
           </td>
         </tr>`;
@@ -457,6 +787,9 @@
         const el = document.getElementById(btn.getAttribute('data-toggle'));
         el.classList.toggle('open');
       });
+    });
+    resultsBody.querySelectorAll('[data-pdf]').forEach((btn) => {
+      btn.addEventListener('click', () => downloadRowPdf(Number(btn.getAttribute('data-pdf'))));
     });
   }
 
