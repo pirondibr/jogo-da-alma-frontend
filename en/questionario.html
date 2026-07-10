@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="quiz-base.css">
     <link rel="stylesheet" href="questionario.css">
     <script src="https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+    <script src="quiz-lead.js"></script>
 </head>
 <body>
 <nav>
@@ -127,7 +128,9 @@ const CHAKRAS = [
 
 let respostas = {};
 let currentChakra = 0;
-let page = 'blocos';
+let page = 'lead';
+let saveState = null;
+let savedOnce = false;
 const app = document.getElementById('quizApp');
 
 function isImpactful(v){ return v==='identifico'||v==='prejudica'; }
@@ -337,12 +340,66 @@ function renderFinal(){
   }
 
   h+='<p class="mapa-disclaimer">This map is a tool for self-knowledge, not a diagnosis.</p>';
+  if (saveState) h += QuizLead.saveStatusHtml(saveState);
   h+='<div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px">';
   h+='<button class="quiz-btn-back" onclick="backToQuiz()">← Back to the quiz</button>';
   h+='<button class="quiz-btn-download" onclick="downloadPDF()">⬇ Download PDF answer sheet</button>';
   h+='</div>';
 
   app.innerHTML=h;
+}
+
+function buildChakraSummary(){
+  const chakras = CHAKRAS.map(c => {
+    const d = getChakraData(c);
+    return {
+      id: c.id,
+      name: c.name,
+      imbalance: d.deseqStatus,
+      result: d.resStatus,
+      priorityResult: d.resPrioridade,
+      harms: d.prejudicam.map(b => b.tipo),
+      relates: d.identificam.map(b => b.tipo),
+    };
+  });
+  return {
+    chakras,
+    criticalCount: chakras.filter(c => c.imbalance === 'Critical').length,
+    priorityResults: chakras.filter(c => c.priorityResult).map(c => c.name),
+  };
+}
+
+async function persistChakraResults(){
+  if (savedOnce) return;
+  saveState = 'saving';
+  render();
+  try {
+    const result = await QuizLead.saveQuizSubmission({
+      quizType: 'chakra',
+      summary: buildChakraSummary(),
+      answers: { ...respostas },
+    });
+    if (result && result.skipped) return;
+    savedOnce = true;
+    saveState = 'saved';
+  } catch (err) {
+    console.warn('Quiz save failed', err);
+    saveState = 'error';
+  }
+  render();
+}
+
+function renderLead(){
+  app.innerHTML = QuizLead.renderLeadForm({
+    title: 'Chakra Map',
+    subtitle: 'Enter your name and email to start. We save your energy map so you (and we) can find it later.',
+    buttonLabel: 'Start the quiz',
+  });
+  QuizLead.bindLeadForm(() => {
+    page = 'blocos';
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 }
 
 window.downloadPDF=function(){
@@ -580,7 +637,8 @@ window.downloadPDF=function(){
 };
 
 function render(){
-  if(page==='final') renderFinal();
+  if(page==='lead') renderLead();
+  else if(page==='final') renderFinal();
   else renderBlocos();
 }
 
@@ -619,13 +677,21 @@ window.showFinal=function(){
     alert('Answer every block in all chakras before viewing the final map.');
     return;
   }
+  if(!QuizLead.getLead()){
+    page='lead';
+    render();
+    return;
+  }
   page='final';
   render();
   window.scrollTo({top:0,behavior:'smooth'});
+  persistChakraResults();
 };
 
 window.backToQuiz=function(){
   page='blocos';
+  saveState=null;
+  savedOnce=false;
   render();
   window.scrollTo({top:0,behavior:'smooth'});
 };

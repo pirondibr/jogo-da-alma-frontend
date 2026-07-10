@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz Results Admin · The Soul Game</title>
+  <meta name="robots" content="noindex,nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../quiz-base.css">
+  <style>
+    .admin-wrap { max-width: 1100px; margin: 0 auto; padding: 32px 20px 80px; }
+    .admin-card {
+      background: var(--bg-card);
+      border: 1px solid var(--surface-light);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+    .admin-card h1 {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+    }
+    .admin-card h2 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      margin-bottom: 14px;
+    }
+    .admin-muted { color: var(--text-muted); font-size: 0.92rem; margin-bottom: 20px; }
+    .admin-form { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; }
+    .admin-field { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 180px; }
+    .admin-field label { font-size: 0.78rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.06em; }
+    .admin-field input {
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--surface-light);
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+    }
+    .admin-btn {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 999px;
+      background: var(--accent-dark);
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body);
+    }
+    .admin-btn.secondary {
+      background: transparent;
+      border: 1px solid var(--surface-light);
+      color: var(--text-secondary);
+    }
+    .admin-error { color: #f87171; margin-top: 12px; font-size: 0.9rem; }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+    .stat {
+      background: var(--bg);
+      border: 1px solid var(--surface-light);
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .stat b { display: block; font-size: 1.6rem; font-family: var(--font-display); margin-bottom: 4px; }
+    .stat span { color: var(--text-muted); font-size: 0.82rem; }
+    .admin-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .admin-table th, .admin-table td {
+      text-align: left;
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--surface);
+      vertical-align: top;
+    }
+    .admin-table th { color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .badge {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .badge-chakra { background: rgba(167,139,250,.15); color: #c4b5fd; }
+    .badge-personality { background: rgba(34,197,94,.12); color: #86efac; }
+    .row-actions button {
+      background: transparent;
+      border: 1px solid var(--surface-light);
+      color: var(--text-secondary);
+      border-radius: 8px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .detail {
+      display: none;
+      margin-top: 10px;
+      padding: 12px;
+      background: var(--bg);
+      border-radius: 10px;
+      border: 1px solid var(--surface);
+      white-space: pre-wrap;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      max-height: 280px;
+      overflow: auto;
+    }
+    .detail.open { display: block; }
+    .toolbar { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; align-items: center; margin-bottom: 8px; }
+    #dashboard { display: none; }
+    #loginCard { display: block; }
+  </style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="../index.html" class="logo"><span>✦</span> The Soul Game</a>
+    <div class="nav-links">
+      <a href="../questionario.html">Chakra Quiz</a>
+      <a href="../questionario-personalidade.html">Personality Quiz</a>
+      <span class="nav-lang"><strong>Admin</strong></span>
+    </div>
+  </div>
+</nav>
+
+<main class="admin-wrap">
+  <section class="admin-card" id="loginCard">
+    <h1>Quiz Results</h1>
+    <p class="admin-muted">Password-protected view of chakra and personality quiz submissions.</p>
+    <form class="admin-form" id="loginForm">
+      <div class="admin-field">
+        <label for="password">Admin password</label>
+        <input id="password" type="password" autocomplete="current-password" required>
+      </div>
+      <button class="admin-btn" type="submit">Unlock</button>
+    </form>
+    <p class="admin-error" id="loginError" hidden></p>
+  </section>
+
+  <div id="dashboard">
+    <section class="admin-card">
+      <div class="toolbar">
+        <h2 style="margin:0">Overview</h2>
+        <button class="admin-btn secondary" type="button" id="logoutBtn">Lock</button>
+      </div>
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat"><b>—</b><span>Total</span></div>
+        <div class="stat"><b>—</b><span>Chakra</span></div>
+        <div class="stat"><b>—</b><span>Personality</span></div>
+        <div class="stat"><b>—</b><span>Last 7 days</span></div>
+      </div>
+    </section>
+
+    <section class="admin-card">
+      <h2>Find a person</h2>
+      <form class="admin-form" id="searchForm">
+        <div class="admin-field">
+          <label for="searchEmail">Email</label>
+          <input id="searchEmail" type="search" placeholder="friend@email.com">
+        </div>
+        <div class="admin-field">
+          <label for="searchName">Name (optional)</label>
+          <input id="searchName" type="search" placeholder="Anna">
+        </div>
+        <button class="admin-btn" type="submit">Search</button>
+        <button class="admin-btn secondary" type="button" id="recentBtn">Recent 50</button>
+      </form>
+      <p class="admin-error" id="searchError" hidden></p>
+      <div style="overflow-x:auto;margin-top:18px">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Quiz</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Summary</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="resultsBody">
+            <tr><td colspan="6" style="color:var(--text-muted)">Search or load recent submissions.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</main>
+
+<script>
+(function () {
+  const PASS_KEY = 'sg_admin_quiz_pass';
+  const loginCard = document.getElementById('loginCard');
+  const dashboard = document.getElementById('dashboard');
+  const loginError = document.getElementById('loginError');
+  const searchError = document.getElementById('searchError');
+  const resultsBody = document.getElementById('resultsBody');
+  const statsGrid = document.getElementById('statsGrid');
+
+  function getPassword() {
+    return sessionStorage.getItem(PASS_KEY) || '';
+  }
+
+  function setPassword(pw) {
+    sessionStorage.setItem(PASS_KEY, pw);
+  }
+
+  function clearPassword() {
+    sessionStorage.removeItem(PASS_KEY);
+  }
+
+  function showLogin() {
+    loginCard.style.display = 'block';
+    dashboard.style.display = 'none';
+  }
+
+  function showDashboard() {
+    loginCard.style.display = 'none';
+    dashboard.style.display = 'block';
+  }
+
+  async function api(action, extra) {
+    const resp = await fetch('/api/admin-quiz', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: getPassword(), action, ...(extra || {}) }),
+    });
+    const data = await resp.json().catch(() => ({}));
+    if (!resp.ok) throw new Error(data.error || ('Error ' + resp.status));
+    return data;
+  }
+
+  function shortSummary(row) {
+    const s = row.summary || {};
+    if (row.quiz_type === 'personality') {
+      const top = s.top;
+      return top ? (top.name + ' · ' + top.score + ' pts') : '—';
+    }
+    if (row.quiz_type === 'chakra') {
+      const critical = s.criticalCount != null ? s.criticalCount + ' critical' : '';
+      const prios = Array.isArray(s.priorityResults) && s.priorityResults.length
+        ? 'prio: ' + s.priorityResults.slice(0, 3).join(', ')
+        : '';
+      return [critical, prios].filter(Boolean).join(' · ') || 'Map saved';
+    }
+    return '—';
+  }
+
+  function formatDate(iso) {
+    try {
+      return new Date(iso).toLocaleString('en-US', {
+        year: 'numeric', month: 'short', day: 'numeric',
+        hour: '2-digit', minute: '2-digit',
+      });
+    } catch {
+      return iso;
+    }
+  }
+
+  function renderRows(rows) {
+    if (!rows || !rows.length) {
+      resultsBody.innerHTML = '<tr><td colspan="6" style="color:var(--text-muted)">No submissions found.</td></tr>';
+      return;
+    }
+
+    resultsBody.innerHTML = rows.map((row, i) => {
+      const badge = row.quiz_type === 'chakra'
+        ? '<span class="badge badge-chakra">Chakra</span>'
+        : '<span class="badge badge-personality">Personality</span>';
+      const detailId = 'detail-' + i;
+      const payload = JSON.stringify({ summary: row.summary, answers: row.answers }, null, 2);
+      return `
+        <tr>
+          <td>${formatDate(row.created_at)}</td>
+          <td>${badge}</td>
+          <td>${escapeHtml(row.name)}</td>
+          <td>${escapeHtml(row.email)}</td>
+          <td>${escapeHtml(shortSummary(row))}</td>
+          <td class="row-actions">
+            <button type="button" data-toggle="${detailId}">Details</button>
+            <pre class="detail" id="${detailId}">${escapeHtml(payload)}</pre>
+          </td>
+        </tr>`;
+    }).join('');
+
+    resultsBody.querySelectorAll('[data-toggle]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const el = document.getElementById(btn.getAttribute('data-toggle'));
+        el.classList.toggle('open');
+      });
+    });
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  async function loadStats() {
+    const stats = await api('stats');
+    statsGrid.innerHTML = `
+      <div class="stat"><b>${stats.total}</b><span>Total</span></div>
+      <div class="stat"><b>${stats.chakra}</b><span>Chakra</span></div>
+      <div class="stat"><b>${stats.personality}</b><span>Personality</span></div>
+      <div class="stat"><b>${stats.last7Days}</b><span>Last 7 days</span></div>`;
+  }
+
+  async function unlockAndLoad() {
+    showDashboard();
+    await loadStats();
+    const recent = await api('recent', { limit: 50 });
+    renderRows(recent.rows);
+  }
+
+  document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    loginError.hidden = true;
+    const pw = document.getElementById('password').value;
+    setPassword(pw);
+    try {
+      await api('stats');
+      await unlockAndLoad();
+    } catch (err) {
+      clearPassword();
+      showLogin();
+      loginError.hidden = false;
+      loginError.textContent = err.message || 'Could not unlock';
+    }
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    clearPassword();
+    showLogin();
+    document.getElementById('password').value = '';
+  });
+
+  document.getElementById('searchForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    searchError.hidden = true;
+    try {
+      const data = await api('search', {
+        email: document.getElementById('searchEmail').value.trim(),
+        name: document.getElementById('searchName').value.trim(),
+        limit: 100,
+      });
+      renderRows(data.rows);
+    } catch (err) {
+      searchError.hidden = false;
+      searchError.textContent = err.message || 'Search failed';
+    }
+  });
+
+  document.getElementById('recentBtn').addEventListener('click', async () => {
+    searchError.hidden = true;
+    try {
+      const data = await api('recent', { limit: 50 });
+      renderRows(data.rows);
+    } catch (err) {
+      searchError.hidden = false;
+      searchError.textContent = err.message || 'Load failed';
+    }
+  });
+
+  if (getPassword()) {
+    unlockAndLoad().catch(() => {
+      clearPassword();
+      showLogin();
+    });
+  }
+})();
+</script>
+</body>
+</html>

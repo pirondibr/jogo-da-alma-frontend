@@ -39,6 +39,14 @@ Site estático da metodologia de autoconhecimento **Jogo da Alma**, construído 
 
 > As 7 perguntas, os 7 perfis de personalidade, as 7 páginas de chakras e os 2 questionários estão completos.
 
+## English site (`/en`) + Vercel
+
+When Vercel Root Directory is `en`, quizzes capture name/email and store results in Supabase.
+
+Setup: see [`en/docs/QUIZ-SUPABASE.md`](en/docs/QUIZ-SUPABASE.md).
+
+Admin: `/admin/quiz-results.html` (password via `ADMIN_PASSWORD`).
+
 ## Rodar localmente
 
 ```bash

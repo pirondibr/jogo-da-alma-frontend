@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="quiz-base.css">
     <link rel="stylesheet" href="questionario-personalidade.css">
     <script src="https://unpkg.com/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+    <script src="quiz-lead.js"></script>
 </head>
 <body>
 <nav>
@@ -114,8 +115,10 @@ const QUESTIONS = [
 
 const POINTS = [35, 30, 15, 10, 5, 5, 5];
 
-let page = 'welcome';
+let page = 'lead';
 let currentQ = 0;
+let saveState = null;
+let savedOnce = false;
 const rankings = [];
 for (let i = 0; i < QUESTIONS.length; i++) {
   const shuffled = QUESTIONS[i].options.slice();
@@ -141,9 +144,23 @@ function posClass(i) {
 
 function render() {
   const app = document.getElementById('pqApp');
+  if (page === 'lead') return renderLead(app);
   if (page === 'welcome') return renderWelcome(app);
   if (page === 'quiz') return renderQuiz(app);
   if (page === 'result') return renderResult(app);
+}
+
+function renderLead(app) {
+  app.innerHTML = QuizLead.renderLeadForm({
+    title: 'Personality Profile',
+    subtitle: 'Enter your name and email to start. We save your profile so you (and we) can find it later.',
+    buttonLabel: 'Continue',
+  });
+  QuizLead.bindLeadForm(() => {
+    page = 'welcome';
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
 }
 
 function renderWelcome(app) {
@@ -257,6 +274,7 @@ function renderResult(app) {
       <h2>Your Personality Profile</h2>
       <p>Based on your answers, this is the order of the personalities that fit you best.</p>
     </div>
+    ${saveState ? QuizLead.saveStatusHtml(saveState) : ''}
     <div class="pq-result-list">${cards}</div>
     <div class="pq-caveat">
       <p><strong>Important:</strong> Everyone carries all 7 personalities at different intensities. This result is an initial indication. According to the methodology, about 50% of people recognize themselves in the result right away, while the other 50% may notice shifts as they go deeper into self-knowledge.</p>
@@ -266,6 +284,40 @@ function renderResult(app) {
       <button class="pq-btn-result" onclick="downloadPDF()">Download PDF</button>
     </div>
     <p class="pq-disclaimer">The Soul Game &middot; Self-knowledge and personal growth</p>`;
+}
+
+function buildPersonalitySummary() {
+  const sorted = calcScores();
+  return {
+    top: sorted[0] ? { id: sorted[0].id, name: sorted[0].name, chakra: sorted[0].chakra, score: sorted[0].score } : null,
+    ranking: sorted.map((a, i) => ({
+      rank: i + 1,
+      id: a.id,
+      name: a.name,
+      chakra: a.chakra,
+      score: a.score,
+    })),
+  };
+}
+
+async function persistPersonalityResults() {
+  if (savedOnce) return;
+  saveState = 'saving';
+  render();
+  try {
+    const result = await QuizLead.saveQuizSubmission({
+      quizType: 'personality',
+      summary: buildPersonalitySummary(),
+      answers: { rankings: rankings.map(r => r.slice()) },
+    });
+    if (result && result.skipped) return;
+    savedOnce = true;
+    saveState = 'saved';
+  } catch (err) {
+    console.warn('Quiz save failed', err);
+    saveState = 'error';
+  }
+  render();
 }
 
 /* ---- Navigation ---- */
@@ -293,13 +345,21 @@ window.prevQ = function() {
 };
 
 window.showResult = function() {
+  if (!QuizLead.getLead()) {
+    page = 'lead';
+    render();
+    return;
+  }
   page = 'result';
   render();
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  persistPersonalityResults();
 };
 
 window.backToQuiz = function() {
   page = 'quiz';
+  saveState = null;
+  savedOnce = false;
   render();
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
