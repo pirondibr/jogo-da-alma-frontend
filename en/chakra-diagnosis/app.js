@@ -234,94 +234,6 @@ function buildDiagnosticoDocument(data) {
 </html>`;
 }
 
-const SYSTEM_PROMPT = `You are Veda — the visual diagnosis generator for **The Soul Game**. From a situation report, return structured DATA to build a didactic diagnosis in 5 blocks: Results, Capacities by Chakra, Beliefs, Training Field/Quest, and Old/New Version Mirror — plus a side panel with activated chakras and mission.
-
-# TONE AND PHILOSOPHY
-- Educate through recognition, never through guilt. No guru tone, no vague mysticism.
-- Chakras = axes of human need (character stats): each can be in **Lack**, **Proportional**, or **Excess**.
-- Experience reveals the capacity; the crossing (quest) develops the new version.
-- Second person when it fits the report; use the person's NAME.
-- Do not invent facts outside the report. Be concrete and warm.
-
-# THE 7 CHAKRAS (reference)
-| Key | Name | Themes | Training field |
-| raiz | Root | Safety, Stability, Foundation, Protection | Pressure and need |
-| sacral | Sacral | Creativity, Pleasure, Emotions, Fluidity | Boredom or intensity |
-| plexo | Solar Plexus | Personal power, Autonomy, Boundary, Position | Challenges |
-| cardiaco | Heart | Love, Compassion, Bond, Reciprocity | Vulnerability |
-| laringeo | Throat | Expression, Truth, Communication, Stance | Argument and exposure |
-| frontal | Third Eye | Clarity, Discernment, Understanding, Focus | Not knowing |
-| coronario | Crown | Purpose, Meaning, Consciousness, Unity | Faith before mystery |
-
-Central questions: Root=How to survive? · Sacral=How to live? · Solar Plexus=How to achieve? · Heart=How to love? · Throat=How to express myself? · Third Eye=How to understand? · Crown=Why live?
-
-# PROCESS
-1. Summarize the situation (situacao_texto) in first person, condensed.
-2. Identify life area (area_identificada) and a plausible goal (objetivo).
-3. List 3–4 internal and 3–4 external results aligned with the active chakras.
-4. Group 2–3 main chakras in capacidades_por_chakra (2 capacities each, with tags of involved chakras).
-5. Choose 3 beliefs (one per main chakra) with key phrase, explanation, old belief and new belief.
-6. Define the open quest (the formative experience) and 4 training cards linked to the chakras' training fields.
-7. Mirror old vs new version (thought, emotion, action).
-8. In sidebar: 3 activated chakras (1–3 "Primary"), concrete mission, main belief, 4 key capacities, mapa_chakras with states "on" (primary), "sup" (support), or omitted (inactive).
-
-# OUTPUT FORMAT (CRITICAL)
-Respond with **ONLY** valid JSON, no markdown, no code fences, no text before or after:
-
-{
-  "nome": "Anna",
-  "situacao_texto": "First-person summary (≤ 280 characters)",
-  "area_identificada": { "titulo": "...", "descricao": "..." },
-  "objetivo": { "titulo": "...", "descricao": "..." },
-  "resultados_internos": ["...", "..."],
-  "resultados_externos": ["...", "..."],
-  "capacidades_por_chakra": [
-    {
-      "chakra": "cardiaco",
-      "titulo_lane": "Love and bond",
-      "capacidades": [
-        { "titulo": "...", "descricao": "...", "tags": ["Heart", "Solar Plexus"] }
-      ]
-    }
-  ],
-  "crencas": [
-    {
-      "chakra": "cardiaco",
-      "subtitulo": "Love + Boundary",
-      "frase_chave": "No quotes in the JSON",
-      "explicacao": "...",
-      "crenca_antiga": "...",
-      "crenca_nova": "..."
-    }
-  ],
-  "quest": { "titulo": "...", "texto": "..." },
-  "treinamentos": [
-    { "chakra": "cardiaco", "campo": "Heart · Vulnerability", "titulo": "...", "descricao": "..." }
-  ],
-  "versao_antiga": { "pensamento": "...", "emocao": "...", "acao": "..." },
-  "versao_nova": { "pensamento": "...", "emocao": "...", "acao": "..." },
-  "resumo_final": "1 optional sentence for the final block",
-  "sidebar": {
-    "chakras_ativados": [
-      { "chakra": "cardiaco", "papel": "Primary", "resumo": "..." }
-    ],
-    "missao": "Concrete, dateable action when possible",
-    "crenca_principal": "...",
-    "capacidades_chave": ["...", "..."],
-    "mapa_chakras": {
-      "raiz": "sup",
-      "sacral": "sup",
-      "plexo": "on",
-      "cardiaco": "on",
-      "laringeo": "on",
-      "frontal": "sup",
-      "coronario": "off"
-    }
-  }
-}
-
-Rules: chakra always lowercase (raiz|sacral|plexo|cardiaco|laringeo|frontal|coronario). 2–3 groups in capacidades_por_chakra, exactly 3 beliefs, 4 trainings, 3 chakras_ativados. All human-readable text in English. Return ONLY the JSON.`;
-
 const LOADING_MESSAGES = [
     'Reading your situation carefully...',
     'Identifying the area and the goal...',
@@ -334,8 +246,6 @@ const LOADING_MESSAGES = [
 
 class DiagnosticoDaAlma {
     constructor() {
-        this.apiKey = localStorage.getItem('ja_diag_api_key') || localStorage.getItem('jda_api_key') || '';
-        this.model = localStorage.getItem('ja_diag_model') || 'openai/gpt-5.5';
         this.reportHtml = '';
         this.lastName = '';
         this.isGenerating = false;
@@ -345,16 +255,9 @@ class DiagnosticoDaAlma {
     init() {
         this.cacheDOM();
         this.bindEvents();
-        this.loadSettings();
-        if (!this.apiKey) this.settingsPanel.classList.add('open');
     }
 
     cacheDOM() {
-        this.settingsToggle = document.getElementById('settingsToggle');
-        this.settingsPanel = document.getElementById('settingsPanel');
-        this.apiKeyInput = document.getElementById('apiKeyInput');
-        this.modelInput = document.getElementById('modelInput');
-        this.saveSettingsBtn = document.getElementById('saveSettingsBtn');
         this.nameInput = document.getElementById('nameInput');
         this.userInput = document.getElementById('userInput');
         this.charCount = document.getElementById('charCount');
@@ -372,8 +275,6 @@ class DiagnosticoDaAlma {
     }
 
     bindEvents() {
-        this.settingsToggle.addEventListener('click', () => this.settingsPanel.classList.toggle('open'));
-        this.saveSettingsBtn.addEventListener('click', () => this.saveSettings());
         this.generateBtn.addEventListener('click', () => this.handleGenerate());
         this.userInput.addEventListener('input', () => this.updateCharCount());
         this.userInput.addEventListener('keydown', (e) => {
@@ -388,20 +289,6 @@ class DiagnosticoDaAlma {
         });
     }
 
-    loadSettings() {
-        if (this.apiKey) this.apiKeyInput.value = this.apiKey;
-        if (this.model) this.modelInput.value = this.model;
-    }
-
-    saveSettings() {
-        this.apiKey = this.apiKeyInput.value.trim();
-        this.model = this.modelInput.value.trim() || 'openai/gpt-5.5';
-        localStorage.setItem('ja_diag_api_key', this.apiKey);
-        localStorage.setItem('ja_diag_model', this.model);
-        this.settingsPanel.classList.remove('open');
-        this.showToast('Settings saved');
-    }
-
     updateCharCount() {
         const len = this.userInput.value.length;
         this.charCount.textContent = len > 0 ? `${len} characters` : '';
@@ -412,11 +299,6 @@ class DiagnosticoDaAlma {
         const name = this.nameInput.value.trim();
         if (this.isGenerating) return;
 
-        if (!this.apiKey) {
-            this.showToast('Set your API key first (gear icon)', true);
-            this.settingsPanel.classList.add('open');
-            return;
-        }
         if (situation.length < 30) {
             this.showToast('Describe the situation in more detail', true);
             return;
@@ -432,14 +314,13 @@ class DiagnosticoDaAlma {
         this.startLoadingMessages();
 
         try {
-            const userContent = (name ? `Name: ${name}\n\n` : '') + `Report:\n${situation}`;
-            const raw = await this.streamAPI(userContent);
+            const raw = await this.streamAPI(name, situation);
             const data = this.parseJSON(raw);
             if (name && !data.nome) data.nome = name;
             this.reportHtml = buildDiagnosticoDocument(data);
             this.renderResult();
         } catch (err) {
-            this.errorMsg.innerHTML = `<strong>Error generating diagnosis:</strong> ${this.escapeHtml(err.message)}<br><br>Check your API key and model.`;
+            this.errorMsg.innerHTML = `<strong>Error generating diagnosis:</strong> ${this.escapeHtml(err.message)}<br><br>Please try again in a moment.`;
             this.errorMsg.style.display = 'block';
         } finally {
             this.stopLoadingMessages();
@@ -450,30 +331,16 @@ class DiagnosticoDaAlma {
         }
     }
 
-    async streamAPI(userContent) {
-        const resp = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    async streamAPI(name, situation) {
+        const resp = await fetch('/api/diagnose', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${this.apiKey}`,
-                'HTTP-Referer': window.location.href,
-                'X-Title': 'The Soul Game Chakra Diagnosis'
-            },
-            body: JSON.stringify({
-                model: this.model,
-                messages: [
-                    { role: 'system', content: SYSTEM_PROMPT },
-                    { role: 'user', content: userContent }
-                ],
-                stream: true,
-                max_tokens: 8000,
-                temperature: 0.75
-            })
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, situation })
         });
 
         if (!resp.ok) {
             const errData = await resp.json().catch(() => ({}));
-            throw new Error(errData.error?.message || `Error ${resp.status}`);
+            throw new Error(errData.error || `Error ${resp.status}`);
         }
 
         const reader = resp.body.getReader();
