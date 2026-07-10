@@ -170,7 +170,7 @@ function getChakraData(chakra){
   if(prejudicam.length>=2){deseqStatus='Crítico';deseqColor='#ef4444';}
   else if(marcados.length>=4||prejudicam.length>=1){deseqStatus='Desequilibrado';deseqColor='#f97316';}
   else if(marcados.length>=2){deseqStatus='Atenção Leve';deseqColor='#eab308';}
-  let resStatus='·',resColor='#6b7280';
+  let resStatus='-',resColor='#6b7280';
   if(resVal==='alto'){resStatus='Forte';resColor='#22c55e';}
   else if(resVal==='medio'){resStatus='Parcial';resColor='#eab308';}
   else if(resVal==='baixo'){resStatus='Fraco';resColor='#ef4444';}
@@ -202,7 +202,7 @@ function renderBlocos(){
   CHAKRAS.forEach((ch,i)=>{
     const active=i===currentChakra;
     const cnt=chakraMarked(i);
-    h+='<button class="quiz-nav-btn'+(active?' active':'')+'" onclick="goToChakra('+i+')" style="'+(active?'border-color:'+ch.color+';background:'+ch.color+'12;':'')+'"><span class="nav-emoji">'+ch.emoji+'</span><span class="nav-count" style="'+(active?'color:'+ch.color:'')+'">'+( cnt>0?cnt:'·')+'</span></button>';
+    h+='<button class="quiz-nav-btn'+(active?' active':'')+'" onclick="goToChakra('+i+')" style="'+(active?'border-color:'+ch.color+';background:'+ch.color+'12;':'')+'"><span class="nav-emoji">'+ch.emoji+'</span><span class="nav-count" style="'+(active?'color:'+ch.color:'')+'">'+( cnt>0?cnt:'')+'</span></button>';
   });
   h+='</div>';
 
@@ -324,7 +324,7 @@ function renderFinal(){
     h+='<div class="mapa-summary-box summary-priority"><h3>★ Resultados prioritários para aprimorar</h3>';
     resPrioridades.forEach(c=>{
       const rv=respostas[c.id+'_resultado'];
-      const lbl=rv?(rv==='alto'?'Forte':rv==='medio'?'Parcial':'Fraco'):'·';
+      const lbl=rv?(rv==='alto'?'Forte':rv==='medio'?'Parcial':'Fraco'):'-';
       h+='<div class="summary-item"><span>'+c.emoji+'</span><span><strong>'+esc(c.name)+'</strong>: '+esc(c.resultadoPergunta)+' <span style="opacity:0.6">('+lbl+')</span></span></div>';
     });
     h+='</div>';
@@ -548,7 +548,7 @@ window.downloadPDF=function(){
     resP.forEach(function(c){
       checkPage(5);
       var rv=respostas[c.id+'_resultado'];
-      var lbl=rv?(rv==='alto'?'Forte':rv==='medio'?'Parcial':'Fraco'):'·';
+      var lbl=rv?(rv==='alto'?'Forte':rv==='medio'?'Parcial':'Fraco'):'-';
       doc.text(c.name+' -- '+c.resultadoPergunta+' ('+lbl+')',M+6,y);
       y+=4.5;
     });
